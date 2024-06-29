@@ -10,6 +10,12 @@ export class User {
   name: string;
 
   @Column()
+  username: string;
+
+  @Column()
+  password: string;
+
+  @Column()
   createdAt: Date;
 
   @OneToMany(() => Record, (record) => record.user)

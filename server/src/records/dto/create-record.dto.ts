@@ -1,4 +1,4 @@
 export class CreateRecordDto {
-  personId: number;
+  userId: number;
   machineId: number;
 }

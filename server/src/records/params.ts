@@ -1,4 +1,4 @@
-export type CreateIngredientParams = {
-  personId: number;
+export type CreateRecordParams = {
+  userId: number;
   machineId: number;
 };
