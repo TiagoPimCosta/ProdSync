@@ -14,7 +14,7 @@ const Machines = () => {
         <MachineButton
           key={maquina.id}
           name={maquina.name}
-          personId={maquina.id}
+          userId={maquina.id}
           machineId={maquina.id}
           disableTime={maquina.tempoDesativado}
         />

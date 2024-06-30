@@ -1,12 +1,14 @@
+"use server";
+
 import { toast } from "react-hot-toast";
 
 interface Record {
-  personId: number;
+  userId: number;
   machineId: number;
 }
 
 export async function addRecord(record: Record): Promise<void> {
-  const res = await fetch("http://192.168.1.109:8080/api/records", {
+  const res = await fetch("http://localhost:8080/api/records", {
     method: "POST",
     body: JSON.stringify(record),
     headers: {

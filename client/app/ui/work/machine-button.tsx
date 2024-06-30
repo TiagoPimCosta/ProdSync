@@ -5,17 +5,17 @@ import { isDOMComponent } from "react-dom/test-utils";
 
 interface Work {
   name: string;
-  personId: number;
+  userId: number;
   machineId: number;
   disableTime: number;
 }
 
-const MachineButton = ({ name, personId, machineId, disableTime }: Work) => {
+const MachineButton = ({ name, userId, machineId, disableTime }: Work) => {
   const [isDisabled, setIsDisabled] = useState(false);
 
   const submitRecord = () => {
     setIsDisabled(true);
-    addRecord({ personId, machineId });
+    addRecord({ userId, machineId });
     setInterval(() => setIsDisabled(false), disableTime * 1000);
   };
 
@@ -23,7 +23,7 @@ const MachineButton = ({ name, personId, machineId, disableTime }: Work) => {
     <button
       onClick={submitRecord}
       disabled={isDisabled}
-      className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded w-full h-1/4"
+      className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md w-full h-1/4"
     >
       {name}
     </button>
