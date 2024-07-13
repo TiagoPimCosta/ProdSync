@@ -1,7 +1,6 @@
 "use client";
 import { addRecord } from "@/app/lib/actions";
 import React, { useState } from "react";
-import { isDOMComponent } from "react-dom/test-utils";
 
 interface Work {
   name: string;
@@ -10,12 +9,12 @@ interface Work {
   disableTime: number;
 }
 
-const MachineButton = ({ name, userId, machineId, disableTime }: Work) => {
+const MachineButton = ({ name, machineId, disableTime }: Work) => {
   const [isDisabled, setIsDisabled] = useState(false);
 
   const submitRecord = () => {
     setIsDisabled(true);
-    addRecord({ userId, machineId });
+    addRecord(machineId);
     setInterval(() => setIsDisabled(false), disableTime * 1000);
   };
 

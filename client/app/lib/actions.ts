@@ -1,22 +1,32 @@
-"use server";
-
 import { toast } from "react-hot-toast";
+import { fetchWithAuth } from "./fetch";
 
-interface Record {
-  userId: number;
-  machineId: number;
-}
+export async function addRecord(machineId: number): Promise<void> {
+  try {
+    const user = await fetchWithAuth("http://localhost:8080/api/auth/status");
 
-export async function addRecord(record: Record): Promise<void> {
-  const res = await fetch("http://localhost:8080/api/records", {
-    method: "POST",
-    body: JSON.stringify(record),
-    headers: {
-      "Content-type": "application/json; charset=UTF-8",
-    },
-  });
-  if (res.status === 201) {
-    toast.success("Trabalho Submetido", {
+    if (!user) {
+      throw new Error("User could not be found");
+    }
+
+    const res = await fetch("http://localhost:8080/api/records", {
+      method: "POST",
+      body: JSON.stringify({ userId: user.id, machineId }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
+
+    if (res.status === 201) {
+      toast.success("Trabalho Submetido", {
+        duration: 4000,
+      });
+    } else {
+      throw new Error("Erro ao submeter trabalho");
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Erro ao submeter trabalho", {
       duration: 4000,
     });
   }

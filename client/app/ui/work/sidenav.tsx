@@ -1,7 +1,21 @@
+"use client";
+
 import Link from "next/link";
 import NavLinks from "@/app/ui/work/nav-links";
+import { useRouter } from "next/navigation";
+import { logout } from "@/app/lib/auth";
 
 export default function SideNav() {
+  const router = useRouter();
+
+  const handleLogOut = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    await logout();
+
+    router.push("/");
+  };
+
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">
       <Link
@@ -14,7 +28,10 @@ export default function SideNav() {
         <NavLinks />
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
         <form>
-          <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
+          <button
+            onClick={handleLogOut}
+            className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3"
+          >
             Sair
           </button>
         </form>

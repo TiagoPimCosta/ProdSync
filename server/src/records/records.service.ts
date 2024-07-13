@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Record } from '../typeorm/entities/record.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -16,6 +16,10 @@ export class RecordsService {
     const user = await this.usersService.findOneById(
       createRecordDetails.userId,
     );
+
+    if (!user) {
+      throw new NotFoundException('User not Found');
+    }
 
     const newRecord = this.recordRepository.create({
       ...createRecordDetails,

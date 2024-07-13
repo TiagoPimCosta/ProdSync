@@ -18,6 +18,6 @@ export class AuthService {
     if (user.password !== authPayloadDto.password)
       throw new UnauthorizedException('Wrong Credentials');
     const { password, ...data } = user;
-    return this.jwtService.sign(data);
+    return { token: this.jwtService.sign(data) };
   }
 }
