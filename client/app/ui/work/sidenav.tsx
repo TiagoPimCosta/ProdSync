@@ -3,7 +3,7 @@
 import Link from "next/link";
 import NavLinks from "@/app/ui/work/nav-links";
 import { useRouter } from "next/navigation";
-import { logout } from "@/app/lib/auth";
+import { logout } from "@/lib/auth";
 
 export default function SideNav() {
   const router = useRouter();

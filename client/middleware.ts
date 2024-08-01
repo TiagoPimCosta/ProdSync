@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { userStatus } from "./app/lib/auth";
-import { getAuthToken } from "./app/lib/cookies";
+import { userStatus } from "./lib/auth";
+import { getAuthToken } from "./lib/cookies";
 
 interface TypeUser {
   id: number;
   name: string;
+  role: string;
   username: string;
   createdAt: string;
   iat: number;
@@ -15,15 +16,20 @@ interface TypeUser {
 export async function middleware(request: NextRequest) {
   const { pathname }: { pathname: string } = request.nextUrl;
   const token = await getAuthToken();
-
   const authRoutes = ["/dashboard", "/work"];
 
   const Redirect = async () => {
     const user: TypeUser | null = await userStatus();
 
-    if (user?.name === "Tiago" && !pathname.startsWith("/dashboard")) {
+    if (
+      user?.role.toLowerCase() === "admin" &&
+      !pathname.startsWith("/dashboard")
+    ) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
-    } else if (user?.name === "Fatima" && !pathname.startsWith("/work")) {
+    } else if (
+      user?.role.toLowerCase() === "user" &&
+      !pathname.startsWith("/work")
+    ) {
       return NextResponse.redirect(new URL("/work", request.url));
     } else {
       return NextResponse.next();

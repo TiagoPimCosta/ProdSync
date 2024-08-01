@@ -4,12 +4,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { CreateRecordParams } from './params';
+import { MachinesService } from 'src/machines/machines.service';
 
 @Injectable()
 export class RecordsService {
   constructor(
     @InjectRepository(Record) private recordRepository: Repository<Record>,
     private readonly usersService: UsersService,
+    private readonly machinesService: MachinesService,
   ) {}
 
   async create(createRecordDetails: CreateRecordParams) {
@@ -21,16 +23,27 @@ export class RecordsService {
       throw new NotFoundException('User not Found');
     }
 
+    const machine = await this.machinesService.findOne(
+      createRecordDetails.machineId,
+    );
+
+    if (!machine) {
+      throw new NotFoundException('Machine not Found');
+    }
+
     const newRecord = this.recordRepository.create({
       ...createRecordDetails,
       user,
+      machine,
       createdAt: new Date(),
     });
     return this.recordRepository.save(newRecord);
   }
 
   findAll() {
-    return this.recordRepository.find();
+    return this.recordRepository.find({
+      relations: ['user'],
+    });
   }
 
   async findAllFromUser(userId: number) {

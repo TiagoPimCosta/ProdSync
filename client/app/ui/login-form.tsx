@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { Button } from "./button";
-import { login } from "../lib/auth";
-import { setAuthToken } from "../lib/cookies";
+import { login } from "../../lib/auth";
+import { getAuthToken, setAuthToken } from "../../lib/cookies";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
@@ -25,8 +25,7 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
-      <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
-        <h1 className="mb-3 text-2xl">Please log in to continue</h1>
+      <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-1">
         <div className="w-full">
           <div>
             <label

@@ -1,12 +1,12 @@
-import SideNav from "../ui/work/sidenav";
+import Navbar from "../ui/dashboard/navbar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-dvh flex-col md:flex-row md:overflow-hidden">
-      <div className="w-full flex-none md:w-64">
-        <SideNav />
-      </div>
-      <div className="px-3 md:py-4 h-full md:w-full">{children}</div>
+    <div className="flex min-h-screen w-full flex-col">
+      <Navbar />
+      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+        {children}
+      </main>
     </div>
   );
 }

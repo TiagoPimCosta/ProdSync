@@ -1,5 +1,6 @@
 export type CreateUserParams = {
   name: string;
+  role: string;
   username: string;
   password: string;
 };

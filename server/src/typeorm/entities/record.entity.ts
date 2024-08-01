@@ -1,5 +1,12 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { User } from './user.entity';
+import { Machine } from './machine.entity';
 
 @Entity({ name: 'records' })
 export class Record {
@@ -7,10 +14,11 @@ export class Record {
   id: number;
 
   @ManyToOne(() => User, (user) => user.records)
+  @JoinColumn()
   user: User;
 
-  @Column()
-  machineId: number;
+  @ManyToOne(() => Machine, (machine) => machine.records)
+  machine: Machine;
 
   @Column()
   createdAt: Date;

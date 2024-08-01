@@ -39,6 +39,7 @@ export async function logout(): Promise<void> {
 interface userStatusResponse {
   id: number;
   name: string;
+  role: string;
   username: string;
   createdAt: string;
   iat: number;

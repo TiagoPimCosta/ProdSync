@@ -5,6 +5,7 @@ import { typeOrmConfigAsync } from '../config/typeorm.config';
 import { RecordsModule } from './records/records.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { MachinesModule } from './machines/machines.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
     RecordsModule,
     UsersModule,
     AuthModule,
+    MachinesModule,
   ],
   controllers: [],
   providers: [],
