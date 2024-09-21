@@ -22,16 +22,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { getAllUsers } from "@/lib/users";
+import { deleteUser, getAllUsers } from "@/lib/users";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
@@ -39,11 +37,17 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface userResponse {
   id: number;
+  idNumber: number;
   name: string;
   role: string;
   username: string;
   password: string;
-  createdAt: string;
+  cc: string;
+  nif: string;
+  phone: string;
+  email: string;
+  isActive: boolean;
+  admission: Date;
 }
 
 const UsersPage = () => {
@@ -62,16 +66,14 @@ const UsersPage = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  const fetchData = async () => {
+    const usersData = await getAllUsers();
+
+    setUsers(usersData);
+    setFilteredUsers(usersData);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const usersData = await getAllUsers();
-
-      setUsers(usersData);
-      setFilteredUsers(usersData);
-    };
-
     fetchData();
   }, []);
 
@@ -91,8 +93,9 @@ const UsersPage = () => {
     setEndIndex(rowsPerPage);
   }, [numberFilter, nameFilter, users, roleFilter, stateFilter]);
 
-  const deleteUser = (id: number) => {
-    console.log("Delete User: " + id);
+  const deleteUserHandler = async (id: number) => {
+    await deleteUser(id);
+    fetchData();
   };
 
   const prevPage = () => {
@@ -206,7 +209,7 @@ const UsersPage = () => {
                       {user.name}
                     </TableCell>
                     <TableCell>
-                      {new Date(user.createdAt).toLocaleDateString()}
+                      {new Date(user.admission).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
                       {user.role === "admin" ? (
@@ -221,7 +224,13 @@ const UsersPage = () => {
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell>{user.username}</TableCell>
+                    <TableCell>
+                      {user.isActive ? (
+                        <Badge variant="default">Active</Badge>
+                      ) : (
+                        <Badge variant="secondary">Inactive</Badge>
+                      )}
+                    </TableCell>
                     <TableCell className="flex flex-row gap-2 justify-center">
                       <Button
                         variant="secondary"
@@ -235,7 +244,7 @@ const UsersPage = () => {
                       <Button
                         variant="destructive"
                         size="icon"
-                        onClick={() => deleteUser(user.id)}
+                        onClick={() => deleteUserHandler(user.id)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

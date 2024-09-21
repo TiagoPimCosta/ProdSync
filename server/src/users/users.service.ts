@@ -11,10 +11,7 @@ export class UsersService {
   ) {}
 
   create(createUserDetails: CreateUserParams) {
-    const newUser = this.userRepository.create({
-      ...createUserDetails,
-      createdAt: new Date(),
-    });
+    const newUser = this.userRepository.create({ ...createUserDetails });
     return this.userRepository.save(newUser);
   }
 
@@ -34,7 +31,8 @@ export class UsersService {
     return this.userRepository.update({ id }, { ...updateUserDetails });
   }
 
-  remove(id: number) {
-    return this.userRepository.delete({ id });
+  async remove(id: number) {
+    const user = await this.userRepository.findOneBy({ id });
+    return this.userRepository.update({ id }, { isActive: !user.isActive });
   }
 }

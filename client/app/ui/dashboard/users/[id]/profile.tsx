@@ -5,11 +5,18 @@ import SubCard from "./subCard";
 
 interface userResponse {
   id: number;
+  idNumber: number;
   name: string;
   role: string;
   username: string;
   password: string;
   createdAt: string;
+  cc: string;
+  nif: string;
+  phone: string;
+  email: string;
+  isActive: boolean;
+  admission: Date;
 }
 
 interface ProfileProps {
@@ -26,28 +33,32 @@ const Profile = async ({ id }: ProfileProps) => {
       <CardHeader className="flex flex-row items-center">
         <div className="flex flex-1 gap-4">
           <CardTitle>
-            {id}. {user.name}
+            {user.idNumber}. {user.name}
           </CardTitle>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col w-full gap-6">
         <div className="flex md:flex-row flex-col w-full">
-          <div className="flex-1">Admissão: 12/07/2023</div>
-          <div className="flex-1">Função: Costureira</div>
+          <div className="flex-1">
+            Admissão: {new Date(user.admission).toLocaleDateString()}
+          </div>
+          <div className="flex-1">
+            Estado: {user.isActive ? "Activo" : "Inativo"}
+          </div>
         </div>
         <div className="flex md:flex-row flex-col w-full gap-4">
           <SubCard
             title="Identificação"
             content={[
-              { key: "CC", value: "123456789" },
-              { key: "NIF", value: "123456789" },
+              { key: "CC", value: user.cc },
+              { key: "NIF", value: user.nif },
             ]}
           />
           <SubCard
             title="Contactos"
             content={[
-              { key: "Telemóvel", value: "123456789" },
-              { key: "Email", value: "tiago@gmail.com" },
+              { key: "Telemóvel", value: user.phone },
+              { key: "Email", value: user.email },
             ]}
           />
           <SubCard

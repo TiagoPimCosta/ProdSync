@@ -7,6 +7,9 @@ export class User {
   id: number;
 
   @Column()
+  idNumber: number;
+
+  @Column()
   name: string;
 
   @Column()
@@ -19,7 +22,22 @@ export class User {
   password: string;
 
   @Column()
-  createdAt: Date;
+  cc: string;
+
+  @Column()
+  nif: string;
+
+  @Column()
+  phone: string;
+
+  @Column()
+  email: string;
+
+  @Column()
+  isActive: boolean;
+
+  @Column({ nullable: true })
+  admission: Date;
 
   @OneToMany(() => Record, (record) => record.user)
   records: Record[];

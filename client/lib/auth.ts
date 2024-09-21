@@ -8,6 +8,16 @@ interface authenticateResponse {
   role: string;
 }
 
+interface userStatusResponse {
+  id: number;
+  name: string;
+  role: string;
+  username: string;
+  createdAt: string;
+  iat: number;
+  exp: number;
+}
+
 export async function login(
   username: string,
   password: string
@@ -34,16 +44,6 @@ export async function login(
 
 export async function logout(): Promise<void> {
   await removeAuthToken();
-}
-
-interface userStatusResponse {
-  id: number;
-  name: string;
-  role: string;
-  username: string;
-  createdAt: string;
-  iat: number;
-  exp: number;
 }
 
 export async function userStatus(): Promise<userStatusResponse | null> {
