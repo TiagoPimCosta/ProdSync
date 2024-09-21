@@ -7,13 +7,21 @@ import clsx from "clsx";
 import { LogOut, Menu, Gauge, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
+import React, { ReactElement } from "react";
+
+type Navlink = {
+  name: string;
+  href: string;
+};
 
 const Navbar = () => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const links = [{ name: "Utilizadores", href: "/dashboard/users" }];
+  const links: Navlink[] = [
+    { name: "Funcionários", href: "/dashboard/users" },
+    { name: "Máquinas", href: "/dashboard/machines" },
+  ];
 
   const handleLogOut = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,7 +68,6 @@ const Navbar = () => {
               className="flex items-center gap-2 text-lg font-semibold"
             >
               <Gauge className="h-6 w-6" />
-              <span className="sr-only">Acme Inc</span>
             </Link>
             {links.map((link) => {
               return (
