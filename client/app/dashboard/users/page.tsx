@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { deleteUser, getAllUsers } from "@/lib/users";
+import { deleteUser, getAllUsers, userResponse } from "@/lib/users";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -34,21 +34,18 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Combobox } from "@/components/ui/combobox";
 
-interface userResponse {
-  id: number;
-  idNumber: number;
-  name: string;
-  role: string;
-  username: string;
-  password: string;
-  cc: string;
-  nif: string;
-  phone: string;
-  email: string;
-  isActive: boolean;
-  admission: Date;
-}
+const UserStates = [
+  {
+    value: "next.js",
+    label: "Ativo",
+  },
+  {
+    value: "sveltekit",
+    label: "Inativo",
+  },
+];
 
 const UsersPage = () => {
   const [users, setUsers] = useState<userResponse[] | []>([]);
@@ -57,7 +54,7 @@ const UsersPage = () => {
   const [nameFilter, setNameFilter] = useState<string>("");
   const [roleFilter, setRoleFilter] = useState<string>("all");
   const [filteredUsers, setFilteredUsers] = useState<userResponse[] | []>([]);
-  const [stateFilter, setStateFilter] = useState<string>("all");
+  const [stateFilter, setStateFilter] = useState<string | null>(null);
 
   const rowsPerPage = 10;
   const [startIndex, setStartIndex] = useState<number>(0);
@@ -85,7 +82,8 @@ const UsersPage = () => {
               user.id.toString().includes(numberFilter) &&
               user.name.toLowerCase().includes(nameFilter.toLowerCase()) &&
               (roleFilter === "all" || user.role === roleFilter) &&
-              (stateFilter === "all" || user.role === stateFilter)
+              (stateFilter === "all" ||
+                user.isActive === (stateFilter === "true"))
           )
         : []
     );
@@ -112,6 +110,27 @@ const UsersPage = () => {
     }
   };
 
+  const handleNumberFilterChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNumberFilter(event.target.value);
+  };
+  const handleNameFilterChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setNameFilter(event.target.value);
+  };
+  const handleRoleFilterChange = (role: string) => {
+    setRoleFilter(role);
+  };
+
+  const handleStateFilterChange = (state: string) => {
+    if (state === "all") {
+      setStateFilter(null);
+    } else {
+      setStateFilter(state);
+    }
+  };
   return (
     <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
       <CardHeader className="flex flex-row items-center">
@@ -137,18 +156,19 @@ const UsersPage = () => {
             type="number"
             className="sm:max-w-32 w-full"
             value={numberFilter}
-            onChange={(e) => setNumberFilter(e.target.value)}
+            onChange={handleNumberFilterChange}
           />
           <Input
             placeholder="Nome"
             className="w-full"
             value={nameFilter}
-            onChange={(e) => setNameFilter(e.target.value)}
+            onChange={handleNameFilterChange}
           />
+
           <div className="flex flex-row sm:w-64 w-full gap-2 pb-4">
             <Select
               value={roleFilter}
-              onValueChange={(e) => setRoleFilter(e.toString())}
+              onValueChange={(e) => handleRoleFilterChange(e.toString())}
             >
               <SelectTrigger className="sm:w-32 w-full">
                 <SelectValue placeholder="Theme" />
@@ -159,19 +179,20 @@ const UsersPage = () => {
                 <SelectItem value="user">User</SelectItem>
               </SelectContent>
             </Select>
-            <Select
+            {/* <Select
               value={stateFilter}
-              onValueChange={(e) => setStateFilter(e.toString())}
+              onValueChange={(e: string) => handleStateFilterChange(e)}
             >
               <SelectTrigger className="sm:w-32 w-full">
                 <SelectValue placeholder="Estado" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="active">Ativo</SelectItem>
-                <SelectItem value="inactive">Inativo</SelectItem>
+                <SelectItem value="true">Ativo</SelectItem>
+                <SelectItem value="false">Inativo</SelectItem>
+                <SelectItem value="all">Clear Filter</SelectItem>
               </SelectContent>
-            </Select>
+            </Select> */}
+            <Combobox values={UserStates} placeholder="Estado" />
           </div>
         </div>
         {filteredUsers?.length === 0 ? (
@@ -290,5 +311,4 @@ const UsersPage = () => {
     </Card>
   );
 };
-
 export default UsersPage;

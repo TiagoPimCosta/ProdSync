@@ -11,28 +11,69 @@ export class UsersService {
   ) {}
 
   create(createUserDetails: CreateUserParams) {
-    const newUser = this.userRepository.create({ ...createUserDetails });
-    return this.userRepository.save(newUser);
+    try {
+      //Verify if the idNumber/nif/phone/email/cc/username are not registered
+      //If they are, this should return an error
+      const newUser = this.userRepository.create({ ...createUserDetails });
+      return this.userRepository.save(newUser);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   findAll() {
-    return this.userRepository.find();
+    try {
+      return this.userRepository.find();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   findOneById(id: number) {
-    return this.userRepository.findOneBy({ id });
+    try {
+      const user = this.userRepository.findOneBy({ id });
+      if (!user) {
+        throw new Error('User not found');
+      }
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   findOneByUsername(username: string) {
-    return this.userRepository.findOneBy({ username });
+    try {
+      const user = this.userRepository.findOneBy({ username });
+      if (!user) {
+        throw new Error('User not found');
+      }
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   update(id: number, updateUserDetails: UpdateUserParams) {
-    return this.userRepository.update({ id }, { ...updateUserDetails });
+    try {
+      const user = this.userRepository.findOneBy({ id });
+      if (!user) {
+        throw new Error('User not found');
+      }
+      return this.userRepository.update({ id }, { ...updateUserDetails });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async remove(id: number) {
-    const user = await this.userRepository.findOneBy({ id });
-    return this.userRepository.update({ id }, { isActive: !user.isActive });
+    try {
+      const user = await this.userRepository.findOneBy({ id });
+      if (!user) {
+        throw new Error('User not found');
+      }
+      return this.userRepository.update({ id }, { isActive: !user.isActive });
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

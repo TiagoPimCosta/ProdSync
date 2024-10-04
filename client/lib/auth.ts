@@ -1,5 +1,3 @@
-"use server";
-
 import { removeAuthToken } from "./cookies";
 import { fetchWithAuth } from "./fetch";
 

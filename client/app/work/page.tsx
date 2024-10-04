@@ -1,9 +1,9 @@
 import React from "react";
-import Machines from "../ui/work/machines";
+import Machines from "@/ui/work/machines";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Work",
+  title: "Trabalho",
 };
 
 const WorkPage = () => {

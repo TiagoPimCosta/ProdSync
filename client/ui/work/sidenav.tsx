@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import NavLinks from "@/app/ui/work/nav-links";
+import NavLinks from "@/ui/work/nav-links";
 import { useRouter } from "next/navigation";
 import { logout } from "@/lib/auth";
 

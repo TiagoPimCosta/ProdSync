@@ -33,7 +33,7 @@ export class User {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ default: true })
   isActive: boolean;
 
   @Column({ nullable: true })

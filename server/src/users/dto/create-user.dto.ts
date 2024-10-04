@@ -8,6 +8,5 @@ export class CreateUserDto {
   nif: string;
   phone: string;
   email: string;
-  isActive: boolean;
   admission: Date;
 }

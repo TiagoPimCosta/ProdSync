@@ -1,14 +1,12 @@
-import LoginForm from "./ui/login-form";
+import LoginForm from "@/ui/login-form";
 
 export default function Home() {
   return (
-    <main className="flex items-center justify-center md:h-screen">
-      <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
-        <div className="flex h-20 w-full items-end rounded-lg bg-blue-500 p-3 md:h-36">
-          <div className="w-32 text-white md:w-36">Production Manager</div>
-        </div>
+    <div className="bg-white flex justify-center items-center h-screen">
+      <div className="w-1/2 h-screen hidden lg:block bg-black" />
+      <div className="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2 ">
         <LoginForm />
       </div>
-    </main>
+    </div>
   );
 }
