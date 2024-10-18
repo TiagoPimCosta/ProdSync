@@ -23,6 +23,6 @@ export class Machine {
   @ManyToOne(() => Line, (line) => line.machine, { nullable: false })
   line: Line;
 
-  @ManyToOne(() => User, (user) => user.machine, { nullable: false })
+  @ManyToOne(() => User, (user) => user.machine)
   user: User;
 }
