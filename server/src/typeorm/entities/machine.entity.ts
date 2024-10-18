@@ -20,9 +20,9 @@ export class Machine {
   @OneToMany(() => Record, (record) => record.machine)
   records: Record[];
 
-  @ManyToOne(() => Line, (line) => line.machine)
+  @ManyToOne(() => Line, (line) => line.machine, { nullable: false })
   line: Line;
 
-  @ManyToOne(() => User, (user) => user.machine)
+  @ManyToOne(() => User, (user) => user.machine, { nullable: false })
   user: User;
 }

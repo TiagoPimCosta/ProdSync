@@ -10,9 +10,9 @@ export class Record {
   @Column()
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.records)
+  @ManyToOne(() => User, (user) => user.records, { nullable: false })
   user: User;
 
-  @ManyToOne(() => Machine, (machine) => machine.records)
+  @ManyToOne(() => Machine, (machine) => machine.records, { nullable: false })
   machine: Machine;
 }
