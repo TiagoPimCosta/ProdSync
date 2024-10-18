@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Record } from './record.entity';
+import { Machine } from './machine.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -38,6 +39,9 @@ export class User {
 
   @Column({ nullable: true })
   admission: Date;
+
+  @OneToMany(() => Machine, (machine) => machine.user)
+  machine: Machine[];
 
   @OneToMany(() => Record, (record) => record.user)
   records: Record[];
