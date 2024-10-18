@@ -1,17 +1,7 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { userStatus } from "./lib/auth";
+import { userStatus, userStatusResponse } from "./lib/auth";
 import { getAuthToken } from "./lib/cookies";
-
-interface TypeUser {
-  id: number;
-  name: string;
-  role: string;
-  username: string;
-  createdAt: string;
-  iat: number;
-  exp: number;
-}
 
 export async function middleware(request: NextRequest) {
   const { pathname }: { pathname: string } = request.nextUrl;
@@ -19,7 +9,7 @@ export async function middleware(request: NextRequest) {
   const authRoutes = ["/dashboard", "/work"];
 
   const Redirect = async () => {
-    const user: TypeUser | null = await userStatus();
+    const user: userStatusResponse | null = await userStatus();
 
     if (
       user?.role.toLowerCase() === "admin" &&

@@ -13,7 +13,7 @@ import { CreateMachineDto } from './dto/create-machine.dto';
 import { UpdateMachineDto } from './dto/update-machine.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('machines')
+@ApiTags('Machines')
 @Controller('machines')
 export class MachinesController {
   constructor(private readonly machinesService: MachinesService) {}

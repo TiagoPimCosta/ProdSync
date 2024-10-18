@@ -1,4 +1,4 @@
-import Profile from "@/app/ui/dashboard/users/[id]/profile";
+import Profile from "@/ui/dashboard/users/[id]/profile";
 import React from "react";
 
 const UserProfile = ({ params }: { params: { id: string } }) => {

@@ -6,12 +6,18 @@ interface authenticateResponse {
   role: string;
 }
 
-interface userStatusResponse {
+export interface userStatusResponse {
   id: number;
+  idNumber: number;
   name: string;
   role: string;
   username: string;
-  createdAt: string;
+  cc: string;
+  nif: string;
+  phone: string;
+  email: string;
+  isActive: boolean;
+  admission: string;
   iat: number;
   exp: number;
 }

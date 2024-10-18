@@ -81,9 +81,9 @@ const UsersPage = () => {
             (user) =>
               user.id.toString().includes(numberFilter) &&
               user.name.toLowerCase().includes(nameFilter.toLowerCase()) &&
-              (roleFilter === "all" || user.role === roleFilter) &&
-              (stateFilter === "all" ||
-                user.isActive === (stateFilter === "true"))
+              (roleFilter === "all" || user.role === roleFilter)
+            //  &&(stateFilter === "all" ||
+            //   user.isActive === (stateFilter === "true"))
           )
         : []
     );
