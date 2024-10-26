@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from 'src/typeorm/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -17,7 +17,7 @@ export class UsersService {
       const newUser = this.userRepository.create({ ...createUserDetails });
       return this.userRepository.save(newUser);
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 
@@ -25,19 +25,19 @@ export class UsersService {
     try {
       return this.userRepository.find();
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 
-  findOneById(id: number) {
+  async findOneById(id: number) {
     try {
-      const user = this.userRepository.findOneBy({ id });
+      const user = await this.userRepository.findOneBy({ id });
       if (!user) {
-        throw new Error('User not found');
+        throw new HttpException('User Not Found', HttpStatus.NOT_FOUND);
       }
       return user;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 
@@ -49,7 +49,7 @@ export class UsersService {
       }
       return user;
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 
@@ -61,7 +61,7 @@ export class UsersService {
       }
       return this.userRepository.update({ id }, { ...updateUserDetails });
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 
@@ -73,7 +73,7 @@ export class UsersService {
       }
       return this.userRepository.update({ id }, { isActive: !user.isActive });
     } catch (error) {
-      console.log(error);
+      return error;
     }
   }
 }
