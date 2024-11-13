@@ -6,10 +6,9 @@ import { ApiProperty } from '@nestjs/swagger';
 @Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn()
-  @ApiProperty()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   @ApiProperty()
   idNumber: number;
 
@@ -21,7 +20,7 @@ export class User {
   @ApiProperty()
   role: string;
 
-  @Column()
+  @Column({ unique: true })
   @ApiProperty()
   username: string;
 
@@ -29,11 +28,11 @@ export class User {
   @ApiProperty()
   password: string;
 
-  @Column()
+  @Column({ unique: true })
   @ApiProperty()
   cc: string;
 
-  @Column()
+  @Column({ unique: true })
   @ApiProperty()
   nif: string;
 
