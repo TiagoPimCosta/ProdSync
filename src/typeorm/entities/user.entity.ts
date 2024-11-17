@@ -46,7 +46,7 @@ export class User {
 
   @Column({ default: true })
   @ApiProperty()
-  isActive: boolean;
+  status: boolean;
 
   @Column({ nullable: true })
   @ApiProperty()

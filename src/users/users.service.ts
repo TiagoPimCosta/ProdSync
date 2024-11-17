@@ -166,7 +166,7 @@ export class UsersService {
       const user = await this.userRepository.findOneBy({ id });
       if (!user) throw new NotFoundException(`User with ID ${id} not found.`);
 
-      await this.userRepository.update({ id }, { isActive: false });
+      await this.userRepository.update({ id }, { status: false });
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;

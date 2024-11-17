@@ -29,7 +29,7 @@ export class UpdateUserDto {
   email?: string;
 
   @ApiProperty()
-  isActive?: boolean;
+  status?: boolean;
 
   @ApiProperty()
   admission?: Date;
