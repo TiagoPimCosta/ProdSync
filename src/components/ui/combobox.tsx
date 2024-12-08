@@ -3,8 +3,8 @@
 import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { cn } from "@/src/lib/utils";
+import { Button } from "@/src/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -12,12 +12,8 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/src/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 
 const frameworks = [
   {
@@ -71,9 +67,7 @@ export function Combobox(props: ComboboxProps) {
           aria-expanded={open}
           className={cn("w-[200px] justify-between", "")}
         >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : placeholder}
+          {value ? frameworks.find((framework) => framework.value === value)?.label : placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
