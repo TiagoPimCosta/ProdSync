@@ -1,5 +1,5 @@
 "use client";
-import { addRecord } from "@/lib/records";
+import { addRecord } from "@/src/lib/records";
 import React, { useState } from "react";
 
 interface Work {

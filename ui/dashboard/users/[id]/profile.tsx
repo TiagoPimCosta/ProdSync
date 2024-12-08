@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getUserById } from "@/lib/users";
+import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
+import { getUserById } from "@/src/lib/users";
 import React from "react";
 import SubCard from "./subCard";
 
@@ -26,7 +26,7 @@ interface ProfileProps {
 const Profile = async ({ id }: ProfileProps) => {
   const user: userResponse | null = await getUserById(id);
 
-  if (!user) return <div>User Nor Found</div>;
+  if (!user) return <div>User Not Found</div>;
 
   return (
     <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
@@ -39,12 +39,8 @@ const Profile = async ({ id }: ProfileProps) => {
       </CardHeader>
       <CardContent className="flex flex-col w-full gap-6">
         <div className="flex md:flex-row flex-col w-full">
-          <div className="flex-1">
-            Admissão: {new Date(user.admission).toLocaleDateString()}
-          </div>
-          <div className="flex-1">
-            Estado: {user.isActive ? "Activo" : "Inativo"}
-          </div>
+          <div className="flex-1">Admissão: {new Date(user.admission).toLocaleDateString()}</div>
+          <div className="flex-1">Estado: {user.isActive ? "Activo" : "Inativo"}</div>
         </div>
         <div className="flex md:flex-row flex-col w-full gap-4">
           <SubCard
@@ -73,5 +69,4 @@ const Profile = async ({ id }: ProfileProps) => {
     </Card>
   );
 };
-
 export default Profile;

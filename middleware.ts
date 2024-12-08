@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { userStatus, userStatusResponse } from "./lib/auth";
-import { getAuthToken } from "./lib/cookies";
+import { userStatus, userStatusResponse } from "./src/lib/auth";
+import { getAuthToken } from "./src/lib/cookies";
 
 export async function middleware(request: NextRequest) {
   const { pathname }: { pathname: string } = request.nextUrl;
@@ -11,15 +11,9 @@ export async function middleware(request: NextRequest) {
   const Redirect = async () => {
     const user: userStatusResponse | null = await userStatus();
 
-    if (
-      user?.role.toLowerCase() === "admin" &&
-      !pathname.startsWith("/dashboard")
-    ) {
+    if (user?.role.toLowerCase() === "admin" && !pathname.startsWith("/dashboard")) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
-    } else if (
-      user?.role.toLowerCase() === "user" &&
-      !pathname.startsWith("/work")
-    ) {
+    } else if (user?.role.toLowerCase() === "user" && !pathname.startsWith("/work")) {
       return NextResponse.redirect(new URL("/work", request.url));
     } else {
       return NextResponse.next();

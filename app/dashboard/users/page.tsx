@@ -4,7 +4,19 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { Plus, Trash2, Pencil, AlertTriangle } from "lucide-react";
-("lucide-react");
+import { deleteUser, getAllUsers, userResponse } from "@/src/lib/users";
+import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
+import { Button } from "@/src/components/ui/button";
+import { Input } from "@/src/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/components/ui/select";
+import { Combobox } from "@/src/components/ui/combobox";
+import { Alert, AlertDescription, AlertTitle } from "@/src/components/ui/alert";
 import {
   Table,
   TableBody,
@@ -12,29 +24,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-import { deleteUser, getAllUsers, userResponse } from "@/lib/users";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+} from "@/src/components/ui/table";
+import { Badge } from "@/src/components/ui/badge";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Combobox } from "@/components/ui/combobox";
+} from "@/src/components/ui/pagination";
 
 const UserStates = [
   {
@@ -110,14 +108,10 @@ const UsersPage = () => {
     }
   };
 
-  const handleNumberFilterChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleNumberFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNumberFilter(event.target.value);
   };
-  const handleNameFilterChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleNameFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNameFilter(event.target.value);
   };
   const handleRoleFilterChange = (role: string) => {
@@ -166,10 +160,7 @@ const UsersPage = () => {
           />
 
           <div className="flex flex-row sm:w-64 w-full gap-2 pb-4">
-            <Select
-              value={roleFilter}
-              onValueChange={(e) => handleRoleFilterChange(e.toString())}
-            >
+            <Select value={roleFilter} onValueChange={(e) => handleRoleFilterChange(e.toString())}>
               <SelectTrigger className="sm:w-32 w-full">
                 <SelectValue placeholder="Theme" />
               </SelectTrigger>
@@ -229,19 +220,15 @@ const UsersPage = () => {
                     >
                       {user.name}
                     </TableCell>
-                    <TableCell>
-                      {new Date(user.admission).toLocaleDateString()}
-                    </TableCell>
+                    <TableCell>{new Date(user.admission).toLocaleDateString()}</TableCell>
                     <TableCell>
                       {user.role === "admin" ? (
                         <Badge variant="default">
-                          {user.role.charAt(0).toUpperCase() +
-                            user.role.slice(1)}
+                          {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                         </Badge>
                       ) : (
                         <Badge variant="secondary">
-                          {user.role.charAt(0).toUpperCase() +
-                            user.role.slice(1)}
+                          {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                         </Badge>
                       )}
                     </TableCell>
@@ -274,37 +261,6 @@ const UsersPage = () => {
                 ))}
               </TableBody>
             </Table>
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious
-                    className={
-                      startIndex === 0
-                        ? "pointer-events-none opacity-50"
-                        : undefined
-                    }
-                    onClick={prevPage}
-                  />
-                </PaginationItem>
-                <PaginationItem>
-                  {startIndex + 1}-
-                  {filteredUsers.length < endIndex
-                    ? filteredUsers.length
-                    : endIndex}{" "}
-                  de {filteredUsers.length}
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext
-                    className={
-                      filteredUsers.length <= endIndex
-                        ? "pointer-events-none opacity-50"
-                        : undefined
-                    }
-                    onClick={nextPage}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
           </>
         )}
       </CardContent>

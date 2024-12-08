@@ -1,7 +1,7 @@
 "use client";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/src/components/ui/avatar";
+import { Button } from "@/src/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,9 +9,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { logout, userStatusResponse } from "@/lib/auth";
-import { cn, getFirstLettersOfName } from "@/lib/utils";
+} from "@/src/components/ui/dropdown-menu";
+import { logout, userStatusResponse } from "@/src/lib/auth";
+import { cn, getFirstLettersOfName } from "@/src/lib/utils";
 import { Gauge, Menu, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
