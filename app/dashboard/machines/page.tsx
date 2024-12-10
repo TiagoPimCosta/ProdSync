@@ -1,7 +1,22 @@
-import React from "react";
+import PageHeader from "@/ui/dashboard/PageHeader";
+import React, { useMemo } from "react";
 
 const Machinespage = () => {
-  return <div>Machinespage</div>;
+  const pageBreadcrumbItems = useMemo(
+    () => [
+      {
+        label: "Máquinas",
+      },
+    ],
+    []
+  );
+
+  return (
+    <div>
+      <PageHeader breadcrumbItems={pageBreadcrumbItems} />
+      Machinespage
+    </div>
+  );
 };
 
 export default Machinespage;

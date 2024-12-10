@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { Plus, Trash2, Pencil, AlertTriangle } from "lucide-react";
@@ -26,13 +26,7 @@ import {
   TableRow,
 } from "@/src/components/ui/table";
 import { Badge } from "@/src/components/ui/badge";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/src/components/ui/pagination";
+import PageHeader from "@/ui/dashboard/PageHeader";
 
 const UserStates = [
   {
@@ -46,6 +40,15 @@ const UserStates = [
 ];
 
 const UsersPage = () => {
+  const pageBreadcrumbItems = useMemo(
+    () => [
+      {
+        label: "Funcionários",
+      },
+    ],
+    []
+  );
+
   const [users, setUsers] = useState<userResponse[] | []>([]);
 
   const [numberFilter, setNumberFilter] = useState<string>("");
@@ -126,51 +129,56 @@ const UsersPage = () => {
     }
   };
   return (
-    <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
-      <CardHeader className="flex flex-row items-center">
-        <div className="flex-1 flex gap-4">
-          <CardTitle>Utilizadores</CardTitle>
-        </div>
-        <div>
-          <Button
-            variant="outline"
-            onClick={() => {
-              router.push(pathname + "/create");
-            }}
-          >
-            <Plus className="mr-2 h-4 w-4" />
-            Criar
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="flex sm:flex-row flex-col w-full gap-2 pb-4">
-          <Input
-            placeholder="Número"
-            type="number"
-            className="sm:max-w-32 w-full"
-            value={numberFilter}
-            onChange={handleNumberFilterChange}
-          />
-          <Input
-            placeholder="Nome"
-            className="w-full"
-            value={nameFilter}
-            onChange={handleNameFilterChange}
-          />
+    <>
+      <PageHeader breadcrumbItems={pageBreadcrumbItems} />
+      <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
+        <CardHeader className="flex flex-row items-center">
+          <div className="flex-1 flex gap-4">
+            <CardTitle>Utilizadores</CardTitle>
+          </div>
+          <div>
+            <Button
+              variant="outline"
+              onClick={() => {
+                router.push(pathname + "/create");
+              }}
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Criar
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="flex sm:flex-row flex-col w-full gap-2 pb-4">
+            <Input
+              placeholder="Número"
+              type="number"
+              className="sm:max-w-32 w-full"
+              value={numberFilter}
+              onChange={handleNumberFilterChange}
+            />
+            <Input
+              placeholder="Nome"
+              className="w-full"
+              value={nameFilter}
+              onChange={handleNameFilterChange}
+            />
 
-          <div className="flex flex-row sm:w-64 w-full gap-2 pb-4">
-            <Select value={roleFilter} onValueChange={(e) => handleRoleFilterChange(e.toString())}>
-              <SelectTrigger className="sm:w-32 w-full">
-                <SelectValue placeholder="Theme" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="admin">Admin</SelectItem>
-                <SelectItem value="user">User</SelectItem>
-              </SelectContent>
-            </Select>
-            {/* <Select
+            <div className="flex flex-row sm:w-64 w-full gap-2 pb-4">
+              <Select
+                value={roleFilter}
+                onValueChange={(e) => handleRoleFilterChange(e.toString())}
+              >
+                <SelectTrigger className="sm:w-32 w-full">
+                  <SelectValue placeholder="Theme" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos</SelectItem>
+                  <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="user">User</SelectItem>
+                </SelectContent>
+              </Select>
+              {/* <Select
               value={stateFilter}
               onValueChange={(e: string) => handleStateFilterChange(e)}
             >
@@ -183,88 +191,89 @@ const UsersPage = () => {
                 <SelectItem value="all">Clear Filter</SelectItem>
               </SelectContent>
             </Select> */}
-            <Combobox values={UserStates} placeholder="Estado" />
+              <Combobox values={UserStates} placeholder="Estado" />
+            </div>
           </div>
-        </div>
-        {filteredUsers?.length === 0 ? (
-          <>
-            <Alert variant="destructive">
-              <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>Nenhum utilizador encontrado.</AlertTitle>
-              <AlertDescription>
-                Não existe nenhum utilizador que satisfaça os filtros inseridos.
-              </AlertDescription>
-            </Alert>
-          </>
-        ) : (
-          <>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[50px]">Número</TableHead>
-                  <TableHead>Nome</TableHead>
-                  <TableHead>Admissão</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Estado</TableHead>
-                  <TableHead className="text-center">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredUsers?.slice(startIndex, endIndex).map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell className="font-medium">{user.id}</TableCell>
-                    <TableCell
-                      onClick={() => {
-                        router.push(pathname + "/" + user.id);
-                      }}
-                    >
-                      {user.name}
-                    </TableCell>
-                    <TableCell>{new Date(user.admission).toLocaleDateString()}</TableCell>
-                    <TableCell>
-                      {user.role === "admin" ? (
-                        <Badge variant="default">
-                          {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-                        </Badge>
-                      ) : (
-                        <Badge variant="secondary">
-                          {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
-                        </Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {user.isActive ? (
-                        <Badge variant="default">Active</Badge>
-                      ) : (
-                        <Badge variant="secondary">Inactive</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell className="flex flex-row gap-2 justify-center">
-                      <Button
-                        variant="secondary"
-                        size="icon"
+          {filteredUsers?.length === 0 ? (
+            <>
+              <Alert variant="destructive">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertTitle>Nenhum utilizador encontrado.</AlertTitle>
+                <AlertDescription>
+                  Não existe nenhum utilizador que satisfaça os filtros inseridos.
+                </AlertDescription>
+              </Alert>
+            </>
+          ) : (
+            <>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[50px]">Número</TableHead>
+                    <TableHead>Nome</TableHead>
+                    <TableHead>Admissão</TableHead>
+                    <TableHead>Role</TableHead>
+                    <TableHead>Estado</TableHead>
+                    <TableHead className="text-center">Ações</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredUsers?.slice(startIndex, endIndex).map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell className="font-medium">{user.id}</TableCell>
+                      <TableCell
                         onClick={() => {
-                          router.push(pathname + "/" + user.id + "/edit");
+                          router.push(pathname + "/" + user.id);
                         }}
                       >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        onClick={() => deleteUserHandler(user.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </>
-        )}
-      </CardContent>
-    </Card>
+                        {user.name}
+                      </TableCell>
+                      <TableCell>{new Date(user.admission).toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        {user.role === "admin" ? (
+                          <Badge variant="default">
+                            {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary">
+                            {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                          </Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {user.isActive ? (
+                          <Badge variant="default">Active</Badge>
+                        ) : (
+                          <Badge variant="secondary">Inactive</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell className="flex flex-row gap-2 justify-center">
+                        <Button
+                          variant="secondary"
+                          size="icon"
+                          onClick={() => {
+                            router.push(pathname + "/" + user.id + "/edit");
+                          }}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          onClick={() => deleteUserHandler(user.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </>
+          )}
+        </CardContent>
+      </Card>
+    </>
   );
 };
 export default UsersPage;
