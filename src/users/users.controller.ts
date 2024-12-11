@@ -7,13 +7,18 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from 'src/typeorm/entities/user.entity';
 import { ErrorResponse } from 'src/types/ErrorResponse';
+import { CreateUserRequestDto, UpdateUserRequestDto } from 'src/dtos/users.dto';
+import {
+  Pagination,
+  PaginationParams,
+} from 'src/helpers/decorators/pagination.params.decorator';
+import { PaginatedResource } from 'src/dtos/paginatedResource.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -42,7 +47,7 @@ export class UsersController {
     type: ErrorResponse,
   })
   async create(
-    @Body() createUserDto: CreateUserDto,
+    @Body() createUserDto: CreateUserRequestDto,
   ): Promise<void | ErrorResponse> {
     try {
       await this.usersService.create(createUserDto);
@@ -53,6 +58,37 @@ export class UsersController {
 
   @Get()
   @ApiOperation({ summary: 'Get all users' })
+  @ApiQuery({
+    name: 'name',
+    required: false,
+    description: 'Filter by name',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'role',
+    required: false,
+    description: 'Filter by role',
+    type: String,
+  })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    description: 'Filter by status',
+    type: String,
+    enum: ['admin', 'user'],
+  })
+  @ApiQuery({
+    name: 'startAdmission',
+    required: false,
+    description: 'Filter by start admission date',
+    type: Date,
+  })
+  @ApiQuery({
+    name: 'endAdmission',
+    required: false,
+    description: 'Filter by end admission date',
+    type: Date,
+  })
   @ApiResponse({
     status: 200,
     description: 'Users successfully retrieved',
@@ -63,9 +99,23 @@ export class UsersController {
     description: 'Internal Server Error',
     type: ErrorResponse,
   })
-  findAll() {
+  findAll(
+    @PaginationParams() paginationParams: Pagination,
+    @Query('name') name?: string,
+    @Query('role') role?: string,
+    @Query('status') status?: string,
+    @Query('startAdmission') startAdmission?: Date,
+    @Query('endAdmission') endAdmission?: Date,
+  ): Promise<PaginatedResource<Partial<User>> | ErrorResponse> {
     try {
-      return this.usersService.findAll();
+      return this.usersService.findAll(
+        paginationParams,
+        name,
+        role,
+        status,
+        startAdmission,
+        endAdmission,
+      );
     } catch (error) {
       throw error;
     }
@@ -114,7 +164,7 @@ export class UsersController {
   })
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: UpdateUserRequestDto,
   ): Promise<void | ErrorResponse> {
     try {
       await this.usersService.update(id, updateUserDto);

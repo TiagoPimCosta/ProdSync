@@ -9,9 +9,11 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { MachinesService } from './machines.service';
-import { CreateMachineDto } from './dto/create-machine.dto';
-import { UpdateMachineDto } from './dto/update-machine.dto';
 import { ApiTags } from '@nestjs/swagger';
+import {
+  CreateMachineRequestDto,
+  UpdateMachineRequestDto,
+} from 'src/dtos/machines.dto';
 
 @ApiTags('Machines')
 @Controller('machines')
@@ -19,7 +21,7 @@ export class MachinesController {
   constructor(private readonly machinesService: MachinesService) {}
 
   @Post()
-  create(@Body() createMachineDto: CreateMachineDto) {
+  create(@Body() createMachineDto: CreateMachineRequestDto) {
     return this.machinesService.create(createMachineDto);
   }
 
@@ -36,7 +38,7 @@ export class MachinesController {
   @Patch(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateMachineDto: UpdateMachineDto,
+    @Body() updateMachineDto: UpdateMachineRequestDto,
   ) {
     return this.machinesService.update(id, updateMachineDto);
   }

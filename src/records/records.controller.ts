@@ -7,8 +7,8 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { RecordsService } from './records.service';
-import { CreateRecordDto } from './dto/create-record.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { CreateRecordRequestDto } from 'src/dtos/records.dto';
 
 @ApiTags('Records')
 @Controller('records')
@@ -16,7 +16,7 @@ export class RecordsController {
   constructor(private readonly recordsService: RecordsService) {}
 
   @Post()
-  create(@Body() createRecordDto: CreateRecordDto) {
+  create(@Body() createRecordDto: CreateRecordRequestDto) {
     return this.recordsService.create(createRecordDto);
   }
 

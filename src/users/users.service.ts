@@ -7,9 +7,12 @@ import {
 import { User } from 'src/typeorm/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserParams, UpdateUserParams } from './params';
 import { ErrorResponse } from 'src/types/ErrorResponse';
 import { checkFieldUniqueness } from 'src/utils/checkFieldUniqueness';
+import { CreateUserParams, UpdateUserParams } from 'src/params/users.params';
+import { Pagination } from 'src/helpers/decorators/pagination.params.decorator';
+import { PaginatedResource } from 'src/dtos/paginatedResource.dto';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class UsersService {
@@ -62,9 +65,47 @@ export class UsersService {
     }
   }
 
-  async findAll() {
+  async findAll(
+    { page, limit, size, offset }: Pagination,
+    name?: string,
+    role?: string,
+    status?: string,
+    startAdmission?: Date,
+    endAdmission?: Date,
+  ): Promise<PaginatedResource<User> | ErrorResponse> {
     try {
-      return this.userRepository.find();
+      const queryBuilder = this.userRepository.createQueryBuilder('user');
+
+      if (name)
+        queryBuilder.andWhere('user.name LIKE :name', { name: `%${name}%` });
+
+      if (role) queryBuilder.andWhere('user.role = :role', { role });
+
+      if (status) queryBuilder.andWhere('user.status = :status', { status });
+
+      if (endAdmission < startAdmission)
+        [startAdmission, endAdmission] = [endAdmission, startAdmission];
+
+      if (startAdmission)
+        queryBuilder.andWhere('user.admission >= :startAdmission', {
+          startAdmission: dayjs(startAdmission).startOf('day').format(),
+        });
+
+      if (endAdmission)
+        queryBuilder.andWhere('user.admission <= :endAdmission', {
+          endAdmission: dayjs(endAdmission).endOf('day').format(),
+        });
+
+      queryBuilder.skip(offset).take(limit);
+
+      const [users, total] = await queryBuilder.getManyAndCount();
+
+      return {
+        items: users,
+        totalItems: total,
+        size,
+        page,
+      };
     } catch (error) {
       throw new InternalServerErrorException(
         'An error occurred while fetching the users.',
@@ -72,7 +113,6 @@ export class UsersService {
       );
     }
   }
-
   async findOneById(id: number) {
     try {
       const user = await this.userRepository.findOneBy({ id });

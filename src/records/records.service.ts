@@ -3,8 +3,8 @@ import { Record } from '../typeorm/entities/record.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
-import { CreateRecordParams } from './params';
 import { MachinesService } from 'src/machines/machines.service';
+import { CreateRecordParams } from 'src/params/records.params';
 
 @Injectable()
 export class RecordsService {
