@@ -16,11 +16,14 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
 import Link from "next/link";
-import { logout } from "@/src/lib/auth";
+import { logout, userStatusResponse } from "@/src/lib/auth";
 import { useRouter } from "next/navigation";
+import { getFirstAndLastName } from "@/src/utils/user";
 
 const links = [
   {
@@ -40,7 +43,13 @@ const links = [
   },
 ];
 
-export function AdminSidebar() {
+interface AdminSidebarProps {
+  user: userStatusResponse | null;
+}
+
+export function AdminSidebar(props: AdminSidebarProps) {
+  const { user } = props;
+
   const router = useRouter();
 
   const handleLogOut = async (e: React.FormEvent) => {
@@ -77,11 +86,13 @@ export function AdminSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> Username
+                  <User2 /> {getFirstAndLastName(user?.name || "Utilizador")}
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="right" className="w-[--radix-popper-anchor-width]">
+                <DropdownMenuLabel>{user?.name || "Utilizador"}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogOut}>
                   <span>Sign out</span>
                 </DropdownMenuItem>
