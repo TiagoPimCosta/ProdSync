@@ -90,7 +90,11 @@ export function AdminSidebar(props: AdminSidebarProps) {
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
-              <DropdownMenuContent side="right" className="w-[--radix-popper-anchor-width]">
+              <DropdownMenuContent
+                side="right"
+                align="end"
+                className="w-[--radix-popper-anchor-width]"
+              >
                 <DropdownMenuLabel>{user?.name || "Utilizador"}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogOut}>
