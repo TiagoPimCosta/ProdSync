@@ -18,10 +18,23 @@ import {
 } from "@/src/components/ui/table";
 import { Badge } from "@/src/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/src/components/ui/avatar";
+import { useMemo } from "react";
+import PageHeader from "@/ui/dashboard/PageHeader";
 
 const DashboardPage = () => {
+  const pageBreadcrumbItems = useMemo(
+    () => [
+      {
+        label: "Dashboard",
+        href: "/dashboard",
+      },
+    ],
+    []
+  );
+
   return (
     <>
+      <PageHeader breadcrumbItems={pageBreadcrumbItems} />
       <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
         <Card x-chunk="dashboard-01-chunk-0">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

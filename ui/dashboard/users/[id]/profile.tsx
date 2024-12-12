@@ -1,23 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
-import { getUserById } from "@/src/lib/users";
+import { getUserById, userResponse } from "@/src/lib/users";
 import React from "react";
 import SubCard from "./subCard";
-
-interface userResponse {
-  id: number;
-  idNumber: number;
-  name: string;
-  role: string;
-  username: string;
-  password: string;
-  createdAt: string;
-  cc: string;
-  nif: string;
-  phone: string;
-  email: string;
-  isActive: boolean;
-  admission: Date;
-}
 
 interface ProfileProps {
   id: number;
