@@ -13,12 +13,13 @@ import { useGetUsers } from "@/src/services/users/usersQueries";
 import { EyeIcon } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo } from "react";
+import { Pagination } from "@mantine/core";
 
 export default function TableUsers() {
   const usersSearchParams = useSearchParams();
   const router = useRouter();
 
-  const page = usersSearchParams.get("page");
+  const page = Number(usersSearchParams.get("page"));
   const size = usersSearchParams.get("size");
 
   const tableColumns = useMemo(() => {
@@ -47,12 +48,18 @@ export default function TableUsers() {
   }, []);
 
   const { data, isLoading } = useGetUsers({
-    page: Number(page) ? Number(page) - 1 : 0,
+    page: page ? page - 1 : 0,
     size: Number(size) ? Number(size) : 10,
   });
 
   const handleOpenProfile = (id: number) => {
     router.push(`/dashboard/users/${id}`);
+  };
+
+  const handleChangePage = (page: number) => {
+    const currentParams = new URLSearchParams(usersSearchParams?.toString());
+    currentParams.set("page", page.toString());
+    router.push(`?${currentParams.toString()}`);
   };
 
   return (
@@ -97,6 +104,11 @@ export default function TableUsers() {
                 ))}
               </TableBody>
             </Table>
+            <Pagination
+              total={Math.ceil((data?.totalItems || 0) / (data?.size || 1))}
+              value={page || 1}
+              onChange={handleChangePage}
+            />
           </>
         )}
       </div>
