@@ -16,7 +16,6 @@ const UsersPage = () => {
   return (
     <>
       <PageHeader breadcrumbItems={pageBreadcrumbItems} />
-      <div>Funcionários</div>
       <TableUsers />
     </>
   );
