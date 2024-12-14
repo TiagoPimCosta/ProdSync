@@ -1,4 +1,3 @@
-import { toast } from "react-hot-toast";
 import { fetchWithAuth } from "./fetch";
 
 export async function addRecord(machineId: number): Promise<void> {
@@ -18,16 +17,10 @@ export async function addRecord(machineId: number): Promise<void> {
     });
 
     if (res.status === 201) {
-      toast.success("Trabalho Submetido", {
-        duration: 4000,
-      });
     } else {
       throw new Error("Erro ao submeter trabalho");
     }
   } catch (error) {
     console.log(error);
-    toast.error("Erro ao submeter trabalho", {
-      duration: 4000,
-    });
   }
 }

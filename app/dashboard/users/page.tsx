@@ -2,6 +2,7 @@
 
 import React, { useMemo } from "react";
 import PageHeader from "@/ui/dashboard/PageHeader";
+import TableUsers from "@/ui/dashboard/users/TableUsers";
 
 const UsersPage = () => {
   const pageBreadcrumbItems = useMemo(
@@ -16,6 +17,7 @@ const UsersPage = () => {
     <>
       <PageHeader breadcrumbItems={pageBreadcrumbItems} />
       <div>Funcionários</div>
+      <TableUsers />
     </>
   );
 };
