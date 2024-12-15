@@ -14,42 +14,43 @@ import { EyeIcon } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { Pagination } from "@mantine/core";
+import { Select } from "@mantine/core";
 
 export default function TableUsers() {
   const usersSearchParams = useSearchParams();
   const router = useRouter();
 
   const page = Number(usersSearchParams.get("page"));
-  const size = usersSearchParams.get("size");
+  const size = Number(usersSearchParams.get("size")) || 10;
 
   const tableColumns = useMemo(() => {
     return [
       {
         title: "Numero",
-        className: "",
+        className: "w-16",
       },
       {
         title: "Nome",
-        className: "",
+        className: "flex-1",
       },
       {
         title: "Role",
-        className: "",
+        className: "w-32",
       },
       {
         title: "Estado",
-        className: "",
+        className: "w-32",
       },
       {
-        title: "",
-        className: "",
+        title: "Ações",
+        className: "w-32",
       },
     ];
   }, []);
 
   const { data, isLoading } = useGetUsers({
     page: page ? page - 1 : 0,
-    size: Number(size) ? Number(size) : 10,
+    size: size,
   });
 
   const handleOpenProfile = (id: number) => {
@@ -62,56 +63,82 @@ export default function TableUsers() {
     router.push(`?${currentParams.toString()}`);
   };
 
+  const handleChangePageSize = (pageSize: string | null) => {
+    if (pageSize) {
+      const currentParams = new URLSearchParams(usersSearchParams?.toString());
+      currentParams.set("size", pageSize);
+      router.push(`?${currentParams.toString()}`);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col items-center gap-4">
-        {isLoading ? (
-          <p>Carregando...</p>
-        ) : (
-          <>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {tableColumns.map((column) => (
-                    <TableHead className={column.className} key={column.title}>
-                      {column.title}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data?.items?.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell>{user.idNumber}</TableCell>
-                    <TableCell>{user.name}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{user.role}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      {user.status ? (
-                        <Badge variant="secondary">Ativo</Badge>
-                      ) : (
-                        <Badge variant="destructive">Inativo</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <EyeIcon
-                        className="h-5 w-5"
-                        onClick={() => handleOpenProfile(user.idNumber)}
-                      />
-                    </TableCell>
-                  </TableRow>
+      {isLoading ? (
+        <p>Carregando...</p>
+      ) : (
+        <>
+          <div className="flex justify-between">
+            <h1></h1>
+            <Select
+              checkIconPosition="right"
+              className="w-20"
+              data={[
+                { value: "10", label: "10" },
+                { value: "15", label: "15" },
+                { value: "25", label: "25" },
+                { value: "50", label: "50" },
+              ]}
+              value={size.toString()}
+              onChange={handleChangePageSize}
+            />
+          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                {tableColumns.map((column) => (
+                  <TableHead className={column.className} key={column.title}>
+                    {column.title}
+                  </TableHead>
                 ))}
-              </TableBody>
-            </Table>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data?.items?.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell>{user.idNumber}</TableCell>
+                  <TableCell>{user.name}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="min-w-16 justify-center">
+                      {user.role[0].toUpperCase() + user.role.slice(1)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {user.status ? (
+                      <Badge variant="secondary" className="min-w-16 justify-center">
+                        Ativo
+                      </Badge>
+                    ) : (
+                      <Badge variant="destructive" className="min-w-16 justify-center">
+                        Inativo
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell className="flex justify-center">
+                    <EyeIcon className="h-5 w-5" onClick={() => handleOpenProfile(user.idNumber)} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <div className="flex justify-center">
             <Pagination
               total={Math.ceil((data?.totalItems || 0) / (data?.size || 1))}
               value={page || 1}
               onChange={handleChangePage}
             />
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
