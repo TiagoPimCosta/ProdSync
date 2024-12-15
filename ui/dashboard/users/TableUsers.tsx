@@ -22,6 +22,7 @@ export default function TableUsers() {
 
   const page = Number(usersSearchParams.get("page"));
   const size = Number(usersSearchParams.get("size")) || 10;
+  const role = usersSearchParams.get("role") || undefined;
 
   const tableColumns = useMemo(() => {
     return [
@@ -51,6 +52,7 @@ export default function TableUsers() {
   const { data, isLoading } = useGetUsers({
     page: page ? page - 1 : 0,
     size: size,
+    role: role,
   });
 
   const handleOpenProfile = (id: number) => {
@@ -71,6 +73,17 @@ export default function TableUsers() {
     }
   };
 
+  const handleChangeRole = (role: string | null) => {
+    const currentParams = new URLSearchParams(usersSearchParams?.toString());
+    if (role) {
+      currentParams.set("role", role);
+      router.push(`?${currentParams.toString()}`);
+    } else {
+      currentParams.delete("role");
+      router.push(`?${currentParams.toString()}`);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
       {isLoading ? (
@@ -78,7 +91,20 @@ export default function TableUsers() {
       ) : (
         <>
           <div className="flex justify-between">
-            <h1></h1>
+            <div>
+              <Select
+                checkIconPosition="right"
+                className="w-28"
+                placeholder="Role"
+                data={[
+                  { value: "admin", label: "Admin" },
+                  { value: "user", label: "User" },
+                ]}
+                value={role}
+                onChange={handleChangeRole}
+                clearable
+              />
+            </div>
             <Select
               checkIconPosition="right"
               className="w-20"
