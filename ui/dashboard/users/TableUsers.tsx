@@ -15,6 +15,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { Pagination } from "@mantine/core";
 import { Select } from "@mantine/core";
+import { PageSizes } from "@/src/utils/consts";
 
 export default function TableUsers() {
   const usersSearchParams = useSearchParams();
@@ -160,12 +161,7 @@ export default function TableUsers() {
               <Select
                 checkIconPosition="right"
                 className="w-20"
-                data={[
-                  { value: "10", label: "10" },
-                  { value: "15", label: "15" },
-                  { value: "25", label: "25" },
-                  { value: "50", label: "50" },
-                ]}
+                data={PageSizes}
                 value={size.toString()}
                 onChange={handleChangePageSize}
               />

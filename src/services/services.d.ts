@@ -12,3 +12,8 @@ interface Pagination {
   size: number;
   totalItems: number;
 }
+
+interface SelectOption {
+  value: string;
+  label: string;
+}
