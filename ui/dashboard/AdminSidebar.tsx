@@ -91,7 +91,7 @@ export function AdminSidebar(props: AdminSidebarProps) {
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                side="right"
+                side="top"
                 align="end"
                 className="w-[--radix-popper-anchor-width]"
               >
