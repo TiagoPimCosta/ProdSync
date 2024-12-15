@@ -20,7 +20,7 @@ export default function TableUsers() {
   const usersSearchParams = useSearchParams();
   const router = useRouter();
 
-  const page = Number(usersSearchParams.get("page"));
+  const page = Number(usersSearchParams.get("page")) || 1;
   const size = Number(usersSearchParams.get("size")) || 10;
   const role = usersSearchParams.get("role") || undefined;
 
@@ -50,7 +50,7 @@ export default function TableUsers() {
   }, []);
 
   const { data, isLoading } = useGetUsers({
-    page: page ? page - 1 : 0,
+    page: page - 1,
     size: size,
     role: role,
   });
@@ -105,18 +105,6 @@ export default function TableUsers() {
                 clearable
               />
             </div>
-            <Select
-              checkIconPosition="right"
-              className="w-20"
-              data={[
-                { value: "10", label: "10" },
-                { value: "15", label: "15" },
-                { value: "25", label: "25" },
-                { value: "50", label: "50" },
-              ]}
-              value={size.toString()}
-              onChange={handleChangePageSize}
-            />
           </div>
           <Table>
             <TableHeader>
@@ -156,12 +144,32 @@ export default function TableUsers() {
               ))}
             </TableBody>
           </Table>
-          <div className="flex justify-center">
-            <Pagination
-              total={Math.ceil((data?.totalItems || 0) / (data?.size || 1))}
-              value={page || 1}
-              onChange={handleChangePage}
-            />
+          <div className="flex">
+            <div className="flex-1 justify-start">
+              {(page - 1) * size + 1}-{Math.min(page * size, data?.totalItems || 0)} of{" "}
+              {data?.totalItems} items
+            </div>
+            <div className="flex-1 items-center">
+              <Pagination
+                total={Math.ceil((data?.totalItems || 0) / (data?.size || 1))}
+                value={page}
+                onChange={handleChangePage}
+              />
+            </div>
+            <div className="justify-end">
+              <Select
+                checkIconPosition="right"
+                className="w-20"
+                data={[
+                  { value: "10", label: "10" },
+                  { value: "15", label: "15" },
+                  { value: "25", label: "25" },
+                  { value: "50", label: "50" },
+                ]}
+                value={size.toString()}
+                onChange={handleChangePageSize}
+              />
+            </div>
           </div>
         </>
       )}
