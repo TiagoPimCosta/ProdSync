@@ -2,9 +2,9 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { PaginationParams } from "../services.Schemas";
 import { handleApiResponseError } from "@/src/utils/errors";
 import { parseQueryParams } from "@/src/utils/services";
-import { GetUsersParamsSchema } from "@/src/schemas/usersSchema";
+import { GetUserParamsSchema, GetUsersParamsSchema } from "@/src/schemas/usersSchema";
 
-interface UserObj {
+export interface UserObj {
   id: number;
   idNumber: number;
   name: string;
@@ -38,9 +38,34 @@ export function useGetUsers(params: GetUsersParams) {
     queryKey: ["users", page, size, role],
     placeholderData: keepPreviousData,
     queryFn: async () => {
-      //await new Promise((resolve) => setTimeout(resolve, 5000));
       const response = await getUsers(params);
       return (await response.json()) as GetUsersResponse;
+    },
+    throwOnError: (error) => {
+      handleApiResponseError(error);
+      return false;
+    },
+  });
+}
+export type GetUserParams = GetUserParamsSchema;
+export type GetUserResponse = UserObj;
+
+export function getUser(params: GetUserParams) {
+  const baseUrl = "http://localhost:8080/api/users";
+  const url = `${baseUrl}/${params.id}`;
+
+  return fetch(url);
+}
+
+export function useGetUser(params: GetUserParams) {
+  const { id } = params;
+
+  return useQuery({
+    queryKey: ["user", id],
+    placeholderData: keepPreviousData,
+    queryFn: async () => {
+      const response = await getUser(params);
+      return (await response.json()) as GetUserResponse;
     },
     throwOnError: (error) => {
       handleApiResponseError(error);
