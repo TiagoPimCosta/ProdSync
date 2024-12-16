@@ -128,18 +128,12 @@ export default function TableUsers() {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    {user.status ? (
-                      <Badge variant="secondary" className="min-w-16 justify-center">
-                        Ativo
-                      </Badge>
-                    ) : (
-                      <Badge variant="destructive" className="min-w-16 justify-center">
-                        Inativo
-                      </Badge>
-                    )}
+                    <Badge variant={user.status ? "success" : "destructive"}>
+                      {user.status ? "Ativo" : "Inativo"}
+                    </Badge>
                   </TableCell>
                   <TableCell className="flex justify-center">
-                    <EyeIcon className="h-5 w-5" onClick={() => handleOpenProfile(user.idNumber)} />
+                    <EyeIcon className="h-5 w-5" onClick={() => handleOpenProfile(user.id)} />
                   </TableCell>
                 </TableRow>
               ))}
