@@ -16,6 +16,15 @@ import { useMemo } from "react";
 import { Pagination } from "@mantine/core";
 import { Select } from "@mantine/core";
 import { PageSizes } from "@/src/utils/consts";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/src/components/ui/dropdown-menu";
 
 export default function TableUsers() {
   const usersSearchParams = useSearchParams();
@@ -133,7 +142,16 @@ export default function TableUsers() {
                     </Badge>
                   </TableCell>
                   <TableCell className="flex justify-center">
-                    <EyeIcon className="h-5 w-5" onClick={() => handleOpenProfile(user.id)} />
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <EyeIcon className="h-5 w-5" />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => handleOpenProfile(user.id)}>
+                          View Profile
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}
