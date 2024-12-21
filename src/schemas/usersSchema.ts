@@ -5,4 +5,9 @@ export const getUsersParamsSchema = z.object({
   role: z.string().optional(),
 });
 
+export const getUserParamsSchema = z.object({
+  id: z.number(),
+});
+
 export type GetUsersParamsSchema = z.infer<typeof getUsersParamsSchema>;
+export type GetUserParamsSchema = z.infer<typeof getUserParamsSchema>;
