@@ -25,7 +25,7 @@ const UsersPage = () => {
             <CardTitle className="flex gap-1 text-2xl font-bold">Funcionários</CardTitle>
             <Button className="gap-2" variant="secondary">
               <PlusCircle />
-              Adicionar Funcionário
+              Criar Funcionário
             </Button>
           </div>
         </CardHeader>

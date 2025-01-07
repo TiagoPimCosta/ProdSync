@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/src/components/ui/table";
 import { useGetUsers } from "@/src/services/users/usersQueries";
-import { EyeIcon } from "lucide-react";
+import { EyeIcon, Power, PowerOff, User } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { Pagination } from "@mantine/core";
@@ -18,13 +18,11 @@ import { Select } from "@mantine/core";
 import { PageSizes } from "@/src/utils/consts";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
+import { useUserDelete } from "@/src/services/users/usersMutations";
 
 export default function TableUsers() {
   const usersSearchParams = useSearchParams();
@@ -64,27 +62,32 @@ export default function TableUsers() {
     size: size,
     role: role,
   });
+  const userDelete = useUserDelete();
 
   const handleOpenProfile = (id: number) => {
     router.push(`/dashboard/users/${id}`);
   };
 
+  const handleDeactivateUser = async (id: number) => {
+    await userDelete.mutateAsync({ userId: id.toString() });
+  };
+
   const handleChangePage = (page: number) => {
-    const currentParams = new URLSearchParams(usersSearchParams?.toString());
+    const currentParams = new URLSearchParams(usersSearchParams.toString());
     currentParams.set("page", page.toString());
     router.push(`?${currentParams.toString()}`);
   };
 
   const handleChangePageSize = (pageSize: string | null) => {
     if (pageSize) {
-      const currentParams = new URLSearchParams(usersSearchParams?.toString());
+      const currentParams = new URLSearchParams(usersSearchParams.toString());
       currentParams.set("size", pageSize);
       router.push(`?${currentParams.toString()}`);
     }
   };
 
   const handleChangeRole = (role: string | null) => {
-    const currentParams = new URLSearchParams(usersSearchParams?.toString());
+    const currentParams = new URLSearchParams(usersSearchParams.toString());
     if (role) {
       currentParams.set("role", role);
       router.push(`?${currentParams.toString()}`);
@@ -110,7 +113,7 @@ export default function TableUsers() {
                   { value: "admin", label: "Admin" },
                   { value: "user", label: "User" },
                 ]}
-                value={role}
+                value={role || null}
                 onChange={handleChangeRole}
                 clearable
               />
@@ -147,8 +150,28 @@ export default function TableUsers() {
                         <EyeIcon className="h-5 w-5" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => handleOpenProfile(user.id)}>
+                        <DropdownMenuItem
+                          onClick={() => handleOpenProfile(user.id)}
+                          className="flex items-center gap-2"
+                        >
+                          <User className="h-5 w-5" />
                           View Profile
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleDeactivateUser(user.id)}
+                          className="flex items-center gap-2"
+                        >
+                          {user.status ? (
+                            <>
+                              <PowerOff className="h-5 w-5" />
+                              Deactivate
+                            </>
+                          ) : (
+                            <>
+                              <Power className="h-5 w-5" />
+                              Activate
+                            </>
+                          )}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
