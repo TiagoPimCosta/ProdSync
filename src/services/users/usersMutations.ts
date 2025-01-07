@@ -2,7 +2,7 @@ import { toastError, toastSuccess } from "@/src/utils/toasts";
 import { useMutation } from "@tanstack/react-query";
 
 interface UserDeleteParams {
-  userId: string;
+  userId: number;
 }
 
 function userDelete(params: UserDeleteParams) {

@@ -69,7 +69,7 @@ export default function TableUsers() {
   };
 
   const handleDeactivateUser = async (id: number) => {
-    await userDelete.mutateAsync({ userId: id.toString() });
+    await userDelete.mutateAsync({ userId: id });
   };
 
   const handleChangePage = (page: number) => {
