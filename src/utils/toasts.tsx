@@ -11,7 +11,7 @@ export function toastSuccess(message: string) {
 }
 
 export function toastError(message: string) {
-  return toast.success(message, {
+  return toast.error(message, {
     icon: <CircleX className="text-danger" />,
     autoClose: AUTO_CLOSE_TIMER,
   });
