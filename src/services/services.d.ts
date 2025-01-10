@@ -17,3 +17,7 @@ interface SelectOption {
   value: string;
   label: string;
 }
+
+interface ApiResponseMessage {
+  message: string;
+}
