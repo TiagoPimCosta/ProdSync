@@ -38,6 +38,7 @@ export default function PageHeader(props: PageHeaderProps) {
   return (
     <div className="flex items-center gap-4">
       <SidebarTrigger />
+      <div className="h-6 w-px bg-border" />
       <Breadcrumb>
         <BreadcrumbList>{breadcrumbItemsMemo}</BreadcrumbList>
       </Breadcrumb>
