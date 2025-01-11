@@ -1,3 +1,5 @@
+const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
+
 export interface userResponse {
   id: number;
   idNumber: number;
@@ -13,11 +15,9 @@ export interface userResponse {
   admission: Date;
 }
 
-export async function createUser(
-  user: userResponse
-): Promise<userResponse | null> {
+export async function createUser(user: userResponse): Promise<userResponse | null> {
   try {
-    const response = await fetch("http://localhost:8080/api/users", {
+    const response = await fetch(API_ENDPOINT_URL + "/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +36,7 @@ export async function createUser(
 
 export async function getAllUsers(): Promise<userResponse[] | []> {
   try {
-    const response = await fetch("http://localhost:8080/api/users", {
+    const response = await fetch(API_ENDPOINT_URL + "/users", {
       cache: "no-store",
     });
 
@@ -53,7 +53,7 @@ export async function getAllUsers(): Promise<userResponse[] | []> {
 
 export async function getUserById(id: number): Promise<userResponse | null> {
   try {
-    const response = await fetch("http://localhost:8080/api/users/" + id, {
+    const response = await fetch(API_ENDPOINT_URL + "/users/" + id, {
       cache: "no-store",
     });
 
@@ -68,12 +68,9 @@ export async function getUserById(id: number): Promise<userResponse | null> {
   }
 }
 
-export async function updateUserById(
-  id: number,
-  user: userResponse
-): Promise<number> {
+export async function updateUserById(id: number, user: userResponse): Promise<number> {
   try {
-    const response = await fetch("http://localhost:8080/api/users/" + id, {
+    const response = await fetch(API_ENDPOINT_URL + "/users/" + id, {
       method: "Patch",
       headers: {
         "Content-Type": "application/json",
@@ -89,7 +86,7 @@ export async function updateUserById(
 
 export async function deleteUser(id: number): Promise<number> {
   try {
-    const response = await fetch("http://localhost:8080/api/users/" + id, {
+    const response = await fetch(API_ENDPOINT_URL + "/users/" + id, {
       method: "DELETE",
     });
 
