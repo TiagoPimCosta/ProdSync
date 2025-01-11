@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useMemo } from "react";
+import React, { Suspense, useMemo } from "react";
 import PageHeader from "@/ui/dashboard/PageHeader";
 import TableUsers from "@/ui/dashboard/users/TableUsers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
@@ -30,7 +28,9 @@ const UsersPage = () => {
           </div>
         </CardHeader>
         <CardContent>
-          <TableUsers />
+          <Suspense fallback={<div>Loading users...</div>}>
+            <TableUsers />
+          </Suspense>
         </CardContent>
       </Card>
     </>

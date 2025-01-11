@@ -1,9 +1,15 @@
 import { SidebarProvider } from "@/src/components/ui/sidebar";
 import { userStatus, userStatusResponse } from "@/src/lib/auth";
+import { getAuthToken } from "@/src/lib/cookies";
 import { AdminSidebar } from "@/ui/dashboard/AdminSidebar";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const user: userStatusResponse | null = await userStatus();
+  let user: userStatusResponse | null = null;
+  const token = await getAuthToken();
+
+  if (token) {
+    user = await userStatus();
+  }
 
   return (
     <div className="flex min-h-screen w-full flex-col">
