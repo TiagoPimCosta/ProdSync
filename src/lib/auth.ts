@@ -1,6 +1,8 @@
 import { removeAuthToken } from "./cookies";
 import { fetchWithAuth } from "./fetch";
 
+const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
+
 interface authenticateResponse {
   token: string;
   role: string;
@@ -27,7 +29,7 @@ export async function login(
   password: string
 ): Promise<authenticateResponse | void> {
   try {
-    const response = await fetch("http://localhost:8080/api/auth/login", {
+    const response = await fetch(API_ENDPOINT_URL + "/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,9 +54,7 @@ export async function logout(): Promise<void> {
 
 export async function userStatus(): Promise<userStatusResponse | null> {
   try {
-    const response = await fetchWithAuth(
-      "http://localhost:8080/api/auth/status"
-    );
+    const response = await fetchWithAuth(API_ENDPOINT_URL + "/auth/status");
 
     if (!response) {
       throw new Error("User could not be found failed");

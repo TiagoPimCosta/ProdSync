@@ -1,16 +1,16 @@
 import { toastError, toastSuccess } from "@/src/utils/toasts";
 import { useMutation } from "@tanstack/react-query";
 
+const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
+
 interface UserDeleteParams {
   userId: number;
 }
 
 function userDelete(params: UserDeleteParams) {
-  const baseUrl = "http://localhost:8080/api/users";
   const { userId } = params;
 
-  const url = `${baseUrl}/${userId}`;
-  return fetch(url, {
+  return fetch(API_ENDPOINT_URL + "/users/" + userId, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

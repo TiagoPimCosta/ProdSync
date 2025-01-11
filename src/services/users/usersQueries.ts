@@ -4,6 +4,8 @@ import { handleApiResponseError } from "@/src/utils/errors";
 import { parseQueryParams } from "@/src/utils/services";
 import { GetUserParamsSchema, GetUsersParamsSchema } from "@/src/schemas/usersSchema";
 
+const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
+
 export interface UserObj {
   id: number;
   idNumber: number;
@@ -22,11 +24,9 @@ export type GetUsersParams = GetUsersParamsSchema & Partial<PaginationParams>;
 export type GetUsersResponse = ApiGetListResponse<UserObj[]> & Pagination;
 
 export function getUsers(params: GetUsersParams) {
-  const baseUrl = "http://localhost:8080/api/users";
-
   const queryParams = parseQueryParams(params);
   const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
-  const url = `${baseUrl}?${queryString}`;
+  const url = API_ENDPOINT_URL + "/users?" + queryString;
 
   return fetch(url);
 }
@@ -51,9 +51,7 @@ export type GetUserParams = GetUserParamsSchema;
 export type GetUserResponse = UserObj;
 
 export function getUser(params: GetUserParams) {
-  const baseUrl = "http://localhost:8080/api/users";
-  const url = `${baseUrl}/${params.id}`;
-
+  const url = API_ENDPOINT_URL + "/users/" + params.id;
   return fetch(url);
 }
 
