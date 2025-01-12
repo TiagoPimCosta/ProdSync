@@ -193,7 +193,7 @@ export class UsersController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<void | ErrorResponse> {
     try {
-      await this.usersService.delete(id);
+      return await this.usersService.delete(id);
     } catch (error) {
       throw error;
     }

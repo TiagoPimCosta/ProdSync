@@ -206,7 +206,11 @@ export class UsersService {
       const user = await this.userRepository.findOneBy({ id });
       if (!user) throw new NotFoundException(`User with ID ${id} not found.`);
 
-      await this.userRepository.update({ id }, { status: false });
+      await this.userRepository.update({ id }, { status: !user.status });
+      return {
+        statusCode: 200,
+        message: `User with number ${user.idNumber} has been ${!user.status ? 'activated' : 'deactivated'}.`,
+      };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
