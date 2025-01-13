@@ -57,7 +57,11 @@ export default function TableUsers() {
     ];
   }, []);
 
-  const { data, isLoading } = useGetUsers({
+  const {
+    data,
+    isLoading,
+    refetch: refetchUsers,
+  } = useGetUsers({
     page: page - 1,
     size: size,
     role: role,
@@ -70,6 +74,7 @@ export default function TableUsers() {
 
   const handleDeactivateUser = async (id: number) => {
     await userDelete.mutateAsync({ userId: id });
+    refetchUsers();
   };
 
   const handleChangePage = (page: number) => {
@@ -82,6 +87,7 @@ export default function TableUsers() {
     if (pageSize) {
       const currentParams = new URLSearchParams(usersSearchParams.toString());
       currentParams.set("size", pageSize);
+      currentParams.set("page", "0");
       router.push(`?${currentParams.toString()}`);
     }
   };
