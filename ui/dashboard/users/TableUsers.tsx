@@ -125,67 +125,69 @@ export default function TableUsers() {
               />
             </div>
           </div>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {tableColumns.map((column) => (
-                  <TableHead className={column.className} key={column.title}>
-                    {column.title}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data?.items?.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.idNumber}</TableCell>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="min-w-16 justify-center">
-                      {user.role[0].toUpperCase() + user.role.slice(1)}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={user.status ? "success" : "destructive"}>
-                      {user.status ? "Ativo" : "Inativo"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="flex justify-center">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <EyeIcon className="h-5 w-5" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem
-                          onClick={() => handleOpenProfile(user.id)}
-                          className="flex items-center gap-2"
-                        >
-                          <User className="h-5 w-5" />
-                          View Profile
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => handleDeactivateUser(user.id)}
-                          className="flex items-center gap-2"
-                        >
-                          {user.status ? (
-                            <>
-                              <PowerOff className="h-5 w-5" />
-                              Deactivate
-                            </>
-                          ) : (
-                            <>
-                              <Power className="h-5 w-5" />
-                              Activate
-                            </>
-                          )}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+          <div className="w-[80vw] md:w-full overflow-x-auto rounded-lg shadow">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  {tableColumns.map((column) => (
+                    <TableHead className={column.className} key={column.title}>
+                      {column.title}
+                    </TableHead>
+                  ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {data?.items?.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell className="whitespace-nowrap">{user.idNumber}</TableCell>
+                    <TableCell className="whitespace-nowrap">{user.name}</TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      <Badge variant="outline" className="min-w-16 justify-center">
+                        {user.role[0].toUpperCase() + user.role.slice(1)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      <Badge variant={user.status ? "success" : "destructive"}>
+                        {user.status ? "Ativo" : "Inativo"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="flex justify-center whitespace-nowrap">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <EyeIcon className="h-5 w-5" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem
+                            onClick={() => handleOpenProfile(user.id)}
+                            className="flex items-center gap-2"
+                          >
+                            <User className="h-5 w-5" />
+                            View Profile
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleDeactivateUser(user.id)}
+                            className="flex items-center gap-2"
+                          >
+                            {user.status ? (
+                              <>
+                                <PowerOff className="h-5 w-5" />
+                                Deactivate
+                              </>
+                            ) : (
+                              <>
+                                <Power className="h-5 w-5" />
+                                Activate
+                              </>
+                            )}
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
           <div className="flex">
             <div className="flex-1 justify-start">
               {(page - 1) * size + 1}-{Math.min(page * size, data?.totalItems || 0)} of{" "}
