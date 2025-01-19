@@ -32,7 +32,7 @@ const links = [
     icon: Gauge,
   },
   {
-    title: "Funcionários",
+    title: "Utilizadores",
     url: "/users",
     icon: Users,
   },

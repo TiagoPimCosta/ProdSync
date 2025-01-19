@@ -13,7 +13,7 @@ const UserProfilePage = ({ params }: { params: { id: string } }) => {
   const pageBreadcrumbItems = useMemo(
     () => [
       {
-        label: "Funcionários",
+        label: "Utilizadores",
         href: "/dashboard/users",
       },
       {

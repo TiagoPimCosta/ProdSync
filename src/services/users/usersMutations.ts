@@ -3,11 +3,53 @@ import { useMutation } from "@tanstack/react-query";
 
 const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
 
+export interface CreateUserBodyParams {
+  idNumber: number;
+  name: string;
+  role: string;
+  username: string;
+  password: string;
+  cc: string;
+  nif: string;
+  phone: string;
+  email: string;
+}
+
+export async function createUser(body: CreateUserBodyParams) {
+  return fetch(API_ENDPOINT_URL + "/users/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+}
+
+export function useCreateUser() {
+  return useMutation<ApiResponseMessage, Error, CreateUserBodyParams>({
+    mutationFn: async (vars) => {
+      const response = await createUser(vars);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "An error occurred");
+      }
+      const data = await response.json();
+      return data as ApiResponseMessage;
+    },
+    onError: (error) => {
+      toastError(error.message);
+    },
+    onSuccess: (data) => {
+      toastSuccess(data.message);
+    },
+  });
+}
+
 interface UserDeleteParams {
   userId: number;
 }
 
-function userDelete(params: UserDeleteParams) {
+function deleteUser(params: UserDeleteParams) {
   const { userId } = params;
 
   return fetch(API_ENDPOINT_URL + "/users/" + userId, {
@@ -19,11 +61,11 @@ function userDelete(params: UserDeleteParams) {
   });
 }
 
-export function useUserDelete() {
+export function useDeleteUser() {
   return useMutation<ApiResponseMessage, Error, UserDeleteParams>({
     mutationFn: async (vars) => {
       const { userId } = vars;
-      const response = await userDelete({ userId });
+      const response = await deleteUser({ userId });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "An error occurred");

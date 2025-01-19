@@ -22,7 +22,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import { useUserDelete } from "@/src/services/users/usersMutations";
+import { useDeleteUser } from "@/src/services/users/usersMutations";
 
 export default function TableUsers() {
   const usersSearchParams = useSearchParams();
@@ -57,12 +57,16 @@ export default function TableUsers() {
     ];
   }, []);
 
-  const { data, isLoading } = useGetUsers({
+  const {
+    data,
+    isLoading,
+    refetch: refetchUsers,
+  } = useGetUsers({
     page: page - 1,
     size: size,
     role: role,
   });
-  const userDelete = useUserDelete();
+  const userDelete = useDeleteUser();
 
   const handleOpenProfile = (id: number) => {
     router.push(`/dashboard/users/${id}`);
@@ -70,6 +74,7 @@ export default function TableUsers() {
 
   const handleDeactivateUser = async (id: number) => {
     await userDelete.mutateAsync({ userId: id });
+    refetchUsers();
   };
 
   const handleChangePage = (page: number) => {
@@ -82,6 +87,7 @@ export default function TableUsers() {
     if (pageSize) {
       const currentParams = new URLSearchParams(usersSearchParams.toString());
       currentParams.set("size", pageSize);
+      currentParams.set("page", "0");
       router.push(`?${currentParams.toString()}`);
     }
   };
@@ -119,67 +125,69 @@ export default function TableUsers() {
               />
             </div>
           </div>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {tableColumns.map((column) => (
-                  <TableHead className={column.className} key={column.title}>
-                    {column.title}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data?.items?.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.idNumber}</TableCell>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="min-w-16 justify-center">
-                      {user.role[0].toUpperCase() + user.role.slice(1)}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={user.status ? "success" : "destructive"}>
-                      {user.status ? "Ativo" : "Inativo"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="flex justify-center">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <EyeIcon className="h-5 w-5" />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuItem
-                          onClick={() => handleOpenProfile(user.id)}
-                          className="flex items-center gap-2"
-                        >
-                          <User className="h-5 w-5" />
-                          View Profile
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => handleDeactivateUser(user.id)}
-                          className="flex items-center gap-2"
-                        >
-                          {user.status ? (
-                            <>
-                              <PowerOff className="h-5 w-5" />
-                              Deactivate
-                            </>
-                          ) : (
-                            <>
-                              <Power className="h-5 w-5" />
-                              Activate
-                            </>
-                          )}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+          <div className="w-[80vw] md:w-full overflow-x-auto rounded-lg shadow">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  {tableColumns.map((column) => (
+                    <TableHead className={column.className} key={column.title}>
+                      {column.title}
+                    </TableHead>
+                  ))}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {data?.items?.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell className="whitespace-nowrap">{user.idNumber}</TableCell>
+                    <TableCell className="whitespace-nowrap">{user.name}</TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      <Badge variant="outline" className="min-w-16 justify-center">
+                        {user.role[0].toUpperCase() + user.role.slice(1)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
+                      <Badge variant={user.status ? "success" : "destructive"}>
+                        {user.status ? "Ativo" : "Inativo"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="flex justify-center whitespace-nowrap">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <EyeIcon className="h-5 w-5" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem
+                            onClick={() => handleOpenProfile(user.id)}
+                            className="flex items-center gap-2"
+                          >
+                            <User className="h-5 w-5" />
+                            View Profile
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleDeactivateUser(user.id)}
+                            className="flex items-center gap-2"
+                          >
+                            {user.status ? (
+                              <>
+                                <PowerOff className="h-5 w-5" />
+                                Deactivate
+                              </>
+                            ) : (
+                              <>
+                                <Power className="h-5 w-5" />
+                                Activate
+                              </>
+                            )}
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
           <div className="flex">
             <div className="flex-1 justify-start">
               {(page - 1) * size + 1}-{Math.min(page * size, data?.totalItems || 0)} of{" "}
