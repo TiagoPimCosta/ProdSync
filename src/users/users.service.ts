@@ -13,6 +13,7 @@ import { CreateUserParams, UpdateUserParams } from 'src/params/users.params';
 import { Pagination } from 'src/helpers/decorators/pagination.params.decorator';
 import { PaginatedResource } from 'src/dtos/paginatedResource.dto';
 import * as dayjs from 'dayjs';
+import { SuccessResponse } from 'src/types/SuccessResponse';
 
 @Injectable()
 export class UsersService {
@@ -22,7 +23,7 @@ export class UsersService {
 
   async create(
     createUserDetails: CreateUserParams,
-  ): Promise<void | ErrorResponse> {
+  ): Promise<SuccessResponse | ErrorResponse> {
     try {
       await checkFieldUniqueness(
         this.userRepository,
@@ -56,6 +57,10 @@ export class UsersService {
       });
 
       await this.userRepository.save(newUser);
+      return {
+        statusCode: 200,
+        message: `User ${createUserDetails.name} has been created.`,
+      };
     } catch (error) {
       if (error instanceof ConflictException) throw error;
 
@@ -201,7 +206,7 @@ export class UsersService {
     }
   }
 
-  async delete(id: number): Promise<void | ErrorResponse> {
+  async delete(id: number): Promise<SuccessResponse | ErrorResponse> {
     try {
       const user = await this.userRepository.findOneBy({ id });
       if (!user) throw new NotFoundException(`User with ID ${id} not found.`);

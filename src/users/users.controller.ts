@@ -19,6 +19,7 @@ import {
   PaginationParams,
 } from 'src/helpers/decorators/pagination.params.decorator';
 import { PaginatedResource } from 'src/dtos/paginatedResource.dto';
+import { SuccessResponse } from 'src/types/SuccessResponse';
 
 @ApiTags('Users')
 @Controller('users')
@@ -48,9 +49,9 @@ export class UsersController {
   })
   async create(
     @Body() createUserDto: CreateUserRequestDto,
-  ): Promise<void | ErrorResponse> {
+  ): Promise<SuccessResponse | ErrorResponse> {
     try {
-      await this.usersService.create(createUserDto);
+      return await this.usersService.create(createUserDto);
     } catch (error) {
       throw error;
     }
@@ -191,7 +192,7 @@ export class UsersController {
   })
   async delete(
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<void | ErrorResponse> {
+  ): Promise<SuccessResponse | ErrorResponse> {
     try {
       return await this.usersService.delete(id);
     } catch (error) {
