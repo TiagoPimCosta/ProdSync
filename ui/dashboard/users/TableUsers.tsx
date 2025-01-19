@@ -22,7 +22,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import { useUserDelete } from "@/src/services/users/usersMutations";
+import { useDeleteUser } from "@/src/services/users/usersMutations";
 
 export default function TableUsers() {
   const usersSearchParams = useSearchParams();
@@ -66,7 +66,7 @@ export default function TableUsers() {
     size: size,
     role: role,
   });
-  const userDelete = useUserDelete();
+  const userDelete = useDeleteUser();
 
   const handleOpenProfile = (id: number) => {
     router.push(`/dashboard/users/${id}`);
