@@ -15,7 +15,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { Pagination } from "@mantine/core";
 import { Select } from "@mantine/core";
-import { PageSizes } from "@/src/utils/consts";
+import { PageSizes, UserStatus, UserTypes } from "@/src/utils/consts";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,6 +31,7 @@ export default function TableUsers() {
   const page = Number(usersSearchParams.get("page")) || 1;
   const size = Number(usersSearchParams.get("size")) || 10;
   const role = usersSearchParams.get("role") || undefined;
+  const status = usersSearchParams.get("status") || undefined;
 
   const tableColumns = useMemo(() => {
     return [
@@ -65,6 +66,7 @@ export default function TableUsers() {
     page: page - 1,
     size: size,
     role: role,
+    status: status,
   });
   const userDelete = useDeleteUser();
 
@@ -96,11 +98,22 @@ export default function TableUsers() {
     const currentParams = new URLSearchParams(usersSearchParams.toString());
     if (role) {
       currentParams.set("role", role);
-      router.push(`?${currentParams.toString()}`);
     } else {
       currentParams.delete("role");
-      router.push(`?${currentParams.toString()}`);
     }
+    currentParams.set("page", "0");
+    router.push(`?${currentParams.toString()}`);
+  };
+
+  const handleChangeStatus = (status: string | null) => {
+    const currentParams = new URLSearchParams(usersSearchParams.toString());
+    if (status) {
+      currentParams.set("status", status);
+    } else {
+      currentParams.delete("status");
+    }
+    currentParams.set("page", "0");
+    router.push(`?${currentParams.toString()}`);
   };
 
   return (
@@ -110,17 +123,23 @@ export default function TableUsers() {
       ) : (
         <>
           <div className="flex justify-between">
-            <div>
+            <div className="flex flex-row gap-2">
               <Select
                 checkIconPosition="right"
                 className="w-28"
                 placeholder="Role"
-                data={[
-                  { value: "admin", label: "Admin" },
-                  { value: "user", label: "User" },
-                ]}
+                data={UserTypes}
                 value={role || null}
                 onChange={handleChangeRole}
+                clearable
+              />
+              <Select
+                checkIconPosition="right"
+                className="w-28"
+                placeholder="Status"
+                data={UserStatus}
+                value={status || null}
+                onChange={handleChangeStatus}
                 clearable
               />
             </div>

@@ -3,6 +3,7 @@ import { z } from "zod";
 export const getUsersParamsSchema = z.object({
   name: z.string().optional(),
   role: z.string().optional(),
+  status: z.string().optional(),
 });
 
 export const getUserParamsSchema = z.object({
