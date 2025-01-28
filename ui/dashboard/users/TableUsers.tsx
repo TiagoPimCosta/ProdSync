@@ -25,6 +25,7 @@ import {
 import { useDeleteUser } from "@/src/services/users/usersMutations";
 import { DatePickerWithRange } from "@/src/components/ui/datePickerWithRange";
 import { DateRange } from "react-day-picker";
+import dayjs from "dayjs";
 
 export default function TableUsers() {
   const usersSearchParams = useSearchParams();
@@ -161,7 +162,13 @@ export default function TableUsers() {
                 onChange={handleChangeStatus}
                 clearable
               />
-              <DatePickerWithRange onChange={handleChangeAdmission} />
+              <DatePickerWithRange
+                value={{
+                  from: startAdmission ? dayjs(startAdmission).toDate() : undefined,
+                  to: endAdmission ? dayjs(endAdmission).toDate() : undefined,
+                }}
+                onChange={handleChangeAdmission}
+              />
             </div>
           </div>
           <div className="w-[80vw] md:w-full overflow-x-auto rounded-lg shadow">

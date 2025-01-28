@@ -11,16 +11,14 @@ import { Calendar } from "./calendar";
 
 export type DatePickerWithRangeProps = {
   className?: string;
+  value: DateRange | undefined;
   onChange: (value: DateRange | undefined) => void;
 };
 
 export function DatePickerWithRange(props: DatePickerWithRangeProps) {
-  const { className, onChange } = props;
+  const { className, value, onChange } = props;
 
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: undefined,
-    to: undefined,
-  });
+  const [date, setDate] = React.useState<DateRange | undefined>(value);
 
   const handleChangeDate = (value: DateRange | undefined) => {
     setDate(value);
