@@ -32,10 +32,10 @@ export function getUsers(params: GetUsersParams) {
 }
 
 export function useGetUsers(params: GetUsersParams) {
-  const { page, size, role, status } = params;
+  const { page, size, role, status, startAdmission, endAdmission } = params;
 
   return useQuery({
-    queryKey: ["users", page, size, role, status],
+    queryKey: ["users", page, size, role, status, startAdmission, endAdmission],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getUsers(params);

@@ -23,6 +23,8 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
 import { useDeleteUser } from "@/src/services/users/usersMutations";
+import { DatePickerWithRange } from "@/src/components/ui/datePickerWithRange";
+import { DateRange } from "react-day-picker";
 
 export default function TableUsers() {
   const usersSearchParams = useSearchParams();
@@ -32,6 +34,8 @@ export default function TableUsers() {
   const size = Number(usersSearchParams.get("size")) || 10;
   const role = usersSearchParams.get("role") || undefined;
   const status = usersSearchParams.get("status") || undefined;
+  const startAdmission = usersSearchParams.get("startAdmission") || undefined;
+  const endAdmission = usersSearchParams.get("endAdmission") || undefined;
 
   const tableColumns = useMemo(() => {
     return [
@@ -67,6 +71,8 @@ export default function TableUsers() {
     size: size,
     role: role,
     status: status,
+    startAdmission: startAdmission,
+    endAdmission: endAdmission,
   });
   const userDelete = useDeleteUser();
 
@@ -116,6 +122,19 @@ export default function TableUsers() {
     router.push(`?${currentParams.toString()}`);
   };
 
+  const handleChangeAdmission = (dateRange: DateRange | undefined) => {
+    const currentParams = new URLSearchParams(usersSearchParams.toString());
+    if (dateRange) {
+      dateRange.from && currentParams.set("startAdmission", dateRange.from.toDateString());
+      dateRange.to && currentParams.set("endAdmission", dateRange.to.toDateString());
+    } else {
+      currentParams.delete("startAdmission");
+      currentParams.delete("endAdmission");
+    }
+    currentParams.set("page", "0");
+    router.push(`?${currentParams.toString()}`);
+  };
+
   return (
     <div className="flex flex-col gap-4">
       {isLoading ? (
@@ -142,6 +161,7 @@ export default function TableUsers() {
                 onChange={handleChangeStatus}
                 clearable
               />
+              <DatePickerWithRange onChange={handleChangeAdmission} />
             </div>
           </div>
           <div className="w-[80vw] md:w-full overflow-x-auto rounded-lg shadow">
