@@ -126,8 +126,8 @@ export default function TableUsers() {
   const handleChangeAdmission = (dateRange: DateRange | undefined) => {
     const currentParams = new URLSearchParams(usersSearchParams.toString());
     if (dateRange) {
-      dateRange.from && currentParams.set("startAdmission", dateRange.from.toDateString());
-      dateRange.to && currentParams.set("endAdmission", dateRange.to.toDateString());
+      dateRange.from && currentParams.set("startAdmission", dayjs(dateRange.from).toISOString());
+      dateRange.to && currentParams.set("endAdmission", dayjs(dateRange.to).toISOString());
     } else {
       currentParams.delete("startAdmission");
       currentParams.delete("endAdmission");
@@ -143,7 +143,7 @@ export default function TableUsers() {
       ) : (
         <>
           <div className="flex justify-between">
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-col md:flex-row gap-2">
               <Select
                 checkIconPosition="right"
                 className="w-28"
