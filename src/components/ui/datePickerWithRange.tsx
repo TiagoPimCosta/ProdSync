@@ -12,11 +12,12 @@ import { Calendar } from "./calendar";
 export type DatePickerWithRangeProps = {
   className?: string;
   value: DateRange | undefined;
+  numberOfMonths?: number;
   onChange: (value: DateRange | undefined) => void;
 };
 
 export function DatePickerWithRange(props: DatePickerWithRangeProps) {
-  const { className, value, onChange } = props;
+  const { className, value, numberOfMonths = 2, onChange } = props;
 
   const [date, setDate] = React.useState<DateRange | undefined>(value);
 
@@ -26,18 +27,18 @@ export function DatePickerWithRange(props: DatePickerWithRangeProps) {
   };
 
   return (
-    <div className={cn("grid gap-2", className)}>
+    <div className={cn(className)}>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             id="date"
             variant={"outline"}
             className={cn(
-              "w-[300px] justify-start text-left font-normal",
+              "w-full justify-start text-left font-normal gap-3",
               !date && "text-muted-foreground"
             )}
           >
-            <CalendarIcon />
+            <CalendarIcon className="h-4 w-4" />
             {date?.from ? (
               date.to ? (
                 <>
@@ -58,7 +59,7 @@ export function DatePickerWithRange(props: DatePickerWithRangeProps) {
             defaultMonth={date?.from}
             selected={date}
             onSelect={handleChangeDate}
-            numberOfMonths={2}
+            numberOfMonths={numberOfMonths}
           />
         </PopoverContent>
       </Popover>

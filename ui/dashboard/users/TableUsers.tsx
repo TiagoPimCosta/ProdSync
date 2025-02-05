@@ -14,7 +14,6 @@ import { EyeIcon, Power, PowerOff, User } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { Pagination } from "@mantine/core";
-import { Select } from "@mantine/core";
 import { PageSizes, UserStatus, UserTypes } from "@/src/utils/consts";
 import {
   DropdownMenu,
@@ -26,6 +25,8 @@ import { useDeleteUser } from "@/src/services/users/usersMutations";
 import { DatePickerWithRange } from "@/src/components/ui/datePickerWithRange";
 import { DateRange } from "react-day-picker";
 import dayjs from "dayjs";
+import { Input } from "@/src/components/ui/input";
+import Select from "@/src/components/ui/Select";
 
 export default function TableUsers() {
   const usersSearchParams = useSearchParams();
@@ -33,6 +34,7 @@ export default function TableUsers() {
 
   const page = Number(usersSearchParams.get("page")) || 1;
   const size = Number(usersSearchParams.get("size")) || 10;
+  const name = usersSearchParams.get("name") || undefined;
   const role = usersSearchParams.get("role") || undefined;
   const status = usersSearchParams.get("status") || undefined;
   const startAdmission = usersSearchParams.get("startAdmission") || undefined;
@@ -70,6 +72,7 @@ export default function TableUsers() {
   } = useGetUsers({
     page: page - 1,
     size: size,
+    name: name,
     role: role,
     status: status,
     startAdmission: startAdmission,
@@ -92,7 +95,7 @@ export default function TableUsers() {
     router.push(`?${currentParams.toString()}`);
   };
 
-  const handleChangePageSize = (pageSize: string | null) => {
+  const handleChangePageSize = (pageSize: string | undefined) => {
     if (pageSize) {
       const currentParams = new URLSearchParams(usersSearchParams.toString());
       currentParams.set("size", pageSize);
@@ -101,7 +104,19 @@ export default function TableUsers() {
     }
   };
 
-  const handleChangeRole = (role: string | null) => {
+  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const name = event.target.value;
+    const currentParams = new URLSearchParams(usersSearchParams.toString());
+    if (name) {
+      currentParams.set("name", name);
+    } else {
+      currentParams.delete("name");
+    }
+    currentParams.set("page", "0");
+    router.push(`?${currentParams.toString()}`);
+  };
+
+  const handleChangeRole = (role: string | undefined) => {
     const currentParams = new URLSearchParams(usersSearchParams.toString());
     if (role) {
       currentParams.set("role", role);
@@ -112,7 +127,7 @@ export default function TableUsers() {
     router.push(`?${currentParams.toString()}`);
   };
 
-  const handleChangeStatus = (status: string | null) => {
+  const handleChangeStatus = (status: string | undefined) => {
     const currentParams = new URLSearchParams(usersSearchParams.toString());
     if (status) {
       currentParams.set("status", status);
@@ -142,34 +157,40 @@ export default function TableUsers() {
         <p>Carregando...</p>
       ) : (
         <>
-          <div className="flex justify-between">
-            <div className="flex flex-col md:flex-row gap-2">
+          <div className="flex flex-col w-full md:flex-row gap-2">
+            <Input
+              className="w-full md:w-1/2"
+              placeholder="Name"
+              value={name}
+              onChange={handleChangeName}
+            />
+            <div className="flex flex-row gap-2 w-full md:w-1/4">
               <Select
-                checkIconPosition="right"
-                className="w-28"
+                className="w-1/2"
                 placeholder="Role"
                 data={UserTypes}
-                value={role || null}
+                value={role || undefined}
                 onChange={handleChangeRole}
                 clearable
               />
               <Select
-                checkIconPosition="right"
-                className="w-28"
+                className="w-1/2"
                 placeholder="Status"
                 data={UserStatus}
-                value={status || null}
+                value={status || undefined}
                 onChange={handleChangeStatus}
                 clearable
               />
-              <DatePickerWithRange
-                value={{
-                  from: startAdmission ? dayjs(startAdmission).toDate() : undefined,
-                  to: endAdmission ? dayjs(endAdmission).toDate() : undefined,
-                }}
-                onChange={handleChangeAdmission}
-              />
             </div>
+            <DatePickerWithRange
+              className="w-full md:w-1/4"
+              value={{
+                from: startAdmission ? dayjs(startAdmission).toDate() : undefined,
+                to: endAdmission ? dayjs(endAdmission).toDate() : undefined,
+              }}
+              onChange={handleChangeAdmission}
+              numberOfMonths={1}
+            />
           </div>
           <div className="w-[80vw] md:w-full overflow-x-auto rounded-lg shadow">
             <Table>
@@ -248,7 +269,6 @@ export default function TableUsers() {
             </div>
             <div className="justify-end">
               <Select
-                checkIconPosition="right"
                 className="w-20"
                 data={PageSizes}
                 value={size.toString()}
