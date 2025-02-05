@@ -4,3 +4,13 @@ export const PageSizes: SelectOption[] = [
   { value: "25", label: "25" },
   { value: "50", label: "50" },
 ];
+
+export const UserTypes: SelectOption[] = [
+  { value: "admin", label: "Admin" },
+  { value: "user", label: "User" },
+];
+
+export const UserStatus: SelectOption[] = [
+  { value: "1", label: "Activo" },
+  { value: "0", label: "Inativo" },
+];
