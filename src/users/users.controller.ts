@@ -11,15 +11,18 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { User } from 'src/typeorm/entities/user.entity';
 import { ErrorResponse } from 'src/types/ErrorResponse';
-import { CreateUserRequestDto, UpdateUserRequestDto } from 'src/dtos/users.dto';
+import {
+  CreateUserRequestDto,
+  UpdateUserRequestDto,
+} from 'src/helpers/dtos/users.dto';
 import {
   Pagination,
   PaginationParams,
 } from 'src/helpers/decorators/pagination.params.decorator';
-import { PaginatedResource } from 'src/dtos/paginatedResource.dto';
+import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
 import { SuccessResponse } from 'src/types/SuccessResponse';
+import { User } from 'src/helpers/typeorm/entities/user.entity';
 
 @ApiTags('Users')
 @Controller('users')

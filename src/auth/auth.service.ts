@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { AuthPayloadDto } from '../dtos/auth.dto';
+import { AuthPayloadDto } from '../helpers/dtos/auth.dto';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 
@@ -14,8 +14,7 @@ export class AuthService {
     const user = await this.usersService.findOneByUsername(
       authPayloadDto.username,
     );
-    if (!user) throw new UnauthorizedException('Username Not Found');
-    if (user.password !== authPayloadDto.password)
+    if (!user || user.password !== authPayloadDto.password || !user.status)
       throw new UnauthorizedException('Wrong Credentials');
     const { password, ...data } = user;
     return { token: this.jwtService.sign(data) };

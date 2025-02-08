@@ -4,14 +4,17 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { User } from 'src/typeorm/entities/user.entity';
+import { User } from 'src/helpers/typeorm/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ErrorResponse } from 'src/types/ErrorResponse';
 import { checkFieldUniqueness } from 'src/utils/checkFieldUniqueness';
-import { CreateUserParams, UpdateUserParams } from 'src/params/users.params';
+import {
+  CreateUserParams,
+  UpdateUserParams,
+} from 'src/helpers/params/users.params';
 import { Pagination } from 'src/helpers/decorators/pagination.params.decorator';
-import { PaginatedResource } from 'src/dtos/paginatedResource.dto';
+import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
 import * as dayjs from 'dayjs';
 import { SuccessResponse } from 'src/types/SuccessResponse';
 

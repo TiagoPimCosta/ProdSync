@@ -13,7 +13,7 @@ import { ApiTags } from '@nestjs/swagger';
 import {
   CreateMachineRequestDto,
   UpdateMachineRequestDto,
-} from 'src/dtos/machines.dto';
+} from 'src/helpers/dtos/machines.dto';
 
 @ApiTags('Machines')
 @Controller('machines')

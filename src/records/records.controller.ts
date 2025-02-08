@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { RecordsService } from './records.service';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateRecordRequestDto } from 'src/dtos/records.dto';
+import { CreateRecordRequestDto } from 'src/helpers/dtos/records.dto';
 
 @ApiTags('Records')
 @Controller('records')
