@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Record } from '../helpers/typeorm/entities/record.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { MachinesService } from 'src/machines/machines.service';
 import { CreateRecordParams } from 'src/helpers/params/records.params';
+import { Record } from 'src/helpers/typeorm/entities/record.entity';
 
 @Injectable()
 export class RecordsService {

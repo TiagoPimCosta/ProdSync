@@ -34,7 +34,6 @@ export class UsersService {
         createUserDetails.idNumber,
         'Number is already registered',
       );
-
       await checkFieldUniqueness(
         this.userRepository,
         'username',
@@ -62,7 +61,7 @@ export class UsersService {
       await this.userRepository.save(newUser);
       return {
         statusCode: 200,
-        message: `User ${createUserDetails.name} has been created.`,
+        message: `User ${newUser.name} has been created.`,
       };
     } catch (error) {
       if (error instanceof ConflictException) throw error;
@@ -121,6 +120,7 @@ export class UsersService {
       );
     }
   }
+
   async findOneById(id: number) {
     try {
       const user = await this.userRepository.findOneBy({ id });
@@ -158,7 +158,7 @@ export class UsersService {
   async update(
     id: number,
     updateUserDetails: UpdateUserParams,
-  ): Promise<void | ErrorResponse> {
+  ): Promise<SuccessResponse | ErrorResponse> {
     try {
       if (updateUserDetails.idNumber)
         await checkFieldUniqueness(
@@ -196,6 +196,10 @@ export class UsersService {
       if (!user) throw new NotFoundException(`User with ID ${id} not found.`);
 
       await this.userRepository.update({ id }, { ...updateUserDetails });
+      return {
+        statusCode: 200,
+        message: `User with number ${user.idNumber} has been updated.`,
+      };
     } catch (error) {
       if (
         error instanceof NotFoundException ||

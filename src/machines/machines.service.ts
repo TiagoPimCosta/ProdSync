@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Machine } from 'src/helpers/typeorm/entities/machine.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   CreateMachineParams,
   UpdateMachineParams,
 } from 'src/helpers/params/machines.params';
+import { Machine } from 'src/helpers/typeorm/entities/machine.entity';
 
 @Injectable()
 export class MachinesService {

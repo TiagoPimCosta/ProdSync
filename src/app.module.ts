@@ -6,6 +6,7 @@ import { RecordsModule } from './records/records.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { MachinesModule } from './machines/machines.module';
+import { LinesModule } from './lines/lines.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { MachinesModule } from './machines/machines.module';
     UsersModule,
     AuthModule,
     MachinesModule,
+    LinesModule,
   ],
   controllers: [],
   providers: [],

@@ -9,31 +9,31 @@ import {
   ParseIntPipe,
   Query,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ErrorResponse } from 'src/types/ErrorResponse';
+import { LinesService } from './lines.service';
 import {
-  CreateUserRequestDto,
-  UpdateUserRequestDto,
-} from 'src/helpers/dtos/users.dto';
+  CreateLineRequestDto,
+  UpdateLineRequestDto,
+} from 'src/helpers/dtos/lines.dto';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { SuccessResponse } from 'src/types/SuccessResponse';
+import { ErrorResponse } from 'src/types/ErrorResponse';
+import { Line } from 'src/helpers/typeorm/entities/line.entity';
 import {
   Pagination,
   PaginationParams,
 } from 'src/helpers/decorators/pagination.params.decorator';
 import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
-import { SuccessResponse } from 'src/types/SuccessResponse';
-import { User } from 'src/helpers/typeorm/entities/user.entity';
 
-@ApiTags('Users')
-@Controller('users')
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+@ApiTags('Lines')
+@Controller('lines')
+export class LinesController {
+  constructor(private readonly linesService: LinesService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a new user' })
+  @ApiOperation({ summary: 'Create a new line' })
   @ApiResponse({
     status: 201,
-    description: 'User {userName} has been created.',
+    description: 'Line {lineName} has been created',
   })
   @ApiResponse({
     status: 400,
@@ -42,7 +42,7 @@ export class UsersController {
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found',
+    description: 'Line not found',
     type: ErrorResponse,
   })
   @ApiResponse({
@@ -51,17 +51,17 @@ export class UsersController {
     type: ErrorResponse,
   })
   async create(
-    @Body() createUserDto: CreateUserRequestDto,
+    @Body() createLineDto: CreateLineRequestDto,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
-      return await this.usersService.create(createUserDto);
+      return await this.linesService.create(createLineDto);
     } catch (error) {
       throw error;
     }
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all users' })
+  @ApiOperation({ summary: 'Get all lines' })
   @ApiQuery({
     name: 'page',
     description: 'Filter by page',
@@ -79,35 +79,16 @@ export class UsersController {
     type: String,
   })
   @ApiQuery({
-    name: 'role',
-    required: false,
-    description: 'Filter by role',
-    type: String,
-    enum: ['admin', 'user'],
-  })
-  @ApiQuery({
     name: 'status',
     required: false,
     description: 'Filter by status',
     type: String,
     enum: ['0', '1'],
   })
-  @ApiQuery({
-    name: 'startAdmission',
-    required: false,
-    description: 'Filter by start admission date',
-    type: Date,
-  })
-  @ApiQuery({
-    name: 'endAdmission',
-    required: false,
-    description: 'Filter by end admission date',
-    type: Date,
-  })
   @ApiResponse({
     status: 200,
-    description: 'Users successfully retrieved',
-    type: [User],
+    description: 'Lines successfully retrieved',
+    type: [Line],
   })
   @ApiResponse({
     status: 500,
@@ -117,35 +98,25 @@ export class UsersController {
   findAll(
     @PaginationParams() paginationParams: Pagination,
     @Query('name') name?: string,
-    @Query('role') role?: string,
     @Query('status') status?: string,
-    @Query('startAdmission') startAdmission?: Date,
-    @Query('endAdmission') endAdmission?: Date,
-  ): Promise<PaginatedResource<Partial<User>> | ErrorResponse> {
+  ): Promise<PaginatedResource<Partial<Line>> | ErrorResponse> {
     try {
-      return this.usersService.findAll(
-        paginationParams,
-        name,
-        role,
-        status,
-        startAdmission,
-        endAdmission,
-      );
+      return this.linesService.findAll(paginationParams, name, status);
     } catch (error) {
       throw error;
     }
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get a user by ID' })
+  @ApiOperation({ summary: 'Get a line by ID' })
   @ApiResponse({
     status: 200,
-    description: 'User successfully retrieved',
-    type: User,
+    description: 'Line successfully retrieved',
+    type: Line,
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found',
+    description: 'Line not found',
     type: ErrorResponse,
   })
   @ApiResponse({
@@ -155,21 +126,21 @@ export class UsersController {
   })
   findOne(@Param('id', ParseIntPipe) id: number) {
     try {
-      return this.usersService.findOneById(id);
+      return this.linesService.findOneById(id);
     } catch (error) {
       throw error;
     }
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Update a user by ID' })
+  @ApiOperation({ summary: 'Update a line by ID' })
   @ApiResponse({
     status: 200,
-    description: 'User successfully updated',
+    description: 'Line successfully updated',
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found',
+    description: 'Line not found',
     type: ErrorResponse,
   })
   @ApiResponse({
@@ -179,25 +150,25 @@ export class UsersController {
   })
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateUserDto: UpdateUserRequestDto,
+    @Body() updateLineDto: UpdateLineRequestDto,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
-      return this.usersService.update(id, updateUserDto);
+      return this.linesService.update(id, updateLineDto);
     } catch (error) {
       throw error;
     }
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete a user by ID' })
+  @ApiOperation({ summary: 'Delete a line by ID' })
   @ApiResponse({
     status: 200,
-    description: 'User successfully deleted',
+    description: 'Line successfully deleted',
     type: SuccessResponse,
   })
   @ApiResponse({
     status: 404,
-    description: 'User not found',
+    description: 'Line not found',
     type: ErrorResponse,
   })
   @ApiResponse({
@@ -209,7 +180,7 @@ export class UsersController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
-      return await this.usersService.delete(id);
+      return this.linesService.delete(id);
     } catch (error) {
       throw error;
     }
