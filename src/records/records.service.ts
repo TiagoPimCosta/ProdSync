@@ -23,7 +23,7 @@ export class RecordsService {
       throw new NotFoundException('User not Found');
     }
 
-    const machine = await this.machinesService.findOne(
+    const machine = await this.machinesService.findOneById(
       createRecordDetails.machineId,
     );
 
@@ -33,13 +33,12 @@ export class RecordsService {
 
     const newRecord = this.recordRepository.create({
       ...createRecordDetails,
-      user,
-      machine,
+      user: { id: user.id },
+      machine: { id: createRecordDetails.machineId },
       createdAt: new Date(),
     });
     return this.recordRepository.save(newRecord);
   }
-
   findAll() {
     return this.recordRepository.find({
       relations: ['user'],

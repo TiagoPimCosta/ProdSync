@@ -66,7 +66,7 @@ export class LinesService {
       };
     } catch (error) {
       throw new InternalServerErrorException(
-        'An error occurred while fetching the users.',
+        'An error occurred while fetching the lines.',
         error,
       );
     }
@@ -125,7 +125,7 @@ export class LinesService {
       await this.lineRepository.update({ id }, { status: !line.status });
       return {
         statusCode: 200,
-        message: `User with number ${line.id} has been ${!line.status ? 'activated' : 'deactivated'}.`,
+        message: `Line with number ${line.id} has been ${!line.status ? 'activated' : 'deactivated'}.`,
       };
     } catch (error) {
       if (error instanceof NotFoundException) {
