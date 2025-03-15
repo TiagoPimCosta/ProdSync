@@ -2,7 +2,8 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { PaginationParams } from "../services.Schemas";
 import { handleApiResponseError } from "@/src/utils/errors";
 import { parseQueryParams } from "@/src/utils/services";
-import { GetUserParamsSchema, GetUsersParamsSchema } from "@/src/schemas/usersSchema";
+import { GetUsersParamsSchema } from "@/src/schemas/users/getUsersSchema";
+import { GetUserParamsSchema } from "@/src/schemas/users/getUserSchema";
 
 const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
 

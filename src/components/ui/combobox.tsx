@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
-
 import { cn } from "@/src/lib/utils";
 import { Button } from "@/src/components/ui/button";
 import {
@@ -15,49 +14,39 @@ import {
 } from "@/src/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "@/src/components/ui/popover";
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
 type SelectOption = {
   label: string;
   value: string;
 };
 
 export type ComboboxProps = {
+  className?: string;
   placeholder?: string;
   searchable?: boolean;
   onChange?: (value: string) => void;
-  values?: SelectOption[];
+  data?: SelectOption[];
+  noDataFoundMessage?: string;
+  value?: string | undefined;
 };
 
 export function Combobox(props: ComboboxProps) {
-  const { placeholder = "placeholder", onChange, values = [] } = props;
+  const {
+    className,
+    placeholder = "",
+    searchable,
+    onChange,
+    data = [],
+    noDataFoundMessage,
+    value,
+  } = props;
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+  const [selected, setSelected] = React.useState(value);
 
   const handleOnChange = (value: string) => {
-    setValue(value);
+    setSelected(value);
     onChange?.(value);
   };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -65,31 +54,33 @@ export function Combobox(props: ComboboxProps) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn("w-[200px] justify-between", "")}
+          className={cn("w-full justify-between", className, !selected && "text-muted-foreground")}
         >
-          {value ? frameworks.find((framework) => framework.value === value)?.label : placeholder}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          {selected ? data.find((option) => option.value === selected)?.label : placeholder}
+          <ChevronsUpDown className="left-0 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="p-0 w-[--radix-popper-anchor-width] min-w-fit">
         <Command>
-          <CommandInput placeholder={placeholder} />
+          {searchable && <CommandInput placeholder={placeholder} />}
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>
+              {noDataFoundMessage ? noDataFoundMessage : "No options found"}
+            </CommandEmpty>
             <CommandGroup>
-              {values.map((option) => (
+              {data.map((option) => (
                 <CommandItem
                   key={option.value}
                   value={option.value}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                    handleOnChange(currentValue === selected ? "" : currentValue);
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === option.value ? "opacity-100" : "opacity-0"
+                      selected === option.value ? "opacity-100" : "opacity-0"
                     )}
                   />
                   {option.label}
