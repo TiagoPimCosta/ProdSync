@@ -2,7 +2,7 @@
 
 import { Badge } from "@/src/components/ui/badge";
 import { UserObj, useGetUsers } from "@/src/services/users/usersQueries";
-import { EllipsisIcon, Power, PowerOff, User } from "lucide-react";
+import { EllipsisIcon, Pencil, Power, PowerOff, User } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   DropdownMenu,
@@ -82,6 +82,13 @@ export default function UsersTable() {
                 View Profile
               </DropdownMenuItem>
               <DropdownMenuItem
+                onClick={() => handleOpenEdit(userId)}
+                className="flex items-center gap-2"
+              >
+                <Pencil className="h-5 w-5" />
+                Edit User
+              </DropdownMenuItem>
+              <DropdownMenuItem
                 onClick={() => handleDeactivateUser(userId)}
                 className="flex items-center gap-2"
               >
@@ -117,6 +124,10 @@ export default function UsersTable() {
 
   const handleOpenProfile = (id: number) => {
     push(`/dashboard/users/${id}`);
+  };
+
+  const handleOpenEdit = (id: number) => {
+    push(`/dashboard/users/${id}/edit`);
   };
 
   const handleDeactivateUser = async (id: number) => {
