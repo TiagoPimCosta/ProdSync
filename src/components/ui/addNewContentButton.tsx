@@ -15,12 +15,12 @@ export default function AddNewContentButton(props: AddNewContentButtonProps) {
       asChild
       variant="outline"
       className={cn(
-        "h-auto py-5 px-10 justify-start shadow-none border-2 border-dashed border-primary text-md text-primary font-semibold",
+        "shadow-none border-2 border-dashed border-primary text-md text-primary font-semibold",
         className
       )}
     >
       <Link className="gap-3" href={href}>
-        <PlusCircle />
+        <PlusCircle className="w-5 h-5" />
         {label}
       </Link>
     </Button>
