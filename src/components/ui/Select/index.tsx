@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { X } from "lucide-react";
 import {
   Select as ShadSelect,
   SelectContent,
@@ -8,7 +7,6 @@ import {
   SelectValue,
 } from "./select";
 import { cn } from "@/src/lib/utils";
-import { Button } from "../button";
 
 interface SelectProps {
   className?: string;
@@ -19,7 +17,6 @@ interface SelectProps {
   }[];
   value?: string | undefined;
   onChange?: (value: string | undefined) => void;
-  clearable?: boolean;
 }
 
 export default function Select({
@@ -28,7 +25,6 @@ export default function Select({
   data = [],
   value,
   onChange,
-  clearable,
 }: SelectProps) {
   const [selected, setSelected] = useState(value);
   const [key, setKey] = useState(0); // Unique key to force re-render
@@ -38,27 +34,11 @@ export default function Select({
     onChange?.(val);
   };
 
-  const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    setSelected(undefined);
-    onChange?.(undefined);
-  };
-
   return (
     <div className={cn("relative", className)}>
       <ShadSelect key={key} value={selected ? selected : undefined} onValueChange={handleSelect}>
         <SelectTrigger>
           <SelectValue placeholder={placeholder} />
-          {clearable && selected && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute right-8 z-50"
-              onClick={handleClear}
-            >
-              <X className="w-4 h-4" />
-            </Button>
-          )}
         </SelectTrigger>
         <SelectContent>
           {data.map((item) => (
