@@ -3,11 +3,15 @@
 import { useGetUser } from "@/src/services/users/usersQueries";
 import PageHeader from "@/ui/dashboard/PageHeader";
 import Profile from "@/ui/dashboard/users/[id]/profile";
+import { useParams } from "next/navigation";
 import React, { useMemo } from "react";
 
-const UserProfilePage = ({ params }: { params: { id: string } }) => {
-  const { data } = useGetUser({
-    id: Number(params.id),
+const UserProfilePage = () => {
+  const params = useParams();
+  const userId = params.userId;
+
+  const { data: user } = useGetUser({
+    id: Number(userId),
   });
 
   const pageBreadcrumbItems = useMemo(
@@ -17,16 +21,18 @@ const UserProfilePage = ({ params }: { params: { id: string } }) => {
         href: "/dashboard/users",
       },
       {
-        label: data?.name ? data.name : "User",
+        label: user?.name || "Loading...",
       },
     ],
-    [data]
+    [user]
   );
+
+  if (!user) return "Loading...";
 
   return (
     <>
       <PageHeader breadcrumbItems={pageBreadcrumbItems} />
-      <Profile user={data} />
+      <Profile user={user} />
     </>
   );
 };
