@@ -79,28 +79,30 @@ export function DataTable<TData, TValue>(dataTableProps: DataTableProps<TData, T
             )}
           </TableBody>
         </Table>
-        <div className="flex justify-between items-center pl-4 pr-2 py-2 border-t">
-          <div className="flex-1 justify-start">
-            {(pagination.currentPage - 1) * pagination.size + 1}-
-            {Math.min(pagination.currentPage * pagination.size, pagination.totalItems || 0)} of{" "}
-            {pagination.totalItems} items
+        {table.getRowModel().rows?.length ? (
+          <div className="flex justify-between items-center pl-4 pr-2 py-2 border-t">
+            <div className="flex-1 justify-start">
+              {(pagination.currentPage - 1) * pagination.size + 1}-
+              {Math.min(pagination.currentPage * pagination.size, pagination.totalItems || 0)} of{" "}
+              {pagination.totalItems} items
+            </div>
+            <div className="flex-1 flex justify-center">
+              <Pagination
+                total={Math.ceil((pagination.totalItems || 0) / (pagination.size || 1))}
+                value={pagination.currentPage}
+                onChange={pagination.onPageChange}
+              />
+            </div>
+            <div className="flex-1 flex justify-end">
+              <Select
+                className="w-20"
+                data={PageSizes}
+                value={pagination.size.toString()}
+                onChange={pagination.onPageSizeChange}
+              />
+            </div>
           </div>
-          <div className="flex-1 flex justify-center">
-            <Pagination
-              total={Math.ceil((pagination.totalItems || 0) / (pagination.size || 1))}
-              value={pagination.currentPage}
-              onChange={pagination.onPageChange}
-            />
-          </div>
-          <div className="flex-1 flex justify-end">
-            <Select
-              className="w-20"
-              data={PageSizes}
-              value={pagination.size.toString()}
-              onChange={pagination.onPageSizeChange}
-            />
-          </div>
-        </div>
+        ) : null}
       </div>
     </div>
   );
