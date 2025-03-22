@@ -11,3 +11,5 @@ export const newUserSchema = z.object({
   phone: z.string().length(9),
   email: z.string().email(),
 });
+
+export type NewUserSchema = z.infer<typeof newUserSchema>;

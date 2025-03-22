@@ -11,3 +11,5 @@ export const editUserSchema = z.object({
   phone: z.string().length(9),
   email: z.string().email(),
 });
+
+export type EditUserSchema = z.infer<typeof editUserSchema>;

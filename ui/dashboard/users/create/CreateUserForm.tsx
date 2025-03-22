@@ -10,13 +10,12 @@ import {
 } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import React from "react";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/src/components/ui/button";
 import { useCreateUser } from "@/src/services/users/usersMutations";
 import { useRouter } from "next/navigation";
-import { newUserSchema } from "@/src/schemas/users/newUserSchema";
+import { type NewUserSchema, newUserSchema } from "@/src/schemas/users/newUserSchema";
 import { UserTypes } from "@/src/utils/consts";
 import { Combobox } from "@/src/components/ui/combobox";
 
@@ -24,7 +23,7 @@ const CreateUserForm = () => {
   const userCreate = useCreateUser();
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof newUserSchema>>({
+  const form = useForm<NewUserSchema>({
     resolver: zodResolver(newUserSchema),
     defaultValues: {
       idNumber: undefined,
@@ -35,7 +34,7 @@ const CreateUserForm = () => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof newUserSchema>) {
+  async function onSubmit(values: NewUserSchema) {
     await userCreate.mutateAsync(values);
     router.push("/dashboard/users");
   }

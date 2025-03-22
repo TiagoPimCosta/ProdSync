@@ -10,19 +10,19 @@ import {
 } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
 import React from "react";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/src/components/ui/button";
-import { useCreateUser, useUpdateUser } from "@/src/services/users/usersMutations";
+import { useUpdateUser } from "@/src/services/users/usersMutations";
 import { useRouter } from "next/navigation";
 import { UserTypes } from "@/src/utils/consts";
 import { Combobox } from "@/src/components/ui/combobox";
 import { UserObj } from "@/src/services/users/usersQueries";
-import { editUserSchema } from "@/src/schemas/users/editUserSchema";
+import { editUserSchema, type EditUserSchema } from "@/src/schemas/users/editUserSchema";
+import { z } from "zod";
 
 interface EditUserFormProps {
-  user?: UserObj;
+  user: UserObj;
 }
 
 const EditUserForm = (props: EditUserFormProps) => {
@@ -31,7 +31,7 @@ const EditUserForm = (props: EditUserFormProps) => {
   const userUpdate = useUpdateUser();
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof editUserSchema>>({
+  const form = useForm<EditUserSchema>({
     resolver: zodResolver(editUserSchema),
     defaultValues: {
       idNumber: user?.idNumber || undefined,
@@ -46,7 +46,7 @@ const EditUserForm = (props: EditUserFormProps) => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof editUserSchema>) {
+  async function onSubmit(values: EditUserSchema) {
     if (!user?.id) return;
     const updateUserParams = { id: user.id, user: values };
     await userUpdate.mutateAsync(updateUserParams);
