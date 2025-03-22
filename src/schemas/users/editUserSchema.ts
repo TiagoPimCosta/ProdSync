@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const newUserSchema = z.object({
+export const editUserSchema = z.object({
   idNumber: z.coerce.number().min(0).gte(1000),
   name: z.string().min(10),
   role: z.string(),
@@ -12,4 +12,4 @@ export const newUserSchema = z.object({
   email: z.string().email(),
 });
 
-export type NewUserSchema = z.infer<typeof newUserSchema>;
+export type EditUserSchema = z.infer<typeof editUserSchema>;

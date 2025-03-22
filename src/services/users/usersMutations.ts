@@ -29,10 +29,50 @@ export function useCreateUser() {
   return useMutation<ApiResponseMessage, Error, CreateUserBodyParams>({
     mutationFn: async (vars) => {
       const response = await createUser(vars);
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "An error occurred");
-      }
+      const data = await response.json();
+      return data as ApiResponseMessage;
+    },
+    onError: (error) => {
+      toastError(error.message);
+    },
+    onSuccess: (data) => {
+      toastSuccess(data.message);
+    },
+  });
+}
+
+export interface UpdateUserBody {
+  idNumber: number;
+  name: string;
+  role: string;
+  username: string;
+  password: string;
+  cc: string;
+  nif: string;
+  phone: string;
+  email: string;
+}
+
+export interface UpdateUserParams {
+  id: number;
+  user: UpdateUserBody;
+}
+
+export async function updateUser(params: UpdateUserParams) {
+  const { id, user } = params;
+  return fetch(API_ENDPOINT_URL + `/users/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  });
+}
+
+export function useUpdateUser() {
+  return useMutation<ApiResponseMessage, Error, UpdateUserParams>({
+    mutationFn: async (vars) => {
+      const response = await updateUser(vars);
       const data = await response.json();
       return data as ApiResponseMessage;
     },
@@ -66,10 +106,6 @@ export function useDeleteUser() {
     mutationFn: async (vars) => {
       const { userId } = vars;
       const response = await deleteUser({ userId });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "An error occurred");
-      }
       const data = await response.json();
       return data as ApiResponseMessage;
     },

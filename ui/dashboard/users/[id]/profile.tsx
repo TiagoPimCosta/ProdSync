@@ -1,20 +1,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import React from "react";
 import { UserObj } from "@/src/services/users/usersQueries";
-import { CalendarIcon, MailIcon, PhoneIcon } from "lucide-react";
+import { CalendarIcon, MailIcon, Pencil, PhoneIcon } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
 import dayjs from "dayjs";
+import { Button } from "@/src/components/ui/button";
+import Link from "next/link";
 
 interface ProfileProps {
   user?: UserObj;
 }
 
 const Profile = ({ user }: ProfileProps) => {
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-  };
-
   if (!user) return <div>User Not Found</div>;
 
   return (
@@ -26,9 +23,16 @@ const Profile = ({ user }: ProfileProps) => {
               <span>{user.idNumber}.</span>
               <span>{user.name}</span>
             </CardTitle>
-            <Badge variant={user.status ? "success" : "destructive"}>
-              {user.status ? "Ativo" : "Inativo"}
-            </Badge>
+            <div className="flex gap-2">
+              <Button variant="ghost" className="h-6 gap-1" asChild>
+                <Link href={`/dashboard/users/${user?.id}/edit`}>
+                  <Pencil className="w-4 h-4" /> Editar
+                </Link>
+              </Button>
+              <Badge variant={user.status ? "success" : "destructive"}>
+                {user.status ? "Ativo" : "Inativo"}
+              </Badge>
+            </div>
           </div>
         </CardHeader>
         <CardContent>

@@ -13,29 +13,43 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/src/components/ui/button";
-import { useCreateUser } from "@/src/services/users/usersMutations";
+import { useUpdateUser } from "@/src/services/users/usersMutations";
 import { useRouter } from "next/navigation";
-import { type NewUserSchema, newUserSchema } from "@/src/schemas/users/newUserSchema";
 import { UserTypes } from "@/src/utils/consts";
 import { Combobox } from "@/src/components/ui/combobox";
+import { UserObj } from "@/src/services/users/usersQueries";
+import { editUserSchema, type EditUserSchema } from "@/src/schemas/users/editUserSchema";
+import { z } from "zod";
 
-const CreateUserForm = () => {
-  const userCreate = useCreateUser();
+interface EditUserFormProps {
+  user: UserObj;
+}
+
+const EditUserForm = (props: EditUserFormProps) => {
+  const { user } = props;
+
+  const userUpdate = useUpdateUser();
   const router = useRouter();
 
-  const form = useForm<NewUserSchema>({
-    resolver: zodResolver(newUserSchema),
+  const form = useForm<EditUserSchema>({
+    resolver: zodResolver(editUserSchema),
     defaultValues: {
-      idNumber: undefined,
-      name: undefined,
-      role: "user",
-      username: undefined,
-      password: undefined,
+      idNumber: user?.idNumber || undefined,
+      name: user?.name || undefined,
+      role: user?.role || undefined,
+      username: user?.username || undefined,
+      password: user?.password || undefined,
+      cc: user?.cc || undefined,
+      nif: user?.nif || undefined,
+      email: user?.email || undefined,
+      phone: user?.phone || undefined,
     },
   });
 
-  async function onSubmit(values: NewUserSchema) {
-    await userCreate.mutateAsync(values);
+  async function onSubmit(values: EditUserSchema) {
+    if (!user?.id) return;
+    const updateUserParams = { id: user.id, user: values };
+    await userUpdate.mutateAsync(updateUserParams);
     router.push("/dashboard/users");
   }
 
@@ -171,4 +185,4 @@ const CreateUserForm = () => {
   );
 };
 
-export default CreateUserForm;
+export default EditUserForm;
