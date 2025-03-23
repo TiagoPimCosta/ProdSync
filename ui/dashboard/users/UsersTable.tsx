@@ -13,6 +13,7 @@ import {
 import { useDeleteUser } from "@/src/services/users/usersMutations";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "@/src/components/ui/data-table";
+import { Button } from "@/src/components/ui/button";
 
 export default function UsersTable() {
   const usersSearchParams = useSearchParams();
@@ -71,38 +72,28 @@ export default function UsersTable() {
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <EllipsisIcon className="h-5 w-5" />
+              <Button size="icon" variant="ghost" className="h-6 w-6">
+                <EllipsisIcon className="h-5 w-5" />
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem
                 onClick={() => handleOpenProfile(userId)}
                 className="flex items-center gap-2"
               >
-                <User className="h-5 w-5" />
-                View Profile
+                Ver Perfil
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => handleOpenEdit(userId)}
                 className="flex items-center gap-2"
               >
-                <Pencil className="h-5 w-5" />
-                Edit User
+                Editar
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => handleDeactivateUser(userId)}
                 className="flex items-center gap-2"
               >
-                {status ? (
-                  <>
-                    <PowerOff className="h-5 w-5" />
-                    Deactivate
-                  </>
-                ) : (
-                  <>
-                    <Power className="h-5 w-5" />
-                    Activate
-                  </>
-                )}
+                {status ? <span className="text-red-500">Desativar</span> : <span>Ativar</span>}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
