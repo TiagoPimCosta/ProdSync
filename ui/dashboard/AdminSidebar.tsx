@@ -1,6 +1,6 @@
 "use client";
 
-import { BellElectric, ChevronUp, Gauge, User2, Users } from "lucide-react";
+import { BellElectric, ChevronUp, Gauge, LayoutGrid, User2, Users } from "lucide-react";
 
 import {
   Sidebar,
@@ -40,6 +40,11 @@ const links = [
     title: "Máquinas",
     url: "/machines",
     icon: BellElectric,
+  },
+  {
+    title: "Linhas",
+    url: "/lines",
+    icon: LayoutGrid,
   },
 ];
 

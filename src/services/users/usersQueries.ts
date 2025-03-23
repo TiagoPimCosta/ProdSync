@@ -48,6 +48,7 @@ export function useGetUsers(params: GetUsersParams) {
     },
   });
 }
+
 export type GetUserParams = GetUserParamsSchema;
 export type GetUserResponse = UserObj;
 
