@@ -11,6 +11,7 @@ import {
 import { LineObj } from "@/src/services/lines/linesQueries";
 import dayjs from "dayjs";
 import { EllipsisIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface LineCardProps {
@@ -19,6 +20,11 @@ interface LineCardProps {
 
 export default function LineCard(props: LineCardProps) {
   const { line } = props;
+  const { push } = useRouter();
+
+  const handleOpenLineDetails = (id: number) => {
+    push(`/dashboard/lines/${id}`);
+  };
 
   return (
     <Card key={line.id.toString()} className="data-card animate-slide-up">
@@ -36,7 +42,7 @@ export default function LineCard(props: LineCardProps) {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem
-                onClick={() => console.log("teste 1")}
+                onClick={() => handleOpenLineDetails(line.id)}
                 className="flex items-center gap-2"
               >
                 Ver detalhes
@@ -59,11 +65,11 @@ export default function LineCard(props: LineCardProps) {
         <h4 className="mb-2 text-sm font-medium">Weekly Output</h4>
         <BarChart
           data={[
-            { name: "Mon", value: 100 },
-            { name: "Tue", value: 200 },
-            { name: "Wed", value: 220 },
-            { name: "Thu", value: 170 },
-            { name: "Fri", value: 230 },
+            { name: "Mon", value: Math.round(Math.random() * (500 - 200) + 200) },
+            { name: "Tue", value: Math.round(Math.random() * (500 - 200) + 200) },
+            { name: "Wed", value: Math.round(Math.random() * (500 - 200) + 200) },
+            { name: "Thu", value: Math.round(Math.random() * (500 - 200) + 200) },
+            { name: "Fri", value: Math.round(Math.random() * (500 - 200) + 200) },
           ]}
           dataKey="value"
           height={120}
