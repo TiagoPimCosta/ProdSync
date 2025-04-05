@@ -22,7 +22,7 @@ const UsersPage = () => {
           <div>
             <h1 className="text-2xl font-semibold md:text-3xl">Utilizadores</h1>
           </div>
-          <AddNewContentButton href={`/dashboard/users/create`} label={`Criar Utilizador`} />
+          <AddNewContentButton href={`/dashboard/users/new`} label={`Criar Utilizador`} />
         </div>
       </div>
       <div className="flex flex-col gap-4">

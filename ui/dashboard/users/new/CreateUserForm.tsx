@@ -13,7 +13,7 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/src/components/ui/button";
-import { useCreateUser } from "@/src/services/users/usersMutations";
+import { useCreateUser } from "@/src/services/users/mutations";
 import { useRouter } from "next/navigation";
 import { type NewUserSchema, newUserSchema } from "@/src/schemas/users/newUserSchema";
 import { UserTypes } from "@/src/utils/consts";
