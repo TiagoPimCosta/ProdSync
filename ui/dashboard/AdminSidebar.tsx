@@ -1,6 +1,6 @@
 "use client";
 
-import { BellElectric, ChevronUp, Gauge, LayoutGrid, User2, Users } from "lucide-react";
+import { BellElectric, ChevronUp, Gauge, LayoutGrid, User2, Users, Clipboard } from "lucide-react";
 
 import {
   Sidebar,
@@ -28,23 +28,28 @@ import { getFirstAndLastName } from "@/src/utils/user";
 const links = [
   {
     title: "Dashboard",
-    url: "",
-    icon: Gauge,
+    url: "/",
+    icon: <Gauge />,
   },
   {
     title: "Utilizadores",
     url: "/users",
-    icon: Users,
+    icon: <Users />,
   },
   {
     title: "Máquinas",
     url: "/machines",
-    icon: BellElectric,
+    icon: <BellElectric />,
   },
   {
     title: "Linhas",
     url: "/lines",
-    icon: LayoutGrid,
+    icon: <LayoutGrid />,
+  },
+  {
+    title: "Registos",
+    url: "/records",
+    icon: <Clipboard />,
   },
 ];
 
@@ -75,7 +80,7 @@ export function AdminSidebar(props: AdminSidebarProps) {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={"/dashboard/" + item.url}>
-                      <item.icon />
+                      {item.icon}
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
