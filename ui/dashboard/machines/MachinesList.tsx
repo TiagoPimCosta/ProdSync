@@ -16,7 +16,7 @@ export default function MachinesList() {
   });
 
   return (
-    <div className="grid gap-6 md:grid-cols-3">
+    <div className="grid gap-6 md:grid-cols-4">
       {data?.items?.map((machine) => (
         <MachineCard key={`machine-${machine.id}`} machine={machine} />
       ))}
