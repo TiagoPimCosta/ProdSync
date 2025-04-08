@@ -90,6 +90,13 @@ export class MachinesController {
     description: 'Filter by user',
     type: String,
   })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    description: 'Filter by status',
+    type: String,
+    enum: ['0', '1'],
+  })
   @ApiResponse({
     status: 200,
     description: 'Machines successfully retrieved',
@@ -105,9 +112,16 @@ export class MachinesController {
     @Query('name') name?: string,
     @Query('line') line?: string,
     @Query('user') user?: string,
+    @Query('status') status?: string,
   ): Promise<PaginatedResource<Partial<Machine>> | ErrorResponse> {
     try {
-      return this.machinesService.findAll(paginationParams, name, line, user);
+      return this.machinesService.findAll(
+        paginationParams,
+        name,
+        line,
+        user,
+        status,
+      );
     } catch (error) {
       throw error;
     }

@@ -22,5 +22,5 @@ export class Line {
 
   @OneToMany(() => Machine, (machine) => machine.line)
   @ApiProperty()
-  machine: Machine[];
+  machines: Machine[];
 }

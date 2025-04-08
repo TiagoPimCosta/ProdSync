@@ -28,7 +28,7 @@ export class Machine {
   @ApiProperty()
   records: Record[];
 
-  @ManyToOne(() => Line, (line) => line.machine)
+  @ManyToOne(() => Line, (line) => line.machines)
   @ApiProperty()
   line: Line;
 

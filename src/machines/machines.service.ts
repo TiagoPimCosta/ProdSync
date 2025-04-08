@@ -44,6 +44,7 @@ export class MachinesService {
     name?: string,
     line?: string,
     user?: string,
+    status?: string,
   ): Promise<PaginatedResource<Machine> | ErrorResponse> {
     try {
       const queryBuilder = this.machineRepository
@@ -57,6 +58,7 @@ export class MachinesService {
         });
       if (line) queryBuilder.andWhere('machine.line = :line', { line });
       if (user) queryBuilder.andWhere('machine.user = :user', { user });
+      if (status) queryBuilder.andWhere('machine.status = :status', { status });
 
       queryBuilder.skip(offset).take(limit);
 

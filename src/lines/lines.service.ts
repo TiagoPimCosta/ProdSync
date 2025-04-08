@@ -45,7 +45,9 @@ export class LinesService {
     status?: string,
   ): Promise<PaginatedResource<Line> | ErrorResponse> {
     try {
-      const queryBuilder = this.lineRepository.createQueryBuilder('line');
+      const queryBuilder = this.lineRepository
+        .createQueryBuilder('line')
+        .leftJoinAndSelect('line.machines', 'machine');
 
       if (name)
         queryBuilder.andWhere('line.name LIKE :name', {
@@ -76,7 +78,7 @@ export class LinesService {
     try {
       const line = await this.lineRepository.findOne({
         where: { id },
-        relations: ['machine'],
+        relations: ['machines'],
       });
       if (!line) throw new NotFoundException(`Line with ID ${id} not found.`);
 
