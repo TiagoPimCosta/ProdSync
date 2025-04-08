@@ -1,18 +1,15 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { Machines, Users, UserStatus, UserTypes } from "@/src/utils/consts";
+import { Machines, Users } from "@/src/utils/consts";
 import { DatePickerWithRange } from "@/src/components/ui/datePickerWithRange";
 import { DateRange } from "react-day-picker";
 import dayjs from "dayjs";
-import { Input } from "@/src/components/ui/input";
 import { Combobox } from "@/src/components/ui/combobox";
 
 export default function RecordsFilters() {
   const recordsSearchParams = useSearchParams();
   const router = useRouter();
-
-  if (!recordsSearchParams) return null;
 
   const user = recordsSearchParams.get("name") || undefined;
   const machine = recordsSearchParams.get("role") || undefined;

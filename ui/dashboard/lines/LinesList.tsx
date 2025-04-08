@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetLines } from "@/src/services/lines/linesQueries";
+import { useGetLines } from "@/src/services/lines/queries";
 import LineCard from "./LineCard";
 import { useSearchParams } from "next/navigation";
 
@@ -22,7 +22,7 @@ export default function LinesList() {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       {data?.items?.map((line) => (
-        <LineCard line={line} />
+        <LineCard key={`line-${line.id}`} line={line} />
       ))}
     </div>
   );

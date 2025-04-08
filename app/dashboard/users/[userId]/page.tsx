@@ -1,17 +1,21 @@
 "use client";
 
-import { useGetUser } from "@/src/services/users/usersQueries";
+import { useGetUser } from "@/src/services/users/queries";
 import PageHeader from "@/ui/dashboard/PageHeader";
 import Profile from "@/ui/dashboard/users/[id]/profile";
 import { useParams } from "next/navigation";
 import React, { useMemo } from "react";
 
 const UserProfilePage = () => {
-  const params = useParams();
-  const userId = params.userId;
+  const params = useParams<{ userId: string }>();
+  const userId = params?.userId;
+
+  if (!userId) {
+    return "Invalid user ID";
+  }
 
   const { data: user } = useGetUser({
-    id: Number(userId),
+    id: userId,
   });
 
   const pageBreadcrumbItems = useMemo(
@@ -26,8 +30,6 @@ const UserProfilePage = () => {
     ],
     [user]
   );
-
-  if (!user) return "Loading...";
 
   return (
     <>

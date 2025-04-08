@@ -13,11 +13,11 @@ import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/src/components/ui/button";
-import { useUpdateUser } from "@/src/services/users/usersMutations";
+import { useUpdateUser } from "@/src/services/users/mutations";
 import { useRouter } from "next/navigation";
 import { UserTypes } from "@/src/utils/consts";
 import { Combobox } from "@/src/components/ui/combobox";
-import { UserObj } from "@/src/services/users/usersQueries";
+import { UserObj } from "@/src/services/users/queries";
 import { editUserSchema, type EditUserSchema } from "@/src/schemas/users/editUserSchema";
 import { z } from "zod";
 

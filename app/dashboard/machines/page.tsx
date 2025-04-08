@@ -1,4 +1,5 @@
 import AddNewContentButton from "@/src/components/ui/addNewContentButton";
+import MachinesFilters from "@/ui/dashboard/machines/MachinesFilters";
 import MachinesList from "@/ui/dashboard/machines/MachinesList";
 import PageHeader from "@/ui/dashboard/PageHeader";
 import React, { useMemo } from "react";
@@ -25,6 +26,7 @@ const Machinespage = () => {
         </div>
       </div>
       <div className="flex flex-col gap-4">
+        <MachinesFilters />
         <MachinesList />
       </div>
     </div>

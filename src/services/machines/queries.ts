@@ -2,6 +2,7 @@ import { PaginationParams } from "../services.Schemas";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { parseQueryParams } from "@/src/utils/services";
 import { handleApiResponseError } from "@/src/utils/errors";
+import { GetMachinesParamsSchema } from "@/src/schemas/machines/getMachinesSchema";
 
 const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
 
@@ -31,7 +32,7 @@ export interface MachineObj {
   };
 }
 
-export type GetMachinesParams = Partial<PaginationParams>;
+export type GetMachinesParams = GetMachinesParamsSchema & Partial<PaginationParams>;
 export type GetMachinesResponse = ApiGetListResponse<MachineObj[]> & Pagination;
 
 export function getMachines(params: GetMachinesParams) {
@@ -43,10 +44,10 @@ export function getMachines(params: GetMachinesParams) {
 }
 
 export function useGetMachines(params: GetMachinesParams) {
-  const { page, size } = params;
+  const { page, size, name, line, user, status } = params;
 
   return useQuery({
-    queryKey: ["machines", page, size],
+    queryKey: ["machines", page, size, name, line, user, status],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getMachines(params);

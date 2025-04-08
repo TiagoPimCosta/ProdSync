@@ -26,6 +26,14 @@ export const Users: SelectOption[] = [
   { value: "78", label: "Teste Telemovel" },
 ];
 
+export const Lines: SelectOption[] = [
+  { value: "6", label: "Linha 1" },
+  { value: "8", label: "Linha 2" },
+  { value: "9", label: "Linha 4" },
+  { value: "10", label: "Linha 5" },
+  { value: "12", label: "Linha 6" },
+];
+
 export const Machines: SelectOption[] = [
   { value: "5", label: "Embalar 2" },
   { value: "6", label: "Embalar 3" },

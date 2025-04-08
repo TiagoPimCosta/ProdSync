@@ -10,8 +10,6 @@ export default function RecordsTable() {
   const recordsSearchParams = useSearchParams();
   const { push } = useRouter();
 
-  if (!recordsSearchParams) return null;
-
   const page = Number(recordsSearchParams.get("page")) || 1;
   const size = Number(recordsSearchParams.get("size")) || 10;
   const user = recordsSearchParams.get("user") || undefined;

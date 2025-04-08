@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/src/components/ui/badge";
-import { UserObj, useGetUsers } from "@/src/services/users/usersQueries";
+import { UserObj, useGetUsers } from "@/src/services/users/queries";
 import { EllipsisIcon, Pencil, Power, PowerOff, User } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import { useDeleteUser } from "@/src/services/users/usersMutations";
+import { useDeleteUser } from "@/src/services/users/mutations";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "@/src/components/ui/data-table";
 import { Button } from "@/src/components/ui/button";
@@ -104,12 +104,12 @@ export default function UsersTable() {
 
   const { data, refetch: refetchUsers } = useGetUsers({
     page: page - 1,
-    size: size,
-    name: name,
-    role: role,
-    status: status,
-    startAdmission: startAdmission,
-    endAdmission: endAdmission,
+    size,
+    name,
+    role,
+    status,
+    startAdmission,
+    endAdmission,
   });
   const userDelete = useDeleteUser();
 

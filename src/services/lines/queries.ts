@@ -34,7 +34,7 @@ export function useGetLines(params: GetLinesParams) {
   const { page, size, name, status } = params;
 
   return useQuery({
-    queryKey: ["users", page, size, name, status],
+    queryKey: ["lines", page, size, name, status],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getLines(params);
