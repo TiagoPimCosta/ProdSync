@@ -1,3 +1,6 @@
+import AddNewContentButton from "@/src/components/ui/addNewContentButton";
+import MachinesFilters from "@/ui/dashboard/machines/MachinesFilters";
+import MachinesList from "@/ui/dashboard/machines/MachinesList";
 import PageHeader from "@/ui/dashboard/PageHeader";
 import React, { useMemo } from "react";
 
@@ -12,9 +15,20 @@ const Machinespage = () => {
   );
 
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       <PageHeader breadcrumbItems={pageBreadcrumbItems} />
-      Machinespage
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-semibold md:text-3xl">Máquinas</h1>
+          </div>
+          <AddNewContentButton href={`/dashboard/machines/new`} label={`Criar Máquina`} />
+        </div>
+      </div>
+      <div className="flex flex-col gap-4">
+        <MachinesFilters />
+        <MachinesList />
+      </div>
     </div>
   );
 };

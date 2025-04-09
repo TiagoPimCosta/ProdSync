@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { userStatus, userStatusResponse } from "./src/lib/auth";
 import { getAuthToken } from "./src/lib/cookies";
+import { jwtDecode } from "jwt-decode";
+
+interface JWTPayload {
+  role: string;
+  id: number;
+  exp: number;
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname }: { pathname: string } = request.nextUrl;
@@ -9,18 +15,27 @@ export async function middleware(request: NextRequest) {
   const authRoutes = ["/dashboard", "/work"];
 
   const Redirect = async () => {
-    const user: userStatusResponse | null = await userStatus();
+    try {
+      const decoded = jwtDecode<JWTPayload>(token || "");
 
-    if (user?.role.toLowerCase() === "admin" && !pathname.startsWith("/dashboard")) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    } else if (user?.role.toLowerCase() === "user" && !pathname.startsWith("/work")) {
-      return NextResponse.redirect(new URL("/work", request.url));
-    } else {
-      return NextResponse.next();
+      // Check if token is expired
+      if (decoded.exp * 1000 < Date.now()) {
+        return NextResponse.redirect(new URL("/", request.url));
+      }
+
+      // Role-based redirects
+      if (decoded?.role.toLowerCase() === "admin" && !pathname.startsWith("/dashboard")) {
+        return NextResponse.redirect(new URL("/dashboard", request.url));
+      } else if (decoded?.role.toLowerCase() === "user" && !pathname.startsWith("/work")) {
+        return NextResponse.redirect(new URL("/work", request.url));
+      } else {
+        return NextResponse.next();
+      }
+    } catch (error) {
+      // If token is invalid, redirect to login
+      return NextResponse.redirect(new URL("/", request.url));
     }
   };
-
-  // Middleware Start
 
   if (!token && authRoutes.includes(pathname)) {
     return NextResponse.redirect(new URL("/", request.url));

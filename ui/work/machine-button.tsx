@@ -1,5 +1,4 @@
 "use client";
-import { addRecord } from "@/src/lib/records";
 import React, { useState } from "react";
 
 interface Work {
@@ -14,7 +13,6 @@ const MachineButton = ({ name, machineId, disableTime }: Work) => {
 
   const submitRecord = () => {
     setIsDisabled(true);
-    addRecord(machineId);
     setInterval(() => setIsDisabled(false), disableTime * 1000);
   };
 

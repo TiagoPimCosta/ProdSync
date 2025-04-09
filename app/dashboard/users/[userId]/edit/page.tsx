@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
-import { useGetUser } from "@/src/services/users/usersQueries";
+import { useGetUser } from "@/src/services/users/queries";
 import PageHeader from "@/ui/dashboard/PageHeader";
 import EditUserForm from "@/ui/dashboard/users/edit/EditUserForm";
 import { useParams } from "next/navigation";
@@ -9,10 +9,14 @@ import React, { useMemo } from "react";
 
 const EditUserPage = () => {
   const params = useParams();
-  const userId = params.userId;
+  const userId = params?.userId;
+
+  if (!userId) {
+    return "Invalid user ID";
+  }
 
   const { data: user } = useGetUser({
-    id: Number(userId),
+    id: userId as string,
   });
 
   const pageBreadcrumbItems = useMemo(

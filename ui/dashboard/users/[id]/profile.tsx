@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
 import React from "react";
-import { UserObj } from "@/src/services/users/usersQueries";
+import { UserObj } from "@/src/services/users/queries";
 import { CalendarIcon, MailIcon, Pencil, PhoneIcon } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
 import dayjs from "dayjs";

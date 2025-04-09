@@ -1,38 +1,42 @@
 "use client";
 
-import { useGetLines } from "@/src/services/lines/queries";
-import LineCard from "./LineCard";
 import { useRouter, useSearchParams } from "next/navigation";
-import { PageSizes } from "@/src/utils/consts";
-import { Pagination } from "@mantine/core";
+import { useGetMachines } from "@/src/services/machines/queries";
+import MachineCard from "./MachineCard";
 import Select from "@/src/components/ui/Select";
+import { Pagination } from "@mantine/core";
+import { PageSizes } from "@/src/utils/consts";
 
-export default function LinesList() {
-  const linesSearchParams = useSearchParams();
+export default function MachinesList() {
+  const machinesSearchParams = useSearchParams();
   const router = useRouter();
   const { push } = router;
 
-  const page = Number(linesSearchParams.get("page")) || 1;
-  const size = Number(linesSearchParams.get("size")) || 10;
-  const name = linesSearchParams.get("name") || undefined;
-  const status = linesSearchParams.get("status") || undefined;
+  const page = Number(machinesSearchParams.get("page")) || 1;
+  const size = Number(machinesSearchParams.get("size")) || 10;
+  const name = machinesSearchParams.get("name") || undefined;
+  const line = machinesSearchParams.get("line") || undefined;
+  const user = machinesSearchParams.get("user") || undefined;
+  const status = machinesSearchParams.get("status") || undefined;
 
-  const { data } = useGetLines({
+  const { data } = useGetMachines({
     page: page - 1,
-    size: size,
-    name: name,
-    status: status,
+    size,
+    name,
+    line,
+    user,
+    status,
   });
 
   const handleChangePage = (page: number) => {
-    const currentParams = new URLSearchParams(linesSearchParams.toString());
+    const currentParams = new URLSearchParams(machinesSearchParams.toString());
     currentParams.set("page", page.toString());
     push(`?${currentParams.toString()}`);
   };
 
   const handleChangePageSize = (pageSize: string | undefined) => {
     if (pageSize) {
-      const currentParams = new URLSearchParams(linesSearchParams.toString());
+      const currentParams = new URLSearchParams(machinesSearchParams.toString());
       currentParams.set("size", pageSize);
       currentParams.set("page", "0");
       push(`?${currentParams.toString()}`);
@@ -43,9 +47,9 @@ export default function LinesList() {
 
   return (
     <>
-      <div className="grid gap-6 md:grid-cols-2">
-        {data.items.map((line) => (
-          <LineCard key={`line-${line.id}`} line={line} />
+      <div className="grid gap-4 md:grid-cols-4">
+        {data?.items?.map((machine) => (
+          <MachineCard key={`machine-${machine.id}`} machine={machine} />
         ))}
       </div>
       <div className="w-full">

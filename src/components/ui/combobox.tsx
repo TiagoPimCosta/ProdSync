@@ -60,7 +60,7 @@ export function Combobox(props: ComboboxProps) {
           <ChevronsUpDown className="left-0 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0 w-[--radix-popper-anchor-width] min-w-fit">
+      <PopoverContent align="start" className="p-0 min-w-[--radix-popper-anchor-width]">
         <Command>
           {searchable && <CommandInput placeholder={placeholder} />}
           <CommandList>

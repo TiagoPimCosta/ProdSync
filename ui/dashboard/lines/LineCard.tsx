@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import { LineObj } from "@/src/services/lines/linesQueries";
+import { LineObj } from "@/src/services/lines/queries";
 import dayjs from "dayjs";
 import { EllipsisIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
