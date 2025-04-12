@@ -20,7 +20,7 @@ import { UserTypes } from "@/src/utils/consts";
 import { Combobox } from "@/src/components/ui/combobox";
 
 const CreateUserForm = () => {
-  const userCreate = useCreateUser();
+  const createUser = useCreateUser();
   const router = useRouter();
 
   const form = useForm<NewUserSchema>({
@@ -35,7 +35,7 @@ const CreateUserForm = () => {
   });
 
   async function onSubmit(values: NewUserSchema) {
-    await userCreate.mutateAsync(values);
+    await createUser.mutateAsync(values);
     router.push("/dashboard/users");
   }
 

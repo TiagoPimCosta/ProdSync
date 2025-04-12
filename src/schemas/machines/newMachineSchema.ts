@@ -1,0 +1,7 @@
+import { z } from "zod";
+
+export const newMachineSchema = z.object({
+  name: z.string().min(5),
+});
+
+export type NewMachineSchema = z.infer<typeof newMachineSchema>;
