@@ -22,10 +22,3 @@ export const Lines: SelectOption[] = [
   { value: "10", label: "Linha 5" },
   { value: "12", label: "Linha 6" },
 ];
-
-export const Machines: SelectOption[] = [
-  { value: "5", label: "Embalar 2" },
-  { value: "6", label: "Embalar 3" },
-  { value: "7", label: "Embalar 4" },
-  { value: "8", label: "Embalar 5" },
-];
