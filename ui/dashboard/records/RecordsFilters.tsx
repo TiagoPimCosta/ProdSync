@@ -1,15 +1,18 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { Machines, Users } from "@/src/utils/consts";
+import { Machines } from "@/src/utils/consts";
 import { DatePickerWithRange } from "@/src/components/ui/datePickerWithRange";
 import { DateRange } from "react-day-picker";
 import dayjs from "dayjs";
 import { Combobox } from "@/src/components/ui/combobox";
+import { useGetUsersOptions } from "@/src/services/options/queries";
 
 export default function RecordsFilters() {
   const recordsSearchParams = useSearchParams();
   const router = useRouter();
+
+  const { data: usersOptions } = useGetUsersOptions();
 
   const user = recordsSearchParams.get("name") || undefined;
   const machine = recordsSearchParams.get("role") || undefined;
@@ -54,14 +57,14 @@ export default function RecordsFilters() {
   return (
     <div className="flex flex-col w-full md:flex-row gap-2">
       <Combobox
-        className="w-fit gap-2"
+        className="w-full gap-2 sm:w-1/6"
         placeholder="User"
-        data={Users}
+        data={usersOptions}
         value={user || undefined}
         onChange={handleChangeUser}
       />
       <Combobox
-        className="w-fit gap-2"
+        className="w-full gap-2 sm:w-1/6"
         placeholder="Machine"
         data={Machines}
         value={machine || undefined}
