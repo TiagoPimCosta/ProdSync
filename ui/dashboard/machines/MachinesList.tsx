@@ -5,7 +5,7 @@ import { useGetMachines } from "@/src/services/machines/queries";
 import MachineCard from "./MachineCard";
 import Select from "@/src/components/ui/Select";
 import { Pagination } from "@mantine/core";
-import { PageSizes } from "@/src/utils/consts";
+import { MachinesPageSizes } from "@/src/utils/consts";
 
 export default function MachinesList() {
   const machinesSearchParams = useSearchParams();
@@ -13,7 +13,7 @@ export default function MachinesList() {
   const { push } = router;
 
   const page = Number(machinesSearchParams.get("page")) || 1;
-  const size = Number(machinesSearchParams.get("size")) || 10;
+  const size = Number(machinesSearchParams.get("size")) || 12;
   const name = machinesSearchParams.get("name") || undefined;
   const line = machinesSearchParams.get("line") || undefined;
   const user = machinesSearchParams.get("user") || undefined;
@@ -68,7 +68,7 @@ export default function MachinesList() {
           <div className="flex-1 flex justify-end">
             <Select
               className="w-20"
-              data={PageSizes}
+              data={MachinesPageSizes}
               value={size.toString()}
               onChange={handleChangePageSize}
             />
