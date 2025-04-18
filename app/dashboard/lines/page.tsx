@@ -22,7 +22,7 @@ const LinesPage = () => {
           <div>
             <h1 className="text-2xl font-semibold md:text-3xl">Linhas de Produção</h1>
           </div>
-          <AddNewContentButton href={`/dashboard/lines/create`} label={`Criar Linha`} />
+          <AddNewContentButton href={`/dashboard/lines/new`} label={`Criar Linha`} />
         </div>
       </div>
       <div className="flex flex-col gap-4">
