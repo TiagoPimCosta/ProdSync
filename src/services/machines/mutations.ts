@@ -21,6 +21,11 @@ export function useCreateMachine() {
   return useMutation<ApiResponseMessage, Error, CreateMachineBodyParams>({
     mutationFn: async (vars) => {
       const response = await createMachine(vars);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+
       const data = await response.json();
       return data as ApiResponseMessage;
     },
