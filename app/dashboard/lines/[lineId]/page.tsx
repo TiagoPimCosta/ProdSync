@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetLine } from "@/src/services/lines/linesQueries";
+import { useGetLine } from "@/src/services/lines/queries";
 import PageHeader from "@/ui/dashboard/PageHeader";
 import { useParams } from "next/navigation";
 import React, { useMemo } from "react";

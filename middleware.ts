@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { getAuthToken } from "./src/lib/cookies";
+import { getAuthToken, removeAuthToken } from "./src/lib/cookies";
 import { jwtDecode } from "jwt-decode";
 
 interface JWTPayload {
@@ -20,7 +20,9 @@ export async function middleware(request: NextRequest) {
 
       // Check if token is expired
       if (decoded.exp * 1000 < Date.now()) {
-        return NextResponse.redirect(new URL("/", request.url));
+        const response = NextResponse.redirect(new URL("/", request.url));
+        response.cookies.delete("authToken");
+        return response;
       }
 
       // Role-based redirects
