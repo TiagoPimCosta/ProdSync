@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { getAuthToken, removeAuthToken } from "./src/lib/cookies";
+import { getAuthToken } from "./src/lib/cookies";
 import { jwtDecode } from "jwt-decode";
 
 interface JWTPayload {
