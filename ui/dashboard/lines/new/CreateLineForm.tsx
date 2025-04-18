@@ -14,23 +14,23 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/src/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useCreateMachine } from "@/src/services/machines/mutations";
-import { newMachineSchema, NewMachineSchema } from "@/src/schemas/machines/newMachineSchema";
+import { useCreateLine } from "@/src/services/lines/mutations";
+import { newLineSchema, NewLineSchema } from "@/src/schemas/lines/newLineSchema";
 
-const CreateMachineForm = () => {
-  const createMachine = useCreateMachine();
+const CreateLineForm = () => {
+  const createLine = useCreateLine();
   const router = useRouter();
 
-  const form = useForm<NewMachineSchema>({
-    resolver: zodResolver(newMachineSchema),
+  const form = useForm<NewLineSchema>({
+    resolver: zodResolver(newLineSchema),
     defaultValues: {
       name: undefined,
     },
   });
 
-  async function onSubmit(values: NewMachineSchema) {
-    await createMachine.mutateAsync(values);
-    router.push("/dashboard/machines");
+  async function onSubmit(values: NewLineSchema) {
+    await createLine.mutateAsync(values);
+    router.push("/dashboard/lines");
   }
 
   return (
@@ -59,4 +59,4 @@ const CreateMachineForm = () => {
   );
 };
 
-export default CreateMachineForm;
+export default CreateLineForm;
