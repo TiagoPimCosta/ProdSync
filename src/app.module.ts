@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { MachinesModule } from './machines/machines.module';
 import { LinesModule } from './lines/lines.module';
+import { OptionsModule } from './options/options.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { LinesModule } from './lines/lines.module';
     AuthModule,
     MachinesModule,
     LinesModule,
+    OptionsModule,
   ],
   controllers: [],
   providers: [],
