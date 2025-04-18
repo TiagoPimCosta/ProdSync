@@ -1,10 +1,10 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { Lines, UserStatus } from "@/src/utils/consts";
+import { UserStatus } from "@/src/utils/consts";
 import { Input } from "@/src/components/ui/input";
 import { Combobox } from "@/src/components/ui/combobox";
-import { useGetUsersOptions } from "@/src/services/options/queries";
+import { useGetLinesOptions, useGetUsersOptions } from "@/src/services/options/queries";
 
 export default function MachinesFilters() {
   const machinesSearchParams = useSearchParams();
@@ -16,6 +16,7 @@ export default function MachinesFilters() {
   const status = machinesSearchParams.get("status") || undefined;
 
   const { data: usersOptions } = useGetUsersOptions();
+  const { data: linesOptions } = useGetLinesOptions();
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value;
@@ -73,7 +74,7 @@ export default function MachinesFilters() {
       <Combobox
         className="w-full sm:w-1/6"
         placeholder="Line"
-        data={Lines}
+        data={linesOptions}
         value={line || undefined}
         onChange={handleChangeLine}
       />

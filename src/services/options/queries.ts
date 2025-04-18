@@ -44,3 +44,24 @@ export function useGetMachinesOptions() {
     },
   });
 }
+
+export function getLinesOptions() {
+  const url = API_ENDPOINT_URL + "/options/lines";
+
+  return fetch(url);
+}
+
+export function useGetLinesOptions() {
+  return useQuery({
+    queryKey: ["options", "lines"],
+    placeholderData: keepPreviousData,
+    queryFn: async () => {
+      const response = await getLinesOptions();
+      return (await response.json()) as SelectOption[];
+    },
+    throwOnError: (error) => {
+      handleApiResponseError(error);
+      return false;
+    },
+  });
+}
