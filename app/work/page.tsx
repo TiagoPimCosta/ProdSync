@@ -7,11 +7,7 @@ export const metadata: Metadata = {
 };
 
 const WorkPage = () => {
-  return (
-    <>
-      <Machines />
-    </>
-  );
+  return <Machines />;
 };
 
 export default WorkPage;
