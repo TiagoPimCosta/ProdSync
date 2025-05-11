@@ -26,7 +26,6 @@ const DashboardPage = () => {
     () => [
       {
         label: "Dashboard",
-        href: "/dashboard",
       },
     ],
     []

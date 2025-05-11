@@ -1,15 +1,23 @@
 import { forwardRef } from "react";
 import { Clock } from "lucide-react";
 import { cn } from "@/src/lib/utils";
-import { Action } from "@/src/hooks/useJobActions";
 import dayjs from "dayjs";
+import { RecordObj } from "@/src/services/records/queries";
 
-interface ActionTimelineProps {
-  actions: Action[];
+export interface Action {
+  id: string;
+  jobId: string;
+  timestamp: Date;
+  jobName: string;
+  jobColor: string;
 }
 
-const ActionTimeline = forwardRef<HTMLDivElement, ActionTimelineProps>(({ actions }, ref) => {
-  if (actions.length === 0) {
+interface RecordTimelineProps {
+  records: RecordObj[] | undefined;
+}
+
+const RecordTimeline = forwardRef<HTMLDivElement, RecordTimelineProps>(({ records }, ref) => {
+  if (!records || records.length === 0) {
     return (
       <div ref={ref} className="mt-6 p-8 text-center text-muted-foreground animate-fade-in">
         <Clock className="mx-auto h-12 w-12 mb-3 opacity-20" />
@@ -22,17 +30,16 @@ const ActionTimeline = forwardRef<HTMLDivElement, ActionTimelineProps>(({ action
   return (
     <div ref={ref} className="mt-3 space-y-6 animate-fade-in">
       <div className="space-y-3">
-        {actions.map((action) => (
+        {records.map((record) => (
           <div
-            key={action.id}
+            key={record.id}
             className="bg-card rounded-xl border border-border/50 shadow-sm overflow-hidden animate-scale-in"
           >
             <div className="flex items-center p-4">
-              <div className={cn("w-2 h-10 rounded-full mr-4", action.jobColor)} />
               <div className="flex-1">
-                <p className="font-medium">{action.jobName}</p>
+                <p className="font-medium">{record.machine.name}</p>
                 <p className="text-sm text-muted-foreground">
-                  {dayjs(action.timestamp).format("DD/MM/YYYY HH:mm:ss")}
+                  {dayjs(record.createdAt).format("DD/MM/YYYY HH:mm:ss")}
                 </p>
               </div>
             </div>
@@ -43,6 +50,4 @@ const ActionTimeline = forwardRef<HTMLDivElement, ActionTimelineProps>(({ action
   );
 });
 
-ActionTimeline.displayName = "ActionTimeline";
-
-export default ActionTimeline;
+export default RecordTimeline;

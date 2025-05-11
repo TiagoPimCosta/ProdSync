@@ -27,7 +27,7 @@ export default function LineCard(props: LineCardProps) {
   };
 
   return (
-    <Card key={line.id.toString()} className="data-card animate-slide-up">
+    <Card key={line.id.toString()} className="animate-slide-up">
       <CardHeader className="flex-row justify-between items-center">
         <CardTitle>{line.name}</CardTitle>
         <div className="flex flex-row gap-2 items-center">

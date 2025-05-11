@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { Briefcase, Clock, LogOut, Trash2 } from "lucide-react";
-import { Separator } from "@/src/components/ui/separator";
+import React, { useRef } from "react";
+import { LogOut } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -11,39 +10,32 @@ import {
   CardTitle,
 } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
-import JobCard from "./JobCard";
-import { toast } from "react-toastify";
-import { useJobActions } from "@/src/hooks/useJobActions";
-import ActionButton from "./ActionButton";
-import ActionTimeline from "./ActionTimeline";
-import { Badge } from "@/src/components/ui/badge";
-import dayjs from "dayjs";
-import { logout } from "@/src/lib/auth";
+import { logout, userStatusResponse } from "@/src/lib/auth";
 import { useRouter } from "next/navigation";
+import { useGetUserMachines } from "@/src/services/machines/queries";
+import ClockBadge from "./ClockBadge";
+import RegisterAction from "./RegisterAction";
+import { useGetRecords } from "@/src/services/records/queries";
+import { greetingsMessage } from "@/src/lib/utils";
+import RecordTimeline from "./RecordTimeline";
 
-const Machines = () => {
-  const { jobs, actions, registerAction, clearActions } = useJobActions();
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const [currentTime, setCurrentTime] = useState(new Date());
-
+interface MachinesProps {
+  user: userStatusResponse | null;
+}
+const Machines = (props: MachinesProps) => {
+  const { user } = props;
   const router = useRouter();
+  const timelineRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
+  const { data: records } = useGetRecords({
+    page: 0,
+    size: 10,
+    user: user?.id.toString(),
+  });
 
-    return () => clearInterval(timer);
-  }, []);
+  if (!user) return "NULL";
 
-  const handleClearAll = () => {
-    if (actions.length === 0) {
-      toast.success("No actions to clear");
-      return;
-    }
-
-    clearActions();
-  };
+  let { data: machines } = useGetUserMachines({ id: user?.id.toString() });
 
   const handleLogOut = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,83 +44,58 @@ const Machines = () => {
     router.push("/");
   };
 
+  if (!machines || machines.length === 0) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container max-w-5xl px-4 py-6 sm:py-8 mx-auto">
+          <header className="flex flex-col mb-8 sm:text-left animate-fade-in sm:gap-0 gap-2">
+            <div className="flex items-center justify-between">
+              <ClockBadge />
+              <Button variant="ghost" className="gap-2" onClick={handleLogOut}>
+                <LogOut />
+                LogOut
+              </Button>
+            </div>
+            <h1 className="text-3xl font-bold tracking-tight mb-1">
+              {greetingsMessage(user.name)}
+            </h1>
+          </header>
+          <Card className="rounded-xl border border-border/50 shadow-sm">
+            <CardHeader>
+              <CardTitle>No Machines Available</CardTitle>
+              <CardDescription>You don't have any machines assigned to you.</CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container max-w-5xl px-4 py-6 sm:py-8 mx-auto">
         <header className="flex flex-col mb-8 sm:text-left animate-fade-in sm:gap-0 gap-2">
           <div className="flex items-center justify-between">
-            <Badge variant="secondary" className="h-fit">
-              <Clock className="w-4 h-4 mr-2" />
-              <span className="text-sm font-medium">
-                {dayjs(currentTime).format("DD/MM/YYYY HH:mm:ss")}
-              </span>
-            </Badge>
+            <ClockBadge />
             <Button variant="ghost" className="gap-2" onClick={handleLogOut}>
               <LogOut />
               LogOut
             </Button>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight mb-1">AS Braga</h1>
+          <h1 className="text-3xl font-bold tracking-tight mb-1">{greetingsMessage(user.name)}</h1>
         </header>
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            <section className="space-y-4 animate-slide-up">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-medium">Register Action</h2>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {jobs.map((job) => (
-                  <ActionButton
-                    key={job.id}
-                    jobId={job.id}
-                    jobName={job.name}
-                    jobColor={job.color}
-                    onClick={(id) => {
-                      registerAction(id);
-                    }}
-                  />
-                ))}
-              </div>
-            </section>
-
-            <Separator className="my-6" />
-
-            <section className="space-y-4 animate-slide-up" style={{ animationDelay: "100ms" }}>
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-medium">Assigned Jobs</h2>
-                <Badge variant="secondary" className="h-fit">
-                  <Briefcase className="w-4 h-4 mr-2" />
-                  <span className="text-sm">{jobs.length} Jobs</span>
-                </Badge>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {jobs.map((job) => (
-                  <JobCard key={job.id} id={job.id} name={job.name} color={job.color} />
-                ))}
-              </div>
-            </section>
-          </div>
-
-          <div className="lg:col-span-1 animate-slide-up" style={{ animationDelay: "200ms" }}>
+          <RegisterAction machines={machines} />
+          <div>
             <Card className="rounded-xl border border-border/50 shadow-sm">
               <CardHeader className="pb-2">
                 <div className="flex justify-between items-center">
                   <CardTitle className="text-xl font-medium">Activity Log</CardTitle>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleClearAll}
-                    className="text-muted-foreground h-8"
-                  >
-                    <Trash2 className="h-4 w-4 mr-1" />
-                    Clear
-                  </Button>
                 </div>
                 <CardDescription>Recent action history</CardDescription>
               </CardHeader>
               <CardContent>
-                <ActionTimeline ref={timelineRef} actions={actions} />
+                <RecordTimeline ref={timelineRef} records={records?.items} />
               </CardContent>
             </Card>
           </div>

@@ -1,8 +1,6 @@
 import { Button } from "@/src/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/src/components/ui/card";
-import { LineObj } from "@/src/services/lines/queries";
 import { MachineObj } from "@/src/services/machines/queries";
-import dayjs from "dayjs";
 import { Activity, Clock, PowerOff, Settings2 } from "lucide-react";
 import React from "react";
 
@@ -14,7 +12,7 @@ export default function MachineCard(props: MachineCardProps) {
   const { machine } = props;
 
   return (
-    <Card key={machine.id.toString()} className="data-card animate-slide-up">
+    <Card key={machine.id.toString()} className="animate-slide-up">
       <CardHeader className="flex-row justify-between items-center">
         <CardTitle>{machine.name}</CardTitle>
         {machine.status ? (

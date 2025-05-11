@@ -37,14 +37,14 @@ const links = [
     icon: <Users />,
   },
   {
-    title: "Máquinas",
-    url: "/machines",
-    icon: <BellElectric />,
-  },
-  {
     title: "Linhas",
     url: "/lines",
     icon: <LayoutGrid />,
+  },
+  {
+    title: "Máquinas",
+    url: "/machines",
+    icon: <BellElectric />,
   },
   {
     title: "Registos",

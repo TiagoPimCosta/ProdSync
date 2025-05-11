@@ -1,8 +1,9 @@
 import { PaginationParams } from "../services.Schemas";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions, useQuery } from "@tanstack/react-query";
 import { parseQueryParams } from "@/src/utils/services";
 import { handleApiResponseError } from "@/src/utils/errors";
 import { GetMachinesParamsSchema } from "@/src/schemas/machines/getMachinesSchema";
+import { GetUserMachinesParamsSchema } from "@/src/schemas/machines/getUserMachinesSchema";
 
 const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
 
@@ -52,6 +53,32 @@ export function useGetMachines(params: GetMachinesParams) {
     queryFn: async () => {
       const response = await getMachines(params);
       return (await response.json()) as GetMachinesResponse;
+    },
+    throwOnError: (error) => {
+      handleApiResponseError(error);
+      return false;
+    },
+  });
+}
+
+export type GetUserMachinesParams = GetUserMachinesParamsSchema;
+export type GetUserMachinesResponse = MachineObj[];
+
+export function getUserMachines(params: GetUserMachinesParams) {
+  const { id } = params;
+  const url = API_ENDPOINT_URL + `/machines/user/${id}`;
+  return fetch(url);
+}
+
+export function useGetUserMachines(params: GetUserMachinesParams) {
+  const { id } = params;
+
+  return useQuery({
+    queryKey: ["machines", "user", id],
+    placeholderData: keepPreviousData,
+    queryFn: async () => {
+      const response = await getUserMachines(params);
+      return (await response.json()) as GetUserMachinesResponse;
     },
     throwOnError: (error) => {
       handleApiResponseError(error);
