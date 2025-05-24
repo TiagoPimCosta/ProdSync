@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
+import dayjs from "dayjs";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -16,4 +17,19 @@ export function getFirstLettersOfName(name: string) {
     .join("");
 
   return initials.slice(0, 2).toUpperCase();
+}
+
+export function greetingsMessage(name: string): string {
+  const hora = dayjs().hour();
+  let message;
+
+  if (hora >= 6 && hora < 12) {
+    message = "Bom dia, ";
+  } else if (hora >= 12 && hora < 18) {
+    message = "Boa tarde, ";
+  } else {
+    message = "Boa noite, ";
+  }
+
+  return message + name;
 }
