@@ -26,7 +26,10 @@ export class MachinesService {
     createMachineDto: CreateMachineParams,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
-      const newMachine = this.machineRepository.create(createMachineDto);
+      const newMachine = this.machineRepository.create({
+        ...createMachineDto,
+        line: { id: Number(createMachineDto.line) },
+      });
       await this.machineRepository.save(newMachine);
       return {
         statusCode: 200,
@@ -96,6 +99,26 @@ export class MachinesService {
     }
   }
 
+  async findAllByUserId(user?: string): Promise<Machine[] | ErrorResponse> {
+    try {
+      const queryBuilder = this.machineRepository
+        .createQueryBuilder('machine')
+        .leftJoinAndSelect('machine.line', 'line')
+        .leftJoinAndSelect('machine.user', 'user');
+
+      if (user) queryBuilder.andWhere('machine.user = :user', { user });
+
+      const machines = await queryBuilder.getMany();
+
+      return machines;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'An error occurred while fetching the machines.',
+        error,
+      );
+    }
+  }
+
   async update(
     id: number,
     updateMachineDetails: UpdateMachineParams,
@@ -105,7 +128,13 @@ export class MachinesService {
       if (!machine)
         throw new NotFoundException(`Machine with ID ${id} not found.`);
 
-      await this.machineRepository.update({ id }, { ...updateMachineDetails });
+      await this.machineRepository.update(
+        { id },
+        {
+          ...updateMachineDetails,
+          line: { id: Number(updateMachineDetails.line) },
+        },
+      );
       return {
         statusCode: 200,
         message: `Machine with number ${machine.id} has been updated.`,

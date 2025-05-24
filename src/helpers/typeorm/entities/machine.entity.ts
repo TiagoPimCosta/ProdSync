@@ -20,6 +20,10 @@ export class Machine {
   @ApiProperty()
   name: string;
 
+  @Column()
+  @ApiProperty()
+  cadence: number;
+
   @Column({ default: true })
   @ApiProperty()
   status: boolean;

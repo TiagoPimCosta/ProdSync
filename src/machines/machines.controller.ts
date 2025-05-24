@@ -154,6 +154,28 @@ export class MachinesController {
     }
   }
 
+  @Get('/user/:user')
+  @ApiOperation({ summary: 'Get all machines from a user' })
+  @ApiResponse({
+    status: 200,
+    description: 'Machines successfully retrieved',
+    type: [Machine],
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+    type: ErrorResponse,
+  })
+  findAllFromAUser(
+    @Param('user') user: string,
+  ): Promise<Machine[] | ErrorResponse> {
+    try {
+      return this.machinesService.findAllByUserId(user);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Update a machine by ID' })
   @ApiResponse({
