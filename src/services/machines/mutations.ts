@@ -5,6 +5,8 @@ const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
 
 export interface CreateMachineBodyParams {
   name: string;
+  line?: string;
+  cadence: number;
 }
 
 export async function createMachine(body: CreateMachineBodyParams) {
