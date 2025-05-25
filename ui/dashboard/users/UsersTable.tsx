@@ -2,7 +2,7 @@
 
 import { Badge } from "@/src/components/ui/badge";
 import { UserObj, useGetUsers } from "@/src/services/users/queries";
-import { EllipsisIcon, Pencil, Power, PowerOff, User } from "lucide-react";
+import { EllipsisIcon, EyeIcon, Pencil, Power, PowerOff, User } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   DropdownMenu,
@@ -70,33 +70,37 @@ export default function UsersTable() {
         const userId = row.original.id;
 
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="ghost" className="h-6 w-6">
-                <EllipsisIcon className="h-5 w-5" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem
-                onClick={() => handleOpenProfile(userId)}
-                className="flex items-center gap-2"
-              >
-                Ver Perfil
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => handleOpenEdit(userId)}
-                className="flex items-center gap-2"
-              >
-                Editar
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => handleDeactivateUser(userId)}
-                className="flex items-center gap-2"
-              >
-                {status ? <span className="text-red-500">Desativar</span> : <span>Ativar</span>}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex flex-row gap-2 items-center">
+            <Button
+              onClick={() => handleOpenProfile(userId)}
+              size="icon"
+              variant="ghost"
+              className="h-6 w-6"
+            >
+              <EyeIcon className="h-5 w-5" />
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="icon" variant="ghost" className="h-6 w-6">
+                  <EllipsisIcon className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem
+                  onClick={() => handleOpenEdit(userId)}
+                  className="flex items-center gap-2"
+                >
+                  Editar
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleDeactivateUser(userId)}
+                  className="flex items-center gap-2"
+                >
+                  {status ? <span className="text-red-500">Desativar</span> : <span>Ativar</span>}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         );
       },
     }),

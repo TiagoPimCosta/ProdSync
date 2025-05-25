@@ -10,7 +10,7 @@ import {
 } from "@/src/components/ui/dropdown-menu";
 import { LineObj } from "@/src/services/lines/queries";
 import dayjs from "dayjs";
-import { EllipsisIcon } from "lucide-react";
+import { EllipsisIcon, EyeIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -34,6 +34,14 @@ export default function LineCard(props: LineCardProps) {
           <Badge variant={line.status ? "success" : "destructive"} className="h-fit">
             {line.status ? "Ativo" : "Inativo"}
           </Badge>
+          <Button
+            onClick={() => handleOpenLineDetails(line.id)}
+            size="icon"
+            variant="ghost"
+            className="h-6 w-6"
+          >
+            <EyeIcon className="h-5 w-5" />
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="icon" variant="ghost" className="h-6 w-6">
@@ -41,12 +49,6 @@ export default function LineCard(props: LineCardProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem
-                onClick={() => handleOpenLineDetails(line.id)}
-                className="flex items-center gap-2"
-              >
-                Ver detalhes
-              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => console.log("Desativar/Ativar")}
                 className="flex items-center gap-2"

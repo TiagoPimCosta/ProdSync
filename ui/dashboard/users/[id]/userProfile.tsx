@@ -7,11 +7,11 @@ import dayjs from "dayjs";
 import { Button } from "@/src/components/ui/button";
 import Link from "next/link";
 
-interface ProfileProps {
+interface UserProfileProps {
   user?: UserObj;
 }
 
-const Profile = ({ user }: ProfileProps) => {
+const UserProfile = ({ user }: UserProfileProps) => {
   if (!user) return <div>User Not Found</div>;
 
   return (
@@ -80,4 +80,4 @@ const Profile = ({ user }: ProfileProps) => {
     </div>
   );
 };
-export default Profile;
+export default UserProfile;
