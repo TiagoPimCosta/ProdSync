@@ -1,17 +1,13 @@
-import React from "react";
-import { LineObj } from "@/src/services/lines/queries";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
+import LinePerformanceFilters from "./linePerformanceFilters";
+import LinePerformanceTable from "./linePerformanceTable";
+import LinePerformanceChart from "./linePerformanceChart";
 
-interface LinePerformanceProps {
-  line?: LineObj;
-}
-
-const LinePerformance = ({ line }: LinePerformanceProps) => {
-  if (!line) return <div>line Not Found</div>;
-
+const LinePerformance = () => {
   return (
-    <div>
-      <h1>Performance {line.name}.</h1>
+    <div className="flex flex-col gap-4">
+      <LinePerformanceFilters />
+      <LinePerformanceChart />
+      <LinePerformanceTable />
     </div>
   );
 };

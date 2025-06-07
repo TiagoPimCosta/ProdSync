@@ -1,4 +1,3 @@
-import React from "react";
 import { LineObj } from "@/src/services/lines/queries";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
 import LineOverview from "./lineOverview";
@@ -15,15 +14,15 @@ const LineProfile = ({ line }: LineProfileProps) => {
   return (
     <Tabs defaultValue="overview">
       <TabsList>
-        <TabsTrigger value="overview">Overview</TabsTrigger>
+        <TabsTrigger value="overview">Geral</TabsTrigger>
         <TabsTrigger value="performance">Performance</TabsTrigger>
-        <TabsTrigger value="machines">Machines</TabsTrigger>
+        <TabsTrigger value="machines">Máquinas</TabsTrigger>
       </TabsList>
       <TabsContent value="overview">
         <LineOverview line={line} />
       </TabsContent>
       <TabsContent value="performance">
-        <LinePerformance line={line} />
+        <LinePerformance />
       </TabsContent>
       <TabsContent value="machines">
         <LineConnectedMachines line={line} />

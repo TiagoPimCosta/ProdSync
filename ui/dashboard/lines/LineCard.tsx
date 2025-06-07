@@ -1,7 +1,7 @@
 import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/src/components/ui/card";
-import { BarChart } from "@/src/components/ui/Charts/BarCharts";
+import DailyLineChart from "@/src/components/ui/Charts/DailyLineChart";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,6 @@ import { LineObj } from "@/src/services/lines/queries";
 import dayjs from "dayjs";
 import { EllipsisIcon, EyeIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React from "react";
 
 interface LineCardProps {
   line: LineObj;
@@ -63,24 +62,12 @@ export default function LineCard(props: LineCardProps) {
           </DropdownMenu>
         </div>
       </CardHeader>
-      <CardContent>
-        <h4 className="mb-2 text-sm font-medium">Weekly Output</h4>
-        <BarChart
-          data={[
-            { name: "Mon", value: Math.round(Math.random() * (500 - 200) + 200) },
-            { name: "Tue", value: Math.round(Math.random() * (500 - 200) + 200) },
-            { name: "Wed", value: Math.round(Math.random() * (500 - 200) + 200) },
-            { name: "Thu", value: Math.round(Math.random() * (500 - 200) + 200) },
-            { name: "Fri", value: Math.round(Math.random() * (500 - 200) + 200) },
-          ]}
-          dataKey="value"
-          height={120}
-          barColor={line.status ? "rgb(22, 163, 74)" : "rgb(202, 138, 4)"}
-        />
+      <CardContent className="gap-2">
+        <DailyLineChart lineId={line.id.toString()} showAverage />
       </CardContent>
       <CardFooter className="flex justify-between items-center">
         <div>
-          <span className="text-muted-foreground">Machines:</span>
+          <span className="text-muted-foreground">Máquinas:</span>
           <span className="ml-1">{line.machines.length}</span>
         </div>
         <div>

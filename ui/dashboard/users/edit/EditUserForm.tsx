@@ -9,7 +9,6 @@ import {
   FormMessage,
 } from "@/src/components/ui/form";
 import { Input } from "@/src/components/ui/input";
-import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/src/components/ui/button";
@@ -19,7 +18,6 @@ import { UserTypes } from "@/src/utils/consts";
 import { Combobox } from "@/src/components/ui/combobox";
 import { UserObj } from "@/src/services/users/queries";
 import { editUserSchema, type EditUserSchema } from "@/src/schemas/users/editUserSchema";
-import { z } from "zod";
 
 interface EditUserFormProps {
   user: UserObj;

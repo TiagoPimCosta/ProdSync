@@ -3,6 +3,8 @@ import { PaginationParams } from "../services.Schemas";
 import { handleApiResponseError } from "@/src/utils/errors";
 import { parseQueryParams } from "@/src/utils/services";
 import { GetRecordsParamsSchema } from "@/src/schemas/records/getRecordsSchema";
+import { GetHourlyStatsRecordsParamsSchema } from "@/src/schemas/records/getHourlyStatsRecordsParamsSchema";
+import { GetDailyStatsRecordsParamsSchema } from "@/src/schemas/records/getDailyStatsRecordsParamsSchema";
 
 const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
 
@@ -52,6 +54,63 @@ export function useGetRecords(params: GetRecordsParams) {
     queryFn: async () => {
       const response = await getRecords(params);
       return (await response.json()) as GetRecordsResponse;
+    },
+    throwOnError: (error) => {
+      handleApiResponseError(error);
+      return false;
+    },
+  });
+}
+
+export function getHourlyStatsRecords(params: GetHourlyStatsRecordsParamsSchema) {
+  const queryParams = parseQueryParams(params);
+  const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
+  const url = API_ENDPOINT_URL + "/records/hourlyStats?" + queryString;
+
+  return fetch(url);
+}
+
+export function useGetHourlyStatsRecords(params: GetHourlyStatsRecordsParamsSchema) {
+  const { userId, lineId, machineId, startDate, endDate } = params;
+
+  return useQuery({
+    queryKey: ["records", "hourlyStats", userId, lineId, machineId, startDate, endDate],
+    placeholderData: keepPreviousData,
+    /*     refetchInterval: 30000, */
+    queryFn: async () => {
+      const response = await getHourlyStatsRecords(params);
+      return (await response.json()) as {
+        hour: string;
+        count: number;
+      }[];
+    },
+    throwOnError: (error) => {
+      handleApiResponseError(error);
+      return false;
+    },
+  });
+}
+
+export function getDailyStatsRecords(params: GetDailyStatsRecordsParamsSchema) {
+  const queryParams = parseQueryParams(params);
+  const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
+  const url = API_ENDPOINT_URL + "/records/dailyStats?" + queryString;
+
+  return fetch(url);
+}
+
+export function useGetDailyStatsRecords(params: GetDailyStatsRecordsParamsSchema) {
+  const { userId, lineId, machineId, startDate, endDate } = params;
+
+  return useQuery({
+    queryKey: ["records", "dailyStats", userId, lineId, machineId, startDate, endDate],
+    placeholderData: keepPreviousData,
+    queryFn: async () => {
+      const response = await getDailyStatsRecords(params);
+      return (await response.json()) as {
+        hour: string;
+        count: number;
+      }[];
     },
     throwOnError: (error) => {
       handleApiResponseError(error);

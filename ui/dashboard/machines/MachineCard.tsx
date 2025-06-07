@@ -2,7 +2,6 @@ import { Button } from "@/src/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { MachineObj } from "@/src/services/machines/queries";
 import { Activity, Clock, PowerOff, Settings2 } from "lucide-react";
-import React from "react";
 
 interface MachineCardProps {
   machine: MachineObj;

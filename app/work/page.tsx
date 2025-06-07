@@ -1,4 +1,3 @@
-import React from "react";
 import Machines from "@/ui/work/machines";
 import { Metadata } from "next";
 import { userStatus, userStatusResponse } from "@/src/lib/auth";
