@@ -1,33 +1,68 @@
-import { ArrowRight } from "lucide-react";
+"use client";
+
+import { ArrowLeft, Home } from "lucide-react";
 import Link from "next/link";
+import { useEffect } from "react";
 
 const NotFound = () => {
+  useEffect(() => {
+    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
+  }, [location.pathname]);
+
   return (
-    <div>
-      <section className="bg-white dark:bg-gray-900">
-        <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-          <div className="mx-auto max-w-screen-sm text-center">
-            <h1 className="mb-4 text-7xl tracking-tight font-extrabold lg:text-9xl text-primary-600 dark:text-primary-500">
-              404
-            </h1>
-            <p className="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">
-              Somethings missing.
-            </p>
-            <p className="mb-6 text-lg font-light text-gray-500 dark:text-gray-400">
-              Sorry, we cant find that page. Youll find lots to explore on the
-              home page.{" "}
-            </p>
-            <Link
-              href={"/"}
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
-              // className="inline-flex text-black bg-primary-600 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900 my-4"
-            >
-              Back to Homepage
-              <ArrowRight className="h-6 w-6" />
-            </Link>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
+      <div className="max-w-2xl mx-auto text-center">
+        <div className="relative mb-8">
+          <h1 className="text-9xl md:text-[12rem] font-black text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text leading-none animate-pulse">
+            404
+          </h1>
+          <div
+            className="absolute inset-0 text-9xl md:text-[12rem] font-black text-blue-200 opacity-20 animate-bounce"
+            style={{ animationDelay: "0.5s", animationDuration: "3s" }}
+          >
+            404
           </div>
         </div>
-      </section>
+
+        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          Oops! Page Not Found
+        </h2>
+
+        <p className="text-lg text-muted-foreground mb-8 max-w-md mx-auto leading-relaxed">
+          The page you're looking for seems to have wandered off into the digital void. Don't worry
+          though, we'll help you find your way back!
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <Link
+            href="/"
+            className="group inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          >
+            <Home size={20} className="transition-transform group-hover:-translate-y-0.5" />
+            Back to Home
+          </Link>
+
+          <button
+            onClick={() => window.history.back()}
+            className="group inline-flex items-center gap-2 border border-border text-foreground px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:bg-accent  focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          >
+            <ArrowLeft size={20} className="transition-transform group-hover:-translate-x-1" />
+            Go Back
+          </button>
+        </div>
+      </div>
+
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
+        <div
+          className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"
+          style={{ animationDelay: "2s" }}
+        ></div>
+        <div
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"
+          style={{ animationDelay: "4s" }}
+        ></div>
+      </div>
     </div>
   );
 };
