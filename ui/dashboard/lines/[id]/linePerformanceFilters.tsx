@@ -13,8 +13,12 @@ export default function LinePerformanceFilters() {
 
   const user = LinePerformanceSearchParams.get("user") || undefined;
   const machine = LinePerformanceSearchParams.get("machine") || undefined;
-  const startDate = LinePerformanceSearchParams.get("startDate") || undefined;
-  const endDate = LinePerformanceSearchParams.get("endDate") || undefined;
+  const startDate =
+    LinePerformanceSearchParams.get("startDate") ||
+    dayjs().startOf("day").format("YYYY-MM-DD HH:mm:ss");
+  const endDate =
+    LinePerformanceSearchParams.get("endDate") ||
+    dayjs().endOf("day").format("YYYY-MM-DD HH:mm:ss");
 
   const { data: usersOptions } = useGetUsersOptions();
   const { data: machinesOptions } = useGetMachinesOptions();

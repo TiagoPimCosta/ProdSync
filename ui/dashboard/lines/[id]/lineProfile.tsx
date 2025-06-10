@@ -1,8 +1,8 @@
 import { LineObj } from "@/src/services/lines/queries";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
-import LineOverview from "./lineOverview";
-import LineConnectedMachines from "./lineConnectedMachines";
-import LinePerformance from "./linePerformance";
+import LineOverview from "./LineOverview";
+import LineConnectedMachines from "./LineConnectedMachines";
+import LinePerformance from "./LinePerformance";
 
 interface LineProfileProps {
   line?: LineObj;

@@ -106,7 +106,7 @@ export default function MultiDayLineChart(props: MultiDayLineChartProps) {
             stroke="green"
             strokeDasharray="4 4"
             label={{
-              value: `Média: ${average.toFixed(1)}`,
+              value: `Média: ${average.toFixed(1)}/dia`,
               position: "top",
               fill: "green",
               fontSize: 12,

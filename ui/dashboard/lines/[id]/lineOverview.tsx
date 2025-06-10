@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Pencil, Settings2 } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
 import dayjs from "dayjs";
-import DailyLineChart from "@/src/components/ui/Charts/DailyLineChart";
 
 interface LineProfileProps {
   line?: LineObj;
@@ -58,14 +57,6 @@ const LineOverview = ({ line }: LineProfileProps) => {
             <p className="text-xs text-muted-foreground">{`${
               line.machines.filter((m) => m.status).length
             } active`}</p>
-          </CardContent>
-        </Card>
-        <Card className="col-span-full md:col-span-1">
-          <CardHeader>
-            <CardTitle>Últimas 24 horas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <DailyLineChart lineId={line.id.toString()} showAverage />
           </CardContent>
         </Card>
       </div>

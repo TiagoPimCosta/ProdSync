@@ -1,6 +1,6 @@
-import LinePerformanceFilters from "./linePerformanceFilters";
-import LinePerformanceTable from "./linePerformanceTable";
-import LinePerformanceChart from "./linePerformanceChart";
+import LinePerformanceFilters from "./LinePerformanceFilters";
+import LinePerformanceTable from "./LinePerformanceTable";
+import LinePerformanceChart from "./LinePerformanceChart";
 
 const LinePerformance = () => {
   return (

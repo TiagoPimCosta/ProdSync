@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/src/components/ui/card";
 import MultiDayLineChart from "@/src/components/ui/Charts/MultiDayLineChart";
+import DailyLineChart from "@/src/components/ui/Charts/DailyLineChart";
 
 export default function LinePerformanceChart() {
   const linePerformanceSearchParams = useSearchParams();
@@ -15,12 +16,23 @@ export default function LinePerformanceChart() {
   return (
     <Card className="animate-slide-up">
       <CardContent className="pt-8">
-        <MultiDayLineChart
-          userId={user}
-          machineId={machine}
-          startDate={startPeriod}
-          endDate={endPeriod}
-        />
+        {startPeriod === endPeriod ? (
+          <DailyLineChart
+            userId={user}
+            machineId={machine}
+            startDate={startPeriod}
+            endDate={endPeriod}
+            showAverage
+          />
+        ) : (
+          <MultiDayLineChart
+            userId={user}
+            machineId={machine}
+            startDate={startPeriod}
+            endDate={endPeriod}
+            showAverage
+          />
+        )}
       </CardContent>
     </Card>
   );

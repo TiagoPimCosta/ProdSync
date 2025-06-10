@@ -1,7 +1,7 @@
 "use client";
 
 import { useGetLine } from "@/src/services/lines/queries";
-import LineProfile from "@/ui/dashboard/lines/[id]/lineProfile";
+import LineProfile from "@/ui/dashboard/lines/[id]/LineProfile";
 import PageHeader from "@/ui/dashboard/PageHeader";
 import { useParams } from "next/navigation";
 import React, { useMemo } from "react";
