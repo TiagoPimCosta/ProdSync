@@ -76,7 +76,7 @@ export function useGetHourlyStatsRecords(params: GetHourlyStatsRecordsParamsSche
   return useQuery({
     queryKey: ["records", "hourlyStats", userId, lineId, machineId, startDate, endDate],
     placeholderData: keepPreviousData,
-    /*     refetchInterval: 30000, */
+    /* refetchInterval: 5000, */
     queryFn: async () => {
       const response = await getHourlyStatsRecords(params);
       return (await response.json()) as {
@@ -105,6 +105,7 @@ export function useGetDailyStatsRecords(params: GetDailyStatsRecordsParamsSchema
   return useQuery({
     queryKey: ["records", "dailyStats", userId, lineId, machineId, startDate, endDate],
     placeholderData: keepPreviousData,
+    /* refetchInterval: 5000, */
     queryFn: async () => {
       const response = await getDailyStatsRecords(params);
       return (await response.json()) as {

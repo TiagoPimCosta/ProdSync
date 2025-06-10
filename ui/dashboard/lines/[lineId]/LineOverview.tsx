@@ -6,11 +6,11 @@ import { Pencil, Settings2 } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
 import dayjs from "dayjs";
 
-interface LineProfileProps {
+interface LineOverviewProps {
   line?: LineObj;
 }
 
-const LineOverview = ({ line }: LineProfileProps) => {
+const LineOverview = ({ line }: LineOverviewProps) => {
   if (!line) return <div>line Not Found</div>;
 
   return (

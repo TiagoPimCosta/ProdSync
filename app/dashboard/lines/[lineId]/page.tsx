@@ -1,12 +1,12 @@
 "use client";
 
 import { useGetLine } from "@/src/services/lines/queries";
-import LineProfile from "@/ui/dashboard/lines/[id]/LineProfile";
+import LineProfile from "@/ui/dashboard/lines/[lineId]/LineProfile";
 import PageHeader from "@/ui/dashboard/PageHeader";
 import { useParams } from "next/navigation";
 import React, { useMemo } from "react";
 
-const UserProfilePage = () => {
+const LineProfilePage = () => {
   const params = useParams();
   const lineId = params.lineId;
 
@@ -36,4 +36,4 @@ const UserProfilePage = () => {
     </>
   );
 };
-export default UserProfilePage;
+export default LineProfilePage;

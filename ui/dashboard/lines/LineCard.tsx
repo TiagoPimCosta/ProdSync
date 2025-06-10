@@ -31,7 +31,7 @@ export default function LineCard(props: LineCardProps) {
         <CardTitle>{line.name}</CardTitle>
         <div className="flex flex-row gap-2 items-center">
           <Badge variant={line.status ? "success" : "destructive"} className="h-fit">
-            {line.status ? "Ativo" : "Inativo"}
+            {line.status ? "Ativa" : "Inativa"}
           </Badge>
           <Button
             onClick={() => handleOpenLineDetails(line.id)}
