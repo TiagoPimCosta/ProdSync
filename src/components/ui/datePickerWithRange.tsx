@@ -42,11 +42,10 @@ export function DatePickerWithRange(props: DatePickerWithRangeProps) {
             {date?.from ? (
               date.to ? (
                 <>
-                  {dayjs(date.from).format("MMM DD, YYYY")} -{" "}
-                  {dayjs(date.to).format("MMM DD, YYYY")}
+                  {dayjs(date.from).format("DD MMM YYYY")} - {dayjs(date.to).format("DD MMM YYYY")}
                 </>
               ) : (
-                dayjs(date.from).format("MMM DD, YYYY")
+                dayjs(date.from).format("DD MMM YYYY")
               )
             ) : (
               <span>Pick a date</span>

@@ -21,7 +21,7 @@ const MachineProfile = ({ machine }: MachineProfileProps) => {
         <MachineOverview machine={machine} />
       </TabsContent>
       <TabsContent value="performance">
-        <MachinePerformance />
+        <MachinePerformance machine={machine} />
       </TabsContent>
     </Tabs>
   );

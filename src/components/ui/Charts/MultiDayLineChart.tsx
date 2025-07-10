@@ -44,7 +44,7 @@ export default function MultiDayLineChart(props: MultiDayLineChartProps) {
   return (
     <ChartContainer className="w-full h-full" config={chartConfig}>
       <LineChart data={data} margin={{ right: 6 }}>
-        <YAxis width={40} />
+        <YAxis width={40} domain={["dataMin", "dataMax"]} padding={{ top: 15 }} />
         <XAxis
           dataKey="day"
           height={30}

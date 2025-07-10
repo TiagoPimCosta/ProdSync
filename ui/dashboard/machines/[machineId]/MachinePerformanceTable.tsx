@@ -5,20 +5,30 @@ import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 import { DataTable } from "@/src/components/ui/data-table";
 import { RecordObj, useGetRecords } from "@/src/services/records/queries";
 import dayjs from "dayjs";
+import { MachineObj } from "@/src/services/machines/queries";
 
-export default function LinePerformanceTable() {
+interface MachinePerformanceTableProps {
+  machine: MachineObj;
+}
+
+export default function MachinePerformanceTable(props: MachinePerformanceTableProps) {
+  const { machine } = props;
   const linePerformanceSearchParams = useSearchParams();
   const { push } = useRouter();
 
   const page = Number(linePerformanceSearchParams.get("page")) || 1;
   const size = Number(linePerformanceSearchParams.get("size")) || 10;
   const user = linePerformanceSearchParams.get("user") || undefined;
-  const machine = linePerformanceSearchParams.get("machine") || undefined;
   const startPeriod = linePerformanceSearchParams.get("startDate") || undefined;
   const endPeriod = linePerformanceSearchParams.get("endDate") || undefined;
 
   const columnHelper = createColumnHelper<RecordObj>();
   const tableColumns = [
+    columnHelper.accessor("id", {
+      header: "Numero",
+      size: 5,
+      minSize: 5,
+    }),
     columnHelper.accessor("user.name", {
       header: "Nome",
     }),
@@ -38,7 +48,7 @@ export default function LinePerformanceTable() {
     page: page - 1,
     size,
     user,
-    machine,
+    machine: machine.id.toString(),
     startPeriod,
     endPeriod,
   });

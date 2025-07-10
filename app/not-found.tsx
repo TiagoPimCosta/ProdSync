@@ -2,12 +2,15 @@
 
 import { ArrowLeft, Home } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 const NotFound = () => {
+  const pathname = usePathname();
+
   useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
-  }, [location.pathname]);
+    console.error("404 Error: User attempted to access non-existent route:", pathname);
+  }, [pathname]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
