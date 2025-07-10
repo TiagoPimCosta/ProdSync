@@ -1,0 +1,33 @@
+import { LineObj } from "@/src/services/lines/queries";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
+import LineOverview from "./LineOverview";
+import LineConnectedMachines from "./LineConnectedMachines";
+import LinePerformance from "./LinePerformance";
+
+interface LineProfileProps {
+  line?: LineObj;
+}
+
+const LineProfile = ({ line }: LineProfileProps) => {
+  if (!line) return <div>line Not Found</div>;
+
+  return (
+    <Tabs defaultValue="overview">
+      <TabsList>
+        <TabsTrigger value="overview">Geral</TabsTrigger>
+        <TabsTrigger value="performance">Performance</TabsTrigger>
+        <TabsTrigger value="machines">Máquinas</TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview">
+        <LineOverview line={line} />
+      </TabsContent>
+      <TabsContent value="performance">
+        <LinePerformance />
+      </TabsContent>
+      <TabsContent value="machines">
+        <LineConnectedMachines line={line} />
+      </TabsContent>
+    </Tabs>
+  );
+};
+export default LineProfile;

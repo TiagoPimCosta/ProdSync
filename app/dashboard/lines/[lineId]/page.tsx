@@ -1,12 +1,12 @@
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs";
 import { useGetLine } from "@/src/services/lines/queries";
+import LineProfile from "@/ui/dashboard/lines/[lineId]/LineProfile";
 import PageHeader from "@/ui/dashboard/PageHeader";
 import { useParams } from "next/navigation";
 import React, { useMemo } from "react";
 
-const UserProfilePage = () => {
+const LineProfilePage = () => {
   const params = useParams();
   const lineId = params.lineId;
 
@@ -32,17 +32,8 @@ const UserProfilePage = () => {
   return (
     <>
       <PageHeader breadcrumbItems={pageBreadcrumbItems} />
-      <Tabs defaultValue="overview">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="performance">Performance</TabsTrigger>
-          <TabsTrigger value="machines">Machines</TabsTrigger>
-        </TabsList>
-        <TabsContent value="overview">Overview {line.name}.</TabsContent>
-        <TabsContent value="performance">Performance {line.name}.</TabsContent>
-        <TabsContent value="machines">Connected Machines {line.name}.</TabsContent>
-      </Tabs>
+      <LineProfile line={line} />
     </>
   );
 };
-export default UserProfilePage;
+export default LineProfilePage;

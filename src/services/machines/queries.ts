@@ -4,6 +4,7 @@ import { parseQueryParams } from "@/src/utils/services";
 import { handleApiResponseError } from "@/src/utils/errors";
 import { GetMachinesParamsSchema } from "@/src/schemas/machines/getMachinesSchema";
 import { GetUserMachinesParamsSchema } from "@/src/schemas/machines/getUserMachinesSchema";
+import { GetMachineParamsSchema } from "@/src/schemas/machines/getMachineSchema";
 
 const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
 
@@ -53,6 +54,31 @@ export function useGetMachines(params: GetMachinesParams) {
     queryFn: async () => {
       const response = await getMachines(params);
       return (await response.json()) as GetMachinesResponse;
+    },
+    throwOnError: (error) => {
+      handleApiResponseError(error);
+      return false;
+    },
+  });
+}
+
+export type GetMachineParams = GetMachineParamsSchema;
+export type GetMachineResponse = MachineObj;
+
+export function getMachine(params: GetMachineParams) {
+  const url = API_ENDPOINT_URL + "/machines/" + params.machineId;
+  return fetch(url);
+}
+
+export function useGetMachine(params: GetMachineParams) {
+  const { machineId } = params;
+
+  return useQuery({
+    queryKey: ["machine", machineId],
+    placeholderData: keepPreviousData,
+    queryFn: async () => {
+      const response = await getMachine(params);
+      return (await response.json()) as GetMachineResponse;
     },
     throwOnError: (error) => {
       handleApiResponseError(error);

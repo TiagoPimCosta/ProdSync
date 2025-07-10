@@ -2,7 +2,7 @@
 
 import { useGetUser } from "@/src/services/users/queries";
 import PageHeader from "@/ui/dashboard/PageHeader";
-import Profile from "@/ui/dashboard/users/[id]/profile";
+import UserProfile from "@/ui/dashboard/users/[id]/userProfile";
 import { useParams } from "next/navigation";
 import React, { useMemo } from "react";
 
@@ -34,7 +34,7 @@ const UserProfilePage = () => {
   return (
     <>
       <PageHeader breadcrumbItems={pageBreadcrumbItems} />
-      <Profile user={user} />
+      <UserProfile user={user} />
     </>
   );
 };

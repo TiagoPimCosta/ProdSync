@@ -1,8 +1,9 @@
+import { Badge } from "@/src/components/ui/badge";
 import { Button } from "@/src/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { MachineObj } from "@/src/services/machines/queries";
-import { Activity, Clock, PowerOff, Settings2 } from "lucide-react";
-import React from "react";
+import { EyeIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface MachineCardProps {
   machine: MachineObj;
@@ -10,22 +11,29 @@ interface MachineCardProps {
 
 export default function MachineCard(props: MachineCardProps) {
   const { machine } = props;
+  const { push } = useRouter();
+
+  const handleOpenMachineDetails = (id: number) => {
+    push(`/dashboard/machines/${id}`);
+  };
 
   return (
     <Card key={machine.id.toString()} className="animate-slide-up">
       <CardHeader className="flex-row justify-between items-center">
         <CardTitle>{machine.name}</CardTitle>
-        {machine.status ? (
-          <span className="flex flex-row gap-2 ml-2 text-sm font-medium text-green-600 items-center justify-center">
-            <Activity className="h-4 w-4 text-green-600" />
-            Ativa
-          </span>
-        ) : (
-          <span className="flex flex-row gap-2 ml-2 text-sm font-medium text-red-600">
-            <PowerOff className="h-4 w-4 text-red-600" />
-            Desativada
-          </span>
-        )}
+        <div className="flex flex-row gap-2 items-center">
+          <Badge variant={machine.status ? "success" : "destructive"} className="h-fit">
+            {machine.status ? "Ativa" : "Inativa"}
+          </Badge>
+          <Button
+            onClick={() => handleOpenMachineDetails(machine.id)}
+            size="icon"
+            variant="ghost"
+            className="h-6 w-6"
+          >
+            <EyeIcon className="h-5 w-5" />
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-between text-sm">
@@ -37,16 +45,6 @@ export default function MachineCard(props: MachineCardProps) {
           <span>{machine?.user?.name || "N/A"}</span>
         </div>
       </CardContent>
-      <CardFooter className="flex  gap-2 items-center">
-        <Button variant="outline" size="sm" className="flex-1">
-          <Settings2 className="mr-2 h-4 w-4" />
-          Maintain
-        </Button>
-        <Button variant="outline" size="sm" className="flex-1">
-          <Clock className="mr-2 h-4 w-4" />
-          History
-        </Button>
-      </CardFooter>
     </Card>
   );
 }

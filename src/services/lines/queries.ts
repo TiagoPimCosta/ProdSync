@@ -9,6 +9,7 @@ const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
 
 interface Machine {
   id: number;
+  cadence: number;
   name: string;
   status: boolean;
 }

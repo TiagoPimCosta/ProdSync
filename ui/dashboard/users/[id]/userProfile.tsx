@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card";
-import React from "react";
 import { UserObj } from "@/src/services/users/queries";
 import { CalendarIcon, MailIcon, Pencil, PhoneIcon } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
@@ -7,11 +6,11 @@ import dayjs from "dayjs";
 import { Button } from "@/src/components/ui/button";
 import Link from "next/link";
 
-interface ProfileProps {
+interface UserProfileProps {
   user?: UserObj;
 }
 
-const Profile = ({ user }: ProfileProps) => {
+const UserProfile = ({ user }: UserProfileProps) => {
   if (!user) return <div>User Not Found</div>;
 
   return (
@@ -80,4 +79,4 @@ const Profile = ({ user }: ProfileProps) => {
     </div>
   );
 };
-export default Profile;
+export default UserProfile;

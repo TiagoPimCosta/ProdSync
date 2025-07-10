@@ -6,24 +6,19 @@ import { DataTable } from "@/src/components/ui/data-table";
 import { RecordObj, useGetRecords } from "@/src/services/records/queries";
 import dayjs from "dayjs";
 
-export default function RecordsTable() {
-  const recordsSearchParams = useSearchParams();
+export default function LinePerformanceTable() {
+  const linePerformanceSearchParams = useSearchParams();
   const { push } = useRouter();
 
-  const page = Number(recordsSearchParams.get("page")) || 1;
-  const size = Number(recordsSearchParams.get("size")) || 10;
-  const user = recordsSearchParams.get("user") || undefined;
-  const machine = recordsSearchParams.get("machine") || undefined;
-  const startPeriod = recordsSearchParams.get("startPeriod") || undefined;
-  const endPeriod = recordsSearchParams.get("endPeriod") || undefined;
+  const page = Number(linePerformanceSearchParams.get("page")) || 1;
+  const size = Number(linePerformanceSearchParams.get("size")) || 10;
+  const user = linePerformanceSearchParams.get("user") || undefined;
+  const machine = linePerformanceSearchParams.get("machine") || undefined;
+  const startPeriod = linePerformanceSearchParams.get("startDate") || undefined;
+  const endPeriod = linePerformanceSearchParams.get("endDate") || undefined;
 
   const columnHelper = createColumnHelper<RecordObj>();
   const tableColumns = [
-    columnHelper.accessor("id", {
-      header: "Numero",
-      size: 5,
-      minSize: 5,
-    }),
     columnHelper.accessor("user.name", {
       header: "Nome",
     }),
@@ -49,14 +44,14 @@ export default function RecordsTable() {
   });
 
   const handleChangePage = (page: number) => {
-    const currentParams = new URLSearchParams(recordsSearchParams.toString());
+    const currentParams = new URLSearchParams(linePerformanceSearchParams.toString());
     currentParams.set("page", page.toString());
     push(`?${currentParams.toString()}`);
   };
 
   const handleChangePageSize = (pageSize: string | undefined) => {
     if (pageSize) {
-      const currentParams = new URLSearchParams(recordsSearchParams.toString());
+      const currentParams = new URLSearchParams(linePerformanceSearchParams.toString());
       currentParams.set("size", pageSize);
       currentParams.set("page", "0");
       push(`?${currentParams.toString()}`);

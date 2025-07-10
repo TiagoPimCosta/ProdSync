@@ -15,7 +15,7 @@ export default function RecordsFilters() {
   const { data: machinesOptions } = useGetMachinesOptions();
 
   const user = recordsSearchParams.get("name") || undefined;
-  const machine = recordsSearchParams.get("role") || undefined;
+  const machine = recordsSearchParams.get("machine") || undefined;
   const startAdmission = recordsSearchParams.get("startAdmission") || undefined;
   const endAdmission = recordsSearchParams.get("endAdmission") || undefined;
 
