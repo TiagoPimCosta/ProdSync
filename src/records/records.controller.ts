@@ -169,4 +169,38 @@ export class RecordsController {
       throw error;
     }
   }
+
+  @Get('hourlyStats')
+  async getHourlyStats(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+    @Query('userId') userId?: string,
+    @Query('lineId') lineId?: string,
+    @Query('machineId') machineId?: string,
+  ) {
+    return this.recordsService.getHourlyRecordCounts(
+      startDate,
+      endDate,
+      userId ? parseInt(userId) : undefined,
+      lineId ? parseInt(lineId) : undefined,
+      machineId ? parseInt(machineId) : undefined,
+    );
+  }
+
+  @Get('dailyStats')
+  async getDaylyStats(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+    @Query('userId') userId?: string,
+    @Query('lineId') lineId?: string,
+    @Query('machineId') machineId?: string,
+  ) {
+    return this.recordsService.getDailyRecordCounts(
+      startDate,
+      endDate,
+      userId ? parseInt(userId) : undefined,
+      lineId ? parseInt(lineId) : undefined,
+      machineId ? parseInt(machineId) : undefined,
+    );
+  }
 }

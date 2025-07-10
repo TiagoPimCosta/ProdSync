@@ -126,4 +126,116 @@ export class RecordsService {
       );
     }
   }
+
+  async getHourlyRecordCounts(
+    startDate: string,
+    endDate: string,
+    userId?: number,
+    lineId?: number,
+    machineId?: number,
+  ) {
+    const query = this.recordRepository
+      .createQueryBuilder('record')
+      .leftJoin('record.machine', 'machine')
+      .leftJoin('machine.line', 'line')
+      .select("DATE_FORMAT(record.createdAt, '%Y-%m-%d %H:00')", 'hour')
+      .addSelect('COUNT(*)', 'count')
+      .where(
+        'record.createdAt >= :startDate AND record.createdAt <= :endDate',
+        {
+          startDate,
+          endDate,
+        },
+      );
+
+    if (userId) {
+      query.andWhere('record.userId = :userId', { userId });
+    }
+
+    if (machineId) {
+      query.andWhere('record.machine = :machineId', { machineId });
+    }
+
+    if (lineId) {
+      query.andWhere('line.id = :lineId', { lineId });
+    }
+
+    const raw = await query.groupBy('hour').orderBy('hour').getRawMany();
+
+    const countsByHour = Object.fromEntries(
+      raw.map((row) => [row.hour, parseInt(row.count)]),
+    );
+
+    const filledHours: { hour: string; count: number }[] = [];
+
+    let current = dayjs(startDate).startOf('hour');
+    const end = dayjs(endDate).startOf('hour');
+
+    while (current.isBefore(end.add(1, 'hour'))) {
+      const formatted = current.format('YYYY-MM-DD HH:00');
+      filledHours.push({
+        hour: formatted,
+        count: countsByHour[formatted] || 0,
+      });
+      current = current.add(1, 'hour');
+    }
+
+    return filledHours;
+  }
+
+  async getDailyRecordCounts(
+    startDate: string,
+    endDate: string,
+    userId?: number,
+    lineId?: number,
+    machineId?: number,
+  ) {
+    const query = this.recordRepository
+      .createQueryBuilder('record')
+      .leftJoin('record.machine', 'machine')
+      .leftJoin('machine.line', 'line')
+      .select("DATE_FORMAT(record.createdAt, '%Y-%m-%d')", 'day')
+      .addSelect('COUNT(*)', 'count')
+      .where(
+        'record.createdAt >= :startDate AND record.createdAt <= :endDate',
+        {
+          startDate,
+          endDate,
+        },
+      );
+
+    if (userId) {
+      query.andWhere('record.userId = :userId', { userId });
+    }
+
+    if (machineId) {
+      query.andWhere('record.machine = :machineId', { machineId });
+    }
+
+    if (lineId) {
+      query.andWhere('line.id = :lineId', { lineId });
+    }
+
+    const raw = await query.groupBy('day').orderBy('day').getRawMany();
+
+    const countsByDay = Object.fromEntries(
+      raw.map((row) => [row.day, parseInt(row.count)]),
+    );
+
+    const filledDays: { day: string; count: number }[] = [];
+
+    let current = dayjs(startDate).startOf('day');
+    const end = dayjs(endDate).startOf('day');
+
+    while (current.isBefore(end.add(1, 'day'))) {
+      const formatted = current.format('YYYY-MM-DD');
+      filledDays.push({
+        day: formatted,
+        count: countsByDay[formatted] || 0,
+      });
+      current = current.add(1, 'day');
+    }
+
+    return filledDays;
+  }
 }
