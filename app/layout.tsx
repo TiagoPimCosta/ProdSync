@@ -13,6 +13,11 @@ export const metadata: Metadata = {
     template: "%s | Production Manager",
     default: "Production Manager",
   },
+  description: "",
+  icons: {
+    icon: [{ url: "/logo.png", type: "image/png" }],
+    apple: [{ url: "/apple-logo.png" }],
+  },
 };
 
 export default function RootLayout({
