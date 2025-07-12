@@ -1,14 +1,14 @@
 import { SidebarProvider } from "@/src/components/ui/sidebar";
-import { userStatus, userStatusResponse } from "@/src/lib/auth";
 import { getAuthToken } from "@/src/lib/cookies";
+import { getUserStatus, UserStatusResponse } from "@/src/services/auth/queries";
 import { AdminSidebar } from "@/ui/dashboard/AdminSidebar";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  let user: userStatusResponse | null = null;
+  let user: UserStatusResponse | null = null;
   const token = await getAuthToken();
 
   if (token) {
-    user = await userStatus();
+    user = await getUserStatus();
   }
 
   return (
