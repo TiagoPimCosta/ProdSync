@@ -1,6 +1,5 @@
 "use client";
 
-import { login } from "@/src/lib/auth";
 import { setAuthToken } from "@/src/lib/cookies";
 import { useRouter } from "next/navigation";
 import { Button } from "@/src/components/ui/button";
@@ -16,16 +15,19 @@ import { Input } from "@/src/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useLogin } from "@/src/services/auth/mutations";
 
 const loginSchema = z.object({
   username: z.string().min(2).max(50),
   password: z.string().min(5).max(18),
 });
+type LoginSchema = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
   const router = useRouter();
+  const loginUser = useLogin();
 
-  const form = useForm<z.infer<typeof loginSchema>>({
+  const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       username: "",
@@ -33,8 +35,8 @@ export default function LoginForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof loginSchema>) {
-    const response = await login(values.username, values.password);
+  async function onSubmit(values: LoginSchema) {
+    const response = await loginUser.mutateAsync(values);
 
     if (response) {
       await setAuthToken(response.token);
