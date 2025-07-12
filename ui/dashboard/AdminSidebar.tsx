@@ -21,9 +21,10 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
 import Link from "next/link";
-import { logout, userStatusResponse } from "@/src/lib/auth";
+import { logout } from "@/src/lib/auth";
 import { useRouter } from "next/navigation";
 import { getFirstAndLastName } from "@/src/utils/user";
+import { UserStatusResponse } from "@/src/services/auth/queries";
 
 const links = [
   {
@@ -54,7 +55,7 @@ const links = [
 ];
 
 interface AdminSidebarProps {
-  user: userStatusResponse | null;
+  user: UserStatusResponse | null;
 }
 
 export function AdminSidebar(props: AdminSidebarProps) {

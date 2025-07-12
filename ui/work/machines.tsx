@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
-import { logout, userStatusResponse } from "@/src/lib/auth";
+import { logout } from "@/src/lib/auth";
 import { useRouter } from "next/navigation";
 import { useGetUserMachines } from "@/src/services/machines/queries";
 import ClockBadge from "./ClockBadge";
@@ -18,9 +18,10 @@ import RegisterAction from "./RegisterAction";
 import { useGetRecords } from "@/src/services/records/queries";
 import { greetingsMessage } from "@/src/lib/utils";
 import RecordTimeline from "./RecordTimeline";
+import { UserStatusResponse } from "@/src/services/auth/queries";
 
 interface MachinesProps {
-  user: userStatusResponse | null;
+  user: UserStatusResponse | null;
 }
 const Machines = (props: MachinesProps) => {
   const { user } = props;
