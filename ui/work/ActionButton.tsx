@@ -12,6 +12,7 @@ interface ActionButtonProps {
 const ActionButton = (props: ActionButtonProps) => {
   const { machine, gradientClass } = props;
   const createRecord = useCreateRecord();
+  const { isPending } = createRecord;
 
   const handleClick = async () => {
     const data = { userId: machine.user.id, machineId: machine.id };
@@ -21,6 +22,7 @@ const ActionButton = (props: ActionButtonProps) => {
   return (
     <Button
       onClick={handleClick}
+      disabled={isPending}
       className={cn(
         "btn-action animate-fade-in bg-gradient-to-br text-white px-6 py-4 h-40",
         gradientClass
