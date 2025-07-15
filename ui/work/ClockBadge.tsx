@@ -5,23 +5,32 @@ import { Badge } from "@/src/components/ui/badge";
 import dayjs from "dayjs";
 import { Clock } from "lucide-react";
 
+const getFormattedTime = () => dayjs().format("DD/MM/YYYY HH:mm");
+
 const ClockBadge = () => {
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [currentTime, setCurrentTime] = useState(getFormattedTime);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
+    const now = new Date();
+    const delay = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
 
-    return () => clearInterval(timer);
+    const timeout = setTimeout(() => {
+      setCurrentTime(getFormattedTime());
+
+      const interval = setInterval(() => {
+        setCurrentTime(getFormattedTime());
+      }, 60000);
+
+      return () => clearInterval(interval);
+    }, delay);
+
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
     <Badge variant="secondary" className="h-fit">
       <Clock className="w-4 h-4 mr-2" />
-      <span className="text-sm font-medium">
-        {dayjs(currentTime).format("DD/MM/YYYY HH:mm:ss")}
-      </span>
+      <span className="text-sm font-medium">{currentTime}</span>
     </Badge>
   );
 };
