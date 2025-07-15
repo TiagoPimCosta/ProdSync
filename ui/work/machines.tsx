@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useGetUserMachines } from "@/src/services/machines/queries";
 import ClockBadge from "./ClockBadge";
 import RegisterAction from "./RegisterAction";
-import { useGetRecords } from "@/src/services/records/queries";
+import { useGetRecordsHistory } from "@/src/services/records/queries";
 import { greetingsMessage } from "@/src/lib/utils";
 import RecordTimeline from "./RecordTimeline";
 import { UserStatusResponse } from "@/src/services/auth/queries";
@@ -20,12 +20,9 @@ interface MachinesProps {
 const Machines = (props: MachinesProps) => {
   const { user } = props;
   const router = useRouter();
-  const timelineRef = useRef<HTMLDivElement>(null);
 
-  const { data: records } = useGetRecords({
-    page: 0,
-    size: 10,
-    user: user?.id.toString(),
+  const { data: records } = useGetRecordsHistory({
+    userId: user?.id.toString(),
   });
 
   if (!user) return null;
@@ -50,7 +47,7 @@ const Machines = (props: MachinesProps) => {
     ) : (
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <RegisterAction machines={machines} />
-        <RecordTimeline ref={timelineRef} records={records?.items} />
+        <RecordTimeline records={records} />
       </div>
     );
 
