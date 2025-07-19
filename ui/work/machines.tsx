@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import { LogOut } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
@@ -9,9 +9,7 @@ import { useRouter } from "next/navigation";
 import { useGetUserMachines } from "@/src/services/machines/queries";
 import ClockBadge from "./ClockBadge";
 import RegisterAction from "./RegisterAction";
-import { useGetRecordsHistory } from "@/src/services/records/queries";
 import { greetingsMessage } from "@/src/lib/utils";
-import RecordTimeline from "./RecordTimeline";
 import { UserStatusResponse } from "@/src/services/auth/queries";
 
 interface MachinesProps {
@@ -20,10 +18,6 @@ interface MachinesProps {
 const Machines = (props: MachinesProps) => {
   const { user } = props;
   const router = useRouter();
-
-  const { data: records } = useGetRecordsHistory({
-    userId: user?.id.toString(),
-  });
 
   if (!user) return null;
 
@@ -45,9 +39,9 @@ const Machines = (props: MachinesProps) => {
         </CardHeader>
       </Card>
     ) : (
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="flex flex-row">
         <RegisterAction machines={machines} />
-        <RecordTimeline records={records} />
+        {/* <RecordTimeline records={records} /> */}
       </div>
     );
 

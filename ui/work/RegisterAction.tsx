@@ -21,7 +21,7 @@ const RegisterAction = (props: RegisterActionProps) => {
   ];
 
   return (
-    <div className="lg:col-span-2 space-y-6">
+    <div className="flex-1">
       <section className="space-y-4 animate-slide-up">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-medium">Registar trabalho</h2>
