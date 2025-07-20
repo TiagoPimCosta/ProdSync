@@ -41,7 +41,6 @@ const Machines = (props: MachinesProps) => {
     ) : (
       <div className="flex flex-row">
         <RegisterAction machines={machines} />
-        {/* <RecordTimeline records={records} /> */}
       </div>
     );
 
