@@ -5,6 +5,7 @@ import { parseQueryParams } from "@/src/utils/services";
 import { GetRecordsParamsSchema } from "@/src/schemas/records/getRecordsSchema";
 import { GetHourlyStatsRecordsParamsSchema } from "@/src/schemas/records/getHourlyStatsRecordsParamsSchema";
 import { GetDailyStatsRecordsParamsSchema } from "@/src/schemas/records/getDailyStatsRecordsParamsSchema";
+import { GetRecordsHistoryParamsSchema } from "@/src/schemas/records/getRecordsHistoryParamsSchema";
 
 const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
 
@@ -30,7 +31,14 @@ export interface RecordObj {
   machine: {
     id: number;
     name: string;
-    status: true;
+    cadence: number;
+    status: boolean;
+    line: {
+      id: number;
+      name: string;
+      status: boolean;
+      createdAt: string;
+    };
   };
 }
 
@@ -54,6 +62,34 @@ export function useGetRecords(params: GetRecordsParams) {
     queryFn: async () => {
       const response = await getRecords(params);
       return (await response.json()) as GetRecordsResponse;
+    },
+    throwOnError: (error) => {
+      handleApiResponseError(error);
+      return false;
+    },
+  });
+}
+
+export type GetRecordsHistoryParams = GetRecordsHistoryParamsSchema;
+export type GetRecordsHistoryResponse = RecordObj[];
+
+export function getRecordsHistory(params: GetRecordsHistoryParams) {
+  const queryParams = parseQueryParams(params);
+  const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
+  const url = API_ENDPOINT_URL + "/records/recordHistory?" + queryString;
+
+  return fetch(url);
+}
+
+export function useGetRecordsHistory(params: GetRecordsHistoryParams) {
+  const { userId } = params;
+
+  return useQuery({
+    queryKey: ["records", "recordsHistory", userId],
+    placeholderData: keepPreviousData,
+    queryFn: async () => {
+      const response = await getRecordsHistory(params);
+      return (await response.json()) as GetRecordsHistoryResponse;
     },
     throwOnError: (error) => {
       handleApiResponseError(error);

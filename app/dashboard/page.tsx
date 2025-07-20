@@ -20,6 +20,11 @@ import { Badge } from "@/src/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/src/components/ui/avatar";
 import { useMemo } from "react";
 import PageHeader from "@/ui/dashboard/PageHeader";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
 
 const DashboardPage = () => {
   const pageBreadcrumbItems = useMemo(

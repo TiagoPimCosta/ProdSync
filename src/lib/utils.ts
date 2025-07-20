@@ -20,16 +20,20 @@ export function getFirstLettersOfName(name: string) {
 }
 
 export function greetingsMessage(name: string): string {
-  const hora = dayjs().hour();
+  const hour = dayjs().hour();
   let message;
 
-  if (hora >= 6 && hora < 12) {
+  if (hour >= 6 && hour < 12) {
     message = "Bom dia, ";
-  } else if (hora >= 12 && hora < 18) {
+  } else if (hour >= 12 && hour < 18) {
     message = "Boa tarde, ";
   } else {
     message = "Boa noite, ";
   }
 
-  return message + name;
+  const nameParts = name.trim().split(" ");
+  const firstAndLastName =
+    nameParts.length >= 2 ? `${nameParts[0]} ${nameParts[nameParts.length - 1]}` : name;
+
+  return message + firstAndLastName;
 }

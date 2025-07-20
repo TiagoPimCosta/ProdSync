@@ -1,5 +1,5 @@
 import { toastError, toastSuccess } from "@/src/utils/toasts";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
 
@@ -19,9 +19,11 @@ export async function createRecord(body: CreateRecordBodyParams) {
 }
 
 export function useCreateRecord() {
+  const queryClient = useQueryClient();
+
   return useMutation<ApiResponseMessage, Error, CreateRecordBodyParams>({
-    mutationFn: async (vars) => {
-      const response = await createRecord(vars);
+    mutationFn: async (body) => {
+      const response = await createRecord(body);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message);
@@ -33,8 +35,11 @@ export function useCreateRecord() {
     onError: (error) => {
       toastError(error.message);
     },
-    onSuccess: (data) => {
+    onSuccess: (data, body) => {
       toastSuccess(data.message);
+      queryClient.invalidateQueries({
+        queryKey: ["records", "recordsHistory", body.userId.toString()],
+      });
     },
   });
 }

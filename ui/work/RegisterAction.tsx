@@ -21,13 +21,15 @@ const RegisterAction = (props: RegisterActionProps) => {
   ];
 
   return (
-    <div className="lg:col-span-2 space-y-6">
+    <div className="flex-1">
       <section className="space-y-4 animate-slide-up">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-medium">Register Action</h2>
+          <h2 className="text-xl font-medium">Registar trabalho</h2>
           <Badge variant="secondary" className="h-fit">
             <Briefcase className="w-4 h-4 mr-2" />
-            <span className="text-sm">{machines?.length} Jobs</span>
+            <span className="text-sm">
+              {machines?.length} {machines?.length === 1 ? "Tarefa" : "Tarefas"}
+            </span>
           </Badge>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
