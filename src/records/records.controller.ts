@@ -170,6 +170,11 @@ export class RecordsController {
     }
   }
 
+  @Get('recordHistory')
+  async getRecordsHistory(@Query('userId') userId: string) {
+    return this.recordsService.getRecordsHistory(parseInt(userId));
+  }
+
   @Get('hourlyStats')
   async getHourlyStats(
     @Query('startDate') startDate: string,

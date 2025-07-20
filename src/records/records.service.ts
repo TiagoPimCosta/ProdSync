@@ -1,4 +1,5 @@
 import {
+  HttpException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -26,24 +27,42 @@ export class RecordsService {
   async create(createRecordDetails: CreateRecordParams) {
     const { userId, machineId } = createRecordDetails;
 
-    const user = await this.usersService.findOneById(userId);
-    if (!user) throw new NotFoundException('User not Found');
+    try {
+      const user = await this.usersService.findOneById(userId);
+      if (!user) throw new NotFoundException('Utilizador não encontrado');
 
-    const machine = await this.machinesService.findOneById(machineId);
-    if (!machine) throw new NotFoundException('Machine not Found');
+      const machine = await this.machinesService.findOneById(machineId);
+      if (!machine) throw new NotFoundException('Máquina não encontrada');
 
-    const newRecord = this.recordRepository.create({
-      ...createRecordDetails,
-      user: { id: user.id },
-      machine: { id: createRecordDetails.machineId },
-      createdAt: new Date(),
-    });
-    this.recordRepository.save(newRecord);
+      const isMachineAssociated = user.machine.some(
+        (userMachine) => userMachine.id === machineId,
+      );
+      if (!isMachineAssociated) {
+        throw new NotFoundException('Máquina não associada a este utilizador');
+      }
 
-    return {
-      statusCode: 200,
-      message: `Record has been added.`,
-    };
+      const newRecord = this.recordRepository.create({
+        ...createRecordDetails,
+        user: { id: userId },
+        machine: { id: machineId },
+        createdAt: new Date(),
+      });
+
+      await this.recordRepository.save(newRecord);
+
+      return {
+        statusCode: 200,
+        message: 'Ação registada com sucesso',
+      };
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      console.error('Unexpected error in create record:', error); // optional logging
+
+      throw new InternalServerErrorException('Erro interno no servidor');
+    }
   }
 
   async findAll(
@@ -125,6 +144,19 @@ export class RecordsService {
         'An error occurred while deleting the record.',
       );
     }
+  }
+
+  async getRecordsHistory(userId: number) {
+    const records = await this.recordRepository
+      .createQueryBuilder('record')
+      .leftJoinAndSelect('record.machine', 'machine')
+      .leftJoinAndSelect('machine.line', 'line')
+      .where('record.userId = :userId', { userId })
+      .orderBy('record.createdAt', 'DESC')
+      .limit(10)
+      .getMany();
+
+    return records;
   }
 
   async getHourlyRecordCounts(

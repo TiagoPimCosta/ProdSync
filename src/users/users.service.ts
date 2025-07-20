@@ -123,7 +123,10 @@ export class UsersService {
 
   async findOneById(id: number) {
     try {
-      const user = await this.userRepository.findOneBy({ id });
+      const user = await this.userRepository.findOne({
+        where: { id },
+        relations: ['machine'],
+      });
       if (!user) throw new NotFoundException(`User with ID ${id} not found.`);
 
       return user;
