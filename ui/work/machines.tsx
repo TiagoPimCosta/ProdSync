@@ -52,7 +52,7 @@ const Machines = (props: MachinesProps) => {
             <ClockBadge />
             <Button variant="ghost" className="gap-1" onClick={handleLogOut}>
               <LogOut />
-              Terminar sessão
+              <span>Terminar sessão</span>
             </Button>
           </div>
           <h1 className="text-3xl font-bold tracking-tight mb-1">{greetingsMessage(user.name)}</h1>
