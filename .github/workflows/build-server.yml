@@ -1,32 +1,41 @@
-name: Build
+name: Build Server
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'server/**'
+      - '.github/workflows/build-server.yml'
   pull_request:
-    branches:
-      - main
+    paths:
+      - 'server/**'
 
 jobs:
-  build:
+  build-server:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: server
+
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '18' # or whatever version you're using
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: server/pnpm-lock.yaml
 
-      - name: Install Dependencies
-        run: npm install # or `yarn install` if you're using yarn
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-      - name: Build App
-        run: npm run build # make sure this command exists in your package.json
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
+      - name: Build NestJS
+        run: pnpm build
 
-      # - name: Run Tests
-      #  run: npm run test # optional, remove if not needed
+      - name: Run tests
+        run: pnpm test --if-present

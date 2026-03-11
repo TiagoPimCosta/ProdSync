@@ -1,28 +1,38 @@
-name: Build
+name: Build Client
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - 'client/**'
+      - '.github/workflows/build-client.yml'
   pull_request:
-    branches:
-      - main
+    paths:
+      - 'client/**'
 
 jobs:
-  build:
+  build-client:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: client
+
     steps:
-      - name: ⬇️ Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: "18" # or the version you’re using
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: client/pnpm-lock.yaml
 
-      - name: 📦 Install dependencies
-        run: npm install
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-      - name: ⚒️ Build App
-        run: npm run build
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Next.js
+        run: pnpm build
