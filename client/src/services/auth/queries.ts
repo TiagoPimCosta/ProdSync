@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import { handleApiResponseError } from "@/src/utils/errors";
-import { fetchWithAuth } from "@/src/lib/fetch";
+import { useQuery } from '@tanstack/react-query';
+import { handleApiResponseError } from '@/src/utils/errors';
+import { fetchWithAuth } from '@/src/lib/fetch';
 
 const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
 
@@ -21,13 +21,12 @@ export type UserStatusResponse = {
 };
 
 export function getUserStatus() {
-  const url = API_ENDPOINT_URL + "/auth/status";
-  return fetchWithAuth(url);
+  return fetchWithAuth('/auth/status');
 }
 
 export function useGetUserStatus() {
   return useQuery({
-    queryKey: ["userStatus"],
+    queryKey: ['userStatus'],
     queryFn: async () => {
       const response = await getUserStatus();
       return (await response.json()) as UserStatusResponse;
