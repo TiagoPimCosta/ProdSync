@@ -74,7 +74,7 @@ export class LinesService {
     }
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: string) {
     try {
       const line = await this.lineRepository.findOne({
         where: { id },
@@ -93,7 +93,7 @@ export class LinesService {
   }
 
   async update(
-    id: number,
+    id: string,
     updateLineDetails: UpdateLineParams,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
@@ -119,7 +119,7 @@ export class LinesService {
     }
   }
 
-  async delete(id: number): Promise<SuccessResponse | ErrorResponse> {
+  async delete(id: string): Promise<SuccessResponse | ErrorResponse> {
     try {
       const line = await this.lineRepository.findOneBy({ id });
       if (!line) throw new NotFoundException(`Line with ID ${id} not found.`);

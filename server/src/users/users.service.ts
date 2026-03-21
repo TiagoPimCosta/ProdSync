@@ -121,7 +121,7 @@ export class UsersService {
     }
   }
 
-  async findOneById(id: number) {
+  async findOneById(id: string) {
     try {
       const user = await this.userRepository.findOne({
         where: { id },
@@ -159,7 +159,7 @@ export class UsersService {
   }
 
   async update(
-    id: number,
+    id: string,
     updateUserDetails: UpdateUserParams,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
@@ -216,7 +216,7 @@ export class UsersService {
     }
   }
 
-  async delete(id: number): Promise<SuccessResponse | ErrorResponse> {
+  async delete(id: string): Promise<SuccessResponse | ErrorResponse> {
     try {
       const user = await this.userRepository.findOneBy({ id });
       if (!user) throw new NotFoundException(`User with ID ${id} not found.`);

@@ -1,4 +1,4 @@
 export type CreateRecordParams = {
-  userId: number;
-  machineId: number;
+  userId: string;
+  machineId: string;
 };

@@ -153,7 +153,7 @@ export class UsersController {
     description: 'Internal Server Error',
     type: ErrorResponse,
   })
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id') id: string) {
     try {
       return this.usersService.findOneById(id);
     } catch (error) {
@@ -178,7 +178,7 @@ export class UsersController {
     type: ErrorResponse,
   })
   async update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateUserDto: UpdateUserRequestDto,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
@@ -206,7 +206,7 @@ export class UsersController {
     type: ErrorResponse,
   })
   async delete(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
       return await this.usersService.delete(id);

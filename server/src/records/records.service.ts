@@ -112,20 +112,20 @@ export class RecordsService {
     }
   }
 
-  async findAllFromUser(userId: number) {
+  async findAllFromUser(userId: string) {
     const user = await this.usersService.findOneById(userId);
     if (!user) throw new NotFoundException(`User with ID ${userId} not found.`);
     return this.recordRepository.findBy({ user: { id: userId } });
   }
 
-  async findAllFromMachine(machineId: number) {
+  async findAllFromMachine(machineId: string) {
     const machine = await this.machinesService.findOneById(machineId);
     if (!machine)
       throw new NotFoundException(`Machine with ID ${machineId} not found.`);
     return this.recordRepository.findBy({ machine: { id: machineId } });
   }
 
-  async delete(id: number): Promise<SuccessResponse | ErrorResponse> {
+  async delete(id: string): Promise<SuccessResponse | ErrorResponse> {
     try {
       const record = await this.recordRepository.findOneBy({ id });
       if (!record)
