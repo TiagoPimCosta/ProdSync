@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   BellElectric,
@@ -12,7 +12,7 @@ import {
   LucideIcon,
   ChevronsUpDown,
   LogOut,
-} from "lucide-react";
+} from 'lucide-react';
 
 import {
   Sidebar,
@@ -25,7 +25,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/src/components/ui/sidebar";
+} from '@/src/components/ui/sidebar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,57 +33,57 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu";
-import Link from "next/link";
-import { logout } from "@/src/lib/auth";
-import { useRouter } from "next/navigation";
-import { getFirstAndLastName, getInitials } from "@/src/utils/user";
-import { UserStatusResponse } from "@/src/services/auth/queries";
-import { Avatar, AvatarFallback } from "@/src/components/ui/avatar";
-import Image from "next/image";
+} from '@/src/components/ui/dropdown-menu';
+import Link from 'next/link';
+import { logout } from '@/src/lib/auth';
+import { useRouter } from 'next/navigation';
+import { getFirstAndLastName, getInitials } from '@/src/utils/user';
+import { UserStatusResponse } from '@/src/services/auth/queries';
+import { Avatar, AvatarFallback } from '@/src/components/ui/avatar';
+import Image from 'next/image';
 
 const links = {
   navMain: [
     {
-      title: "Dashboard",
-      url: "/",
+      title: 'Dashboard',
+      url: '/',
       icon: Gauge,
     },
     {
-      title: "Utilizadores",
-      url: "/users",
-      icon: Users,
-    },
-    {
-      title: "Linhas",
-      url: "/lines",
+      title: 'Linhas',
+      url: '/lines',
       icon: LayoutGrid,
     },
     {
-      title: "Máquinas",
-      url: "/machines",
+      title: 'Máquinas',
+      url: '/machines',
       icon: BellElectric,
     },
     {
-      title: "Registos",
-      url: "/records",
+      title: 'Utilizadores',
+      url: '/users',
+      icon: Users,
+    },
+    {
+      title: 'Registos',
+      url: '/records',
       icon: Clipboard,
     },
   ],
   navSecondary: [
     {
-      title: "Settings",
-      url: "#",
+      title: 'Settings',
+      url: '#',
       icon: SettingsIcon,
     },
     {
-      title: "Get Help",
-      url: "#",
+      title: 'Get Help',
+      url: '#',
       icon: HelpCircleIcon,
     },
     {
-      title: "Search",
-      url: "#",
+      title: 'Search',
+      url: '#',
       icon: SearchIcon,
     },
   ],
@@ -103,7 +103,12 @@ export function AdminSidebar(props: AdminSidebarProps) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" variant="clean" asChild>
               <div>
-                <Image src="/logo.png" width={35} height={35} alt="Picture of the author" />
+                <Image
+                  src="/logo.png"
+                  width={35}
+                  height={35}
+                  alt="Picture of the author"
+                />
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-medium">ProdSync</span>
                 </div>
@@ -139,7 +144,7 @@ function NavMain({
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton tooltip={item.title} asChild>
-                <Link href={"/dashboard/" + item.url}>
+                <Link href={'/dashboard/' + item.url}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
                 </Link>
@@ -191,7 +196,7 @@ function NavUser({ user }: { user: UserStatusResponse | null }) {
     e.preventDefault();
 
     await logout();
-    router.push("/");
+    router.push('/');
   };
 
   return (
@@ -205,12 +210,12 @@ function NavUser({ user }: { user: UserStatusResponse | null }) {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarFallback className="rounded-lg">
-                  {getInitials(user?.name || "teste")}
+                  {getInitials(user?.name || 'teste')}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">
-                  {getFirstAndLastName(user?.name || "Utilizador")}
+                  {getFirstAndLastName(user?.name || 'Utilizador')}
                 </span>
               </div>
               <ChevronsUpDown className="ml-auto" />
@@ -218,7 +223,7 @@ function NavUser({ user }: { user: UserStatusResponse | null }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
+            side={isMobile ? 'bottom' : 'right'}
             align="end"
             sideOffset={4}
           >
@@ -226,11 +231,13 @@ function NavUser({ user }: { user: UserStatusResponse | null }) {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarFallback className="rounded-lg">
-                    {getInitials(user?.name || "teste")}
+                    {getInitials(user?.name || 'teste')}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user?.name || "Utilizador"}</span>
+                  <span className="truncate font-medium">
+                    {user?.name || 'Utilizador'}
+                  </span>
                 </div>
               </div>
             </DropdownMenuLabel>
