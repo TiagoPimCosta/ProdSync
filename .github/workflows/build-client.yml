@@ -5,7 +5,14 @@ on:
     paths:
       - 'client/**'
       - '.github/workflows/build-client.yml'
-
+    branches:
+      - main
+  pull_request:
+    paths:
+      - 'client/**'
+      - '.github/workflows/build-client.yml'
+    branches:
+      - main
 jobs:
   build-client:
     runs-on: ubuntu-latest
