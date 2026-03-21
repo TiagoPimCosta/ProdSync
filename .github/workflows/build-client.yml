@@ -5,9 +5,6 @@ on:
     paths:
       - 'client/**'
       - '.github/workflows/build-client.yml'
-  pull_request:
-    paths:
-      - 'client/**'
 
 jobs:
   build-client:
