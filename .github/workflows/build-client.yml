@@ -25,14 +25,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
-          cache-dependency-path: client/pnpm-lock.yaml
-
-      - name: Install pnpm
-        run: npm install -g pnpm
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Build Next.js
-        run: pnpm build
+        run: npm run build
