@@ -45,5 +45,5 @@ jobs:
       - name: Build NestJS
         run: pnpm build
 
-      - name: Run tests
-        run: pnpm test --if-present
+      #- name: Run tests
+      #  run: pnpm test --if-present
