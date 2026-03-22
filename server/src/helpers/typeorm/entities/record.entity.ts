@@ -5,17 +5,19 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'records' })
 export class Record {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   @ApiProperty()
-  id: number;
+  id: string;
 
   @Column()
   @ApiProperty()
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.records, { nullable: false })
+  @ManyToOne(() => User, (user) => user.records)
+  @ApiProperty({ type: () => User })
   user: User;
 
-  @ManyToOne(() => Machine, (machine) => machine.records, { nullable: false })
+  @ManyToOne(() => Machine, (machine) => machine.records)
+  @ApiProperty({ type: () => Machine })
   machine: Machine;
 }

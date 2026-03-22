@@ -9,3 +9,7 @@ export class UpdateMachineRequestDto {
   line: string;
   cadence: number;
 }
+
+export class UpdateMachineUserDto {
+  userId: string;
+}

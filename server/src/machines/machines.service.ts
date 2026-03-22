@@ -15,11 +15,13 @@ import { SuccessResponse } from 'src/types/SuccessResponse';
 import { ErrorResponse } from 'src/types/ErrorResponse';
 import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
 import { Pagination } from 'src/helpers/decorators/pagination.params.decorator';
+import { User } from 'src/helpers/typeorm/entities/user.entity';
 
 @Injectable()
 export class MachinesService {
   constructor(
     @InjectRepository(Machine) private machineRepository: Repository<Machine>,
+    @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
   async create(
@@ -28,7 +30,7 @@ export class MachinesService {
     try {
       const newMachine = this.machineRepository.create({
         ...createMachineDto,
-        line: { id: Number(createMachineDto.line) },
+        line: { id: createMachineDto.line },
       });
       await this.machineRepository.save(newMachine);
       return {
@@ -81,7 +83,7 @@ export class MachinesService {
     }
   }
 
-  async findOneById(id: number): Promise<Machine | ErrorResponse> {
+  async findOneById(id: string): Promise<Machine | ErrorResponse> {
     try {
       const queryBuilder = this.machineRepository
         .createQueryBuilder('machine')
@@ -120,7 +122,7 @@ export class MachinesService {
   }
 
   async update(
-    id: number,
+    id: string,
     updateMachineDetails: UpdateMachineParams,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
@@ -132,7 +134,7 @@ export class MachinesService {
         { id },
         {
           ...updateMachineDetails,
-          line: { id: Number(updateMachineDetails.line) },
+          line: { id: updateMachineDetails.line },
         },
       );
       return {
@@ -153,7 +155,7 @@ export class MachinesService {
     }
   }
 
-  async delete(id: number): Promise<SuccessResponse | ErrorResponse> {
+  async delete(id: string): Promise<SuccessResponse | ErrorResponse> {
     try {
       const machine = await this.machineRepository.findOneBy({ id });
       if (!machine)
@@ -172,5 +174,32 @@ export class MachinesService {
         'An error occurred while deleting the machine.',
       );
     }
+  }
+
+  async updateUser(machineId: string, userId: string) {
+    const machine = await this.machineRepository.findOne({
+      where: { id: machineId },
+    });
+
+    if (!machine) {
+      throw new NotFoundException('Machine not found');
+    }
+
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    machine.user = user;
+
+    await this.machineRepository.save(machine);
+
+    return {
+      success: true,
+      message: 'Machine user updated successfully',
+    };
   }
 }

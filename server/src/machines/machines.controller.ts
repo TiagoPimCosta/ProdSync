@@ -14,6 +14,7 @@ import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   CreateMachineRequestDto,
   UpdateMachineRequestDto,
+  UpdateMachineUserDto,
 } from 'src/helpers/dtos/machines.dto';
 import { SuccessResponse } from 'src/types/SuccessResponse';
 import { ErrorResponse } from 'src/types/ErrorResponse';
@@ -144,9 +145,7 @@ export class MachinesController {
     description: 'Internal Server Error',
     type: ErrorResponse,
   })
-  findOne(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<Machine | ErrorResponse> {
+  findOne(@Param('id') id: string): Promise<Machine | ErrorResponse> {
     try {
       return this.machinesService.findOneById(id);
     } catch (error) {
@@ -193,7 +192,7 @@ export class MachinesController {
     type: ErrorResponse,
   })
   async update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateMachineDto: UpdateMachineRequestDto,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
@@ -221,12 +220,32 @@ export class MachinesController {
     type: ErrorResponse,
   })
   async delete(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
       return this.machinesService.delete(id);
     } catch (error) {
       throw error;
     }
+  }
+
+  @Patch(':id/user')
+  @ApiOperation({ summary: 'Update machine user' })
+  @ApiResponse({
+    status: 200,
+    description: 'Machine user successfully updated',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Machine or User not found',
+    type: ErrorResponse,
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+    type: ErrorResponse,
+  })
+  async updateUser(@Param('id') id: string, @Body() dto: UpdateMachineUserDto) {
+    return this.machinesService.updateUser(id, dto.userId);
   }
 }

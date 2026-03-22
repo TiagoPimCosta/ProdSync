@@ -5,9 +5,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'users' })
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   @ApiProperty()
-  id: number;
+  id: string;
 
   @Column({ unique: true })
   @ApiProperty()
@@ -54,8 +54,10 @@ export class User {
   admission: Date;
 
   @OneToMany(() => Machine, (machine) => machine.user)
+  @ApiProperty({ type: () => [Machine] })
   machine: Machine[];
 
   @OneToMany(() => Record, (record) => record.user)
+  @ApiProperty({ type: () => [Record] })
   records: Record[];
 }

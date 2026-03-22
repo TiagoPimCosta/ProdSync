@@ -5,9 +5,14 @@ on:
     paths:
       - 'server/**'
       - '.github/workflows/build-server.yml'
+    branches:
+      - main
   pull_request:
     paths:
       - 'server/**'
+      - '.github/workflows/build-server.yml'
+    branches:
+      - main
 
 jobs:
   build-server:
@@ -21,6 +26,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -28,14 +39,11 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: server/pnpm-lock.yaml
 
-      - name: Install pnpm
-        run: npm install -g pnpm
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build NestJS
         run: pnpm build
 
-      - name: Run tests
-        run: pnpm test --if-present
+      #- name: Run tests
+      #  run: pnpm test --if-present

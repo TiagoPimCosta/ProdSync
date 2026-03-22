@@ -1,4 +1,4 @@
 export class CreateRecordRequestDto {
-  userId: number;
-  machineId: number;
+  userId: string;
+  machineId: string;
 }

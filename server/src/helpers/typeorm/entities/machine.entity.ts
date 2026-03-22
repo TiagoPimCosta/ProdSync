@@ -12,9 +12,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'machines' })
 export class Machine {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   @ApiProperty()
-  id: number;
+  id: string;
 
   @Column()
   @ApiProperty()
@@ -28,14 +28,15 @@ export class Machine {
   @ApiProperty()
   status: boolean;
 
-  @OneToMany(() => Record, (record) => record.machine)
-  @ApiProperty()
-  records: Record[];
+  @ManyToOne(() => User, (user) => user.machine)
+  @ApiProperty({ type: () => User })
+  user: User;
 
   @ManyToOne(() => Line, (line) => line.machines)
-  @ApiProperty()
+  @ApiProperty({ type: () => Line })
   line: Line;
 
-  @ManyToOne(() => User, (user) => user.machine)
-  user: User;
+  @OneToMany(() => Record, (record) => record.machine)
+  @ApiProperty({ type: () => [Record] })
+  records: Record[];
 }

@@ -124,7 +124,7 @@ export class LinesController {
     description: 'Internal Server Error',
     type: ErrorResponse,
   })
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id') id: string) {
     try {
       return this.linesService.findOneById(id);
     } catch (error) {
@@ -149,7 +149,7 @@ export class LinesController {
     type: ErrorResponse,
   })
   async update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateLineDto: UpdateLineRequestDto,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
@@ -177,7 +177,7 @@ export class LinesController {
     type: ErrorResponse,
   })
   async delete(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
       return this.linesService.delete(id);

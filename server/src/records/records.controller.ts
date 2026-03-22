@@ -126,7 +126,7 @@ export class RecordsController {
   }
 
   @Get('/user/:userId')
-  findAllFromUser(@Param('userId', ParseIntPipe) userId: number) {
+  findAllFromUser(@Param('userId') userId: string) {
     try {
       return this.recordsService.findAllFromUser(userId);
     } catch (error) {
@@ -135,7 +135,7 @@ export class RecordsController {
   }
 
   @Get('/machine/:machineId')
-  findAllFromMachine(@Param('machineId', ParseIntPipe) machineId: number) {
+  findAllFromMachine(@Param('machineId') machineId: string) {
     try {
       return this.recordsService.findAllFromMachine(machineId);
     } catch (error) {
@@ -161,7 +161,7 @@ export class RecordsController {
     type: ErrorResponse,
   })
   async delete(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
       return this.recordsService.delete(id);
