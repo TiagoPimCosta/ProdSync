@@ -24,38 +24,32 @@ import {
   SelectValue,
 } from '@/src/components/ui/Select/select';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { useGetUsersOptions } from '@/src/services/options/queries';
+import { useUpdateMachineUser } from '@/src/services/machines/mutations';
 
 interface MachineOverviewProps {
   machine?: MachineObj;
 }
 
-const availableOperators = [
-  { id: '1', name: 'John Smith' },
-  { id: '2', name: 'Maria Garcia' },
-  { id: '3', name: 'James Wilson' },
-  { id: '4', name: 'Sarah Johnson' },
-  { id: '5', name: 'Robert Chen' },
-];
-
 const MachineOverview = ({ machine }: MachineOverviewProps) => {
-  const [currentOperator, setCurrentOperator] = useState('John Smith');
   const [selectedOperator, setSelectedOperator] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const { data: usersOptions } = useGetUsersOptions();
+  const { mutate: updateMachineUser, isPending } = useUpdateMachineUser(machine?.id ?? 0);
 
   if (!machine) return <div>line Not Found</div>;
 
   const handleChangeOperator = () => {
-    const operator = availableOperators.find(
-      (op) => op.id === selectedOperator,
-    );
-    if (operator) {
-      setCurrentOperator(operator.name);
-      setIsDialogOpen(false);
-      setSelectedOperator('');
-      toast('Operator Changed');
-    }
+    updateMachineUser(selectedOperator, {
+      onSuccess: () => {
+        setIsDialogOpen(false);
+        setSelectedOperator('');
+      },
+    });
   };
+
+  const opertator = machine.user?.name || 'Not assigned';
 
   return (
     <div className="flex flex-col gap-4">
@@ -73,7 +67,7 @@ const MachineOverview = ({ machine }: MachineOverviewProps) => {
                   </p>
                   <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-muted-foreground" />
-                    <span className="font-medium">{currentOperator}</span>
+                    <span className="font-medium">{opertator}</span>
                     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                       <DialogTrigger asChild>
                         <Button variant="ghost" size="icon" className="h-7 w-7">
@@ -89,7 +83,7 @@ const MachineOverview = ({ machine }: MachineOverviewProps) => {
                             <p className="text-sm text-muted-foreground mb-1">
                               Current:{' '}
                               <span className="font-medium text-foreground">
-                                {currentOperator}
+                                {opertator}
                               </span>
                             </p>
                           </div>
@@ -101,18 +95,18 @@ const MachineOverview = ({ machine }: MachineOverviewProps) => {
                               <SelectValue placeholder="Select new operator" />
                             </SelectTrigger>
                             <SelectContent>
-                              {availableOperators
-                                .filter((op) => op.name !== currentOperator)
+                              {usersOptions
+                                ?.filter((op) => op.label !== opertator)
                                 .map((op) => (
-                                  <SelectItem key={op.id} value={op.id}>
-                                    {op.name}
+                                  <SelectItem key={op.value} value={op.value}>
+                                    {op.label}
                                   </SelectItem>
                                 ))}
                             </SelectContent>
                           </Select>
                           <Button
                             onClick={handleChangeOperator}
-                            disabled={!selectedOperator}
+                            disabled={!selectedOperator || isPending}
                             className="w-full"
                           >
                             Assign Operator

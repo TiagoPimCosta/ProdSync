@@ -193,6 +193,21 @@ export class MachinesService {
       throw new NotFoundException('User not found');
     }
 
+    const existingAssignments = await this.machineRepository.find({
+      where: { user: { id: userId } },
+      relations: ['user'],
+    });
+
+    const assignedElsewhere = existingAssignments.filter(
+      (m) => m.id !== machineId,
+    );
+
+    if (assignedElsewhere.length >= 2) {
+      throw new ConflictException(
+        `${user.name} is already assigned to 2 machines`,
+      );
+    }
+
     machine.user = user;
 
     await this.machineRepository.save(machine);

@@ -2,8 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import { handleApiResponseError } from '@/src/utils/errors';
 import { fetchWithAuth } from '@/src/lib/fetch';
 
-const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
-
 export type UserStatusResponse = {
   id: number;
   idNumber: number;
