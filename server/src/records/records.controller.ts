@@ -170,6 +170,16 @@ export class RecordsController {
     }
   }
 
+  @Get('kpis')
+  @ApiOperation({ summary: 'Get dashboard KPIs' })
+  @ApiResponse({
+    status: 200,
+    description: 'KPIs successfully retrieved',
+  })
+  async getKpis() {
+    return this.recordsService.getKpis();
+  }
+
   @Get('recordHistory')
   async getRecordsHistory(@Query('userId') userId: string) {
     return this.recordsService.getRecordsHistory(parseInt(userId));

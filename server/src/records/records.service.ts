@@ -5,11 +5,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { MachinesService } from 'src/machines/machines.service';
 import { CreateRecordParams } from 'src/helpers/params/records.params';
 import { Record } from 'src/helpers/typeorm/entities/record.entity';
+import { User } from 'src/helpers/typeorm/entities/user.entity';
+import { Machine } from 'src/helpers/typeorm/entities/machine.entity';
 import { Pagination } from 'src/helpers/decorators/pagination.params.decorator';
 import * as dayjs from 'dayjs';
 import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
@@ -20,6 +22,8 @@ import { SuccessResponse } from 'src/types/SuccessResponse';
 export class RecordsService {
   constructor(
     @InjectRepository(Record) private recordRepository: Repository<Record>,
+    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Machine) private machineRepository: Repository<Machine>,
     private readonly usersService: UsersService,
     private readonly machinesService: MachinesService,
   ) {}
@@ -269,5 +273,49 @@ export class RecordsService {
     }
 
     return filledDays;
+  }
+
+  async getKpis() {
+    const todayStart = dayjs().startOf('day').toDate();
+    const todayEnd = dayjs().endOf('day').toDate();
+    const yesterdayStart = dayjs().subtract(1, 'day').startOf('day').toDate();
+    const yesterdayEnd = dayjs().subtract(1, 'day').endOf('day').toDate();
+    const monthStart = dayjs().startOf('month').toDate();
+    const monthEnd = dayjs().endOf('day').toDate();
+    const lastMonthStart = dayjs().subtract(1, 'month').startOf('month').toDate();
+    const lastMonthEnd = dayjs().subtract(1, 'month').endOf('month').toDate();
+
+    const [
+      todayRecords,
+      yesterdayRecords,
+      monthRecords,
+      lastMonthRecords,
+      activeUsers,
+      activeMachines,
+    ] = await Promise.all([
+      this.recordRepository.count({
+        where: { createdAt: Between(todayStart, todayEnd) },
+      }),
+      this.recordRepository.count({
+        where: { createdAt: Between(yesterdayStart, yesterdayEnd) },
+      }),
+      this.recordRepository.count({
+        where: { createdAt: Between(monthStart, monthEnd) },
+      }),
+      this.recordRepository.count({
+        where: { createdAt: Between(lastMonthStart, lastMonthEnd) },
+      }),
+      this.userRepository.count({ where: { status: true } }),
+      this.machineRepository.count({ where: { status: true } }),
+    ]);
+
+    return {
+      todayRecords,
+      yesterdayRecords,
+      monthRecords,
+      lastMonthRecords,
+      activeUsers,
+      activeMachines,
+    };
   }
 }

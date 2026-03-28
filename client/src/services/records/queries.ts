@@ -127,6 +127,29 @@ export function useGetHourlyStatsRecords(params: GetHourlyStatsRecordsParamsSche
   });
 }
 
+export interface DashboardKpisResponse {
+  todayRecords: number;
+  yesterdayRecords: number;
+  monthRecords: number;
+  lastMonthRecords: number;
+  activeUsers: number;
+  activeMachines: number;
+}
+
+export function useGetDashboardKpis() {
+  return useQuery({
+    queryKey: ["records", "kpis"],
+    queryFn: async () => {
+      const response = await fetch(API_ENDPOINT_URL + "/records/kpis");
+      return (await response.json()) as DashboardKpisResponse;
+    },
+    throwOnError: (error) => {
+      handleApiResponseError(error);
+      return false;
+    },
+  });
+}
+
 export function getDailyStatsRecords(params: GetDailyStatsRecordsParamsSchema) {
   const queryParams = parseQueryParams(params);
   const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
