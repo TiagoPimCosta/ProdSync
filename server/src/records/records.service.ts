@@ -75,7 +75,7 @@ export class RecordsService {
     machine?: number,
     startPeriod?: Date,
     endPeriod?: Date,
-  ): Promise<PaginatedResource<Record> | ErrorResponse> {
+  ): Promise<PaginatedResource<Record & { timeSincePrevious: number | null }> | ErrorResponse> {
     try {
       const queryBuilder = this.recordRepository.createQueryBuilder('record');
       queryBuilder.leftJoinAndSelect('record.user', 'user');
@@ -98,12 +98,38 @@ export class RecordsService {
           endPeriod: dayjs(endPeriod).endOf('day').format(),
         });
 
-      queryBuilder.skip(offset).take(limit);
+      queryBuilder.orderBy('record.createdAt', 'DESC').skip(offset).take(limit);
 
       const [records, total] = await queryBuilder.getManyAndCount();
 
+      if (records.length === 0) {
+        return { items: [], totalItems: total, size, page };
+      }
+
+      const ids = records.map((r) => r.id);
+      const diffs = await this.recordRepository
+        .createQueryBuilder('r1')
+        .select('r1.id', 'id')
+        .addSelect(
+          `TIMESTAMPDIFF(SECOND, (
+            SELECT r2.createdAt FROM records r2
+            WHERE r2.userId = r1.userId
+              AND r2.createdAt < r1.createdAt
+              AND DATE(r2.createdAt) = DATE(r1.createdAt)
+            ORDER BY r2.createdAt DESC LIMIT 1
+          ), r1.createdAt)`,
+          'timeSincePrevious',
+        )
+        .where('r1.id IN (:...ids)', { ids })
+        .getRawMany<{ id: string; timeSincePrevious: number | null }>();
+
+      const diffMap = new Map(diffs.map((d) => [d.id, d.timeSincePrevious]));
+
       return {
-        items: records,
+        items: records.map((r) => ({
+          ...r,
+          timeSincePrevious: diffMap.get(r.id) ?? null,
+        })),
         totalItems: total,
         size,
         page,

@@ -17,6 +17,19 @@ export default function RecordsTable() {
   const startPeriod = recordsSearchParams.get('startPeriod') || undefined;
   const endPeriod = recordsSearchParams.get('endPeriod') || undefined;
 
+  function formatDuration(seconds: number | null): string {
+    if (seconds === null) return '-';
+    if (seconds < 60) return `${seconds}s`;
+    if (seconds < 3600) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return s > 0 ? `${m}m ${s}s` : `${m}m`;
+    }
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    return m > 0 ? `${h}h ${m}m` : `${h}h`;
+  }
+
   const columnHelper = createColumnHelper<RecordObj>();
   const tableColumns = [
     columnHelper.accessor('user.name', {
@@ -31,6 +44,10 @@ export default function RecordsTable() {
         const createdAt = row.original.createdAt;
         return dayjs(createdAt).format('YYYY/MM/DD HH:mm:ss');
       },
+    }),
+    columnHelper.accessor('timeSincePrevious', {
+      header: 'Tempo desde anterior',
+      cell: ({ row }) => formatDuration(row.original.timeSincePrevious),
     }),
   ] as ColumnDef<RecordObj>[];
 

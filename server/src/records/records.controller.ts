@@ -111,7 +111,7 @@ export class RecordsController {
     @Query('machine') machine?: number,
     @Query('startPeriod') startPeriod?: Date,
     @Query('endPeriod') endPeriod?: Date,
-  ): Promise<PaginatedResource<Partial<Record>> | ErrorResponse> {
+  ): Promise<PaginatedResource<Partial<Record> & { timeSincePrevious: number | null }> | ErrorResponse> {
     try {
       return this.recordsService.findAll(
         paginationParams,

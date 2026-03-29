@@ -27,6 +27,7 @@ export interface UserObj {
 export interface RecordObj {
   id: number;
   createdAt: string;
+  timeSincePrevious: number | null;
   user: UserObj;
   machine: {
     id: number;
