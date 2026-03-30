@@ -4,6 +4,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { DataTable } from '@/src/components/ui/data-table';
 import { RecordObj, useGetRecords } from '@/src/services/records/queries';
+import { useDeleteRecord } from '@/src/services/records/mutations';
+import { Button } from '@/src/components/ui/button';
+import { Trash2 } from 'lucide-react';
 import dayjs from 'dayjs';
 
 export default function RecordsTable() {
@@ -49,6 +52,22 @@ export default function RecordsTable() {
       header: 'Tempo desde anterior',
       cell: ({ row }) => formatDuration(row.original.timeSincePrevious),
     }),
+    columnHelper.display({
+      id: 'actions',
+      header: 'Ações',
+      size: 10,
+      meta: { align: 'center' },
+      cell: ({ row }) => (
+        <Button
+          size="icon"
+          variant="ghost"
+          className="h-6 w-6 text-red-500 hover:text-red-600"
+          onClick={() => handleDeleteRecord(row.original.id)}
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      ),
+    }),
   ] as ColumnDef<RecordObj>[];
 
   const { data } = useGetRecords({
@@ -59,6 +78,12 @@ export default function RecordsTable() {
     startPeriod,
     endPeriod,
   });
+
+  const recordDelete = useDeleteRecord();
+
+  const handleDeleteRecord = async (id: number) => {
+    await recordDelete.mutateAsync(String(id));
+  };
 
   const handleChangePage = (page: number) => {
     const currentParams = new URLSearchParams(recordsSearchParams.toString());

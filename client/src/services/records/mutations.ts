@@ -1,5 +1,5 @@
-import { toastError, toastSuccess } from "@/src/utils/toasts";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toastError, toastSuccess } from '@/src/utils/toasts';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
 
@@ -9,10 +9,10 @@ export interface CreateRecordBodyParams {
 }
 
 export async function createRecord(body: CreateRecordBodyParams) {
-  return fetch(API_ENDPOINT_URL + "/records/", {
-    method: "POST",
+  return fetch(API_ENDPOINT_URL + '/records/', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
   });
@@ -38,8 +38,36 @@ export function useCreateRecord() {
     onSuccess: (data, body) => {
       toastSuccess(data.message);
       queryClient.invalidateQueries({
-        queryKey: ["records", "recordsHistory", body.userId.toString()],
+        queryKey: ['records', 'recordsHistory', body.userId.toString()],
       });
+    },
+  });
+}
+
+export async function deleteRecord(recordId: string) {
+  return fetch(`${API_ENDPOINT_URL}/records/${recordId}`, {
+    method: 'DELETE',
+  });
+}
+
+export function useDeleteRecord() {
+  const queryClient = useQueryClient();
+
+  return useMutation<ApiResponseMessage, Error, string>({
+    mutationFn: async (recordId) => {
+      const response = await deleteRecord(recordId);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+      return response.json() as Promise<ApiResponseMessage>;
+    },
+    onError: (error) => {
+      toastError(error.message);
+    },
+    onSuccess: (data) => {
+      toastSuccess(data.message);
+      queryClient.invalidateQueries({ queryKey: ['records'] });
     },
   });
 }
