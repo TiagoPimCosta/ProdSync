@@ -170,6 +170,21 @@ export class RecordsController {
     }
   }
 
+  @Get('avgActionTime')
+  async getAvgActionTime(
+    @Query('machineId') machineId: string,
+    @Query('userId') userId?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+  ) {
+    return this.recordsService.getAvgActionTime(
+      parseInt(machineId),
+      userId ? parseInt(userId) : undefined,
+      startDate,
+      endDate,
+    );
+  }
+
   @Get('kpis')
   @ApiOperation({ summary: 'Get dashboard KPIs' })
   @ApiResponse({

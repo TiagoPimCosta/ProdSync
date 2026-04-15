@@ -151,6 +151,31 @@ export function useGetDashboardKpis() {
   });
 }
 
+export interface GetAvgActionTimeParams {
+  machineId: number;
+  userId?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
+export function useGetAvgActionTime(params: GetAvgActionTimeParams) {
+  const { machineId, userId, startDate, endDate } = params;
+
+  return useQuery({
+    queryKey: ["records", "avgActionTime", machineId, userId, startDate, endDate],
+    queryFn: async () => {
+      const queryParams = parseQueryParams(params);
+      const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
+      const response = await fetch(`${API_ENDPOINT_URL}/records/avgActionTime?${queryString}`);
+      return (await response.json()) as { avgSeconds: number | null };
+    },
+    throwOnError: (error) => {
+      handleApiResponseError(error);
+      return false;
+    },
+  });
+}
+
 export function getDailyStatsRecords(params: GetDailyStatsRecordsParamsSchema) {
   const queryParams = parseQueryParams(params);
   const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();

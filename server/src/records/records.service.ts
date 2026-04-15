@@ -301,6 +301,45 @@ export class RecordsService {
     return filledDays;
   }
 
+  async getAvgActionTime(
+    machineId: number,
+    userId?: number,
+    startDate?: string,
+    endDate?: string,
+  ): Promise<{ avgSeconds: number | null }> {
+    try {
+      const qb = this.recordRepository
+        .createQueryBuilder('r1')
+        .select(
+          `AVG(TIMESTAMPDIFF(SECOND, (
+            SELECT r2.createdAt FROM records r2
+            WHERE r2.userId = r1.userId
+              AND r2.machineId = r1.machineId
+              AND r2.createdAt < r1.createdAt
+              AND DATE(r2.createdAt) = DATE(r1.createdAt)
+            ORDER BY r2.createdAt DESC LIMIT 1
+          ), r1.createdAt))`,
+          'avgSeconds',
+        )
+        .where('r1.machine = :machineId', { machineId });
+
+      if (userId) qb.andWhere('r1.user = :userId', { userId });
+      if (startDate) qb.andWhere('r1.createdAt >= :startDate', { startDate });
+      if (endDate) qb.andWhere('r1.createdAt <= :endDate', { endDate });
+
+      const result = await qb.getRawOne<{ avgSeconds: string | null }>();
+      return {
+        avgSeconds:
+          result?.avgSeconds != null ? parseFloat(result.avgSeconds) : null,
+      };
+    } catch (error) {
+      console.error('Error in getAvgActionTime:', error);
+      throw new InternalServerErrorException(
+        'An error occurred while fetching average action time.',
+      );
+    }
+  }
+
   async getKpis() {
     const todayStart = dayjs().startOf('day').toDate();
     const todayEnd = dayjs().endOf('day').toDate();
