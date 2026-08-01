@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(find /Users/tiagopimcosta/Desktop/ProdSync/client -path *dashboard* -name *.tsx -type f)"
-    ]
-  }
-}
