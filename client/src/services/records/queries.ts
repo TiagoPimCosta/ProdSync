@@ -151,12 +151,12 @@ export function useGetDashboardKpis() {
   });
 }
 
-export interface GetAvgActionTimeParams {
+export type GetAvgActionTimeParams = {
   machineId: number;
   userId?: string;
   startDate?: string;
   endDate?: string;
-}
+};
 
 export function useGetAvgActionTime(params: GetAvgActionTimeParams) {
   const { machineId, userId, startDate, endDate } = params;
@@ -165,7 +165,9 @@ export function useGetAvgActionTime(params: GetAvgActionTimeParams) {
     queryKey: ["records", "avgActionTime", machineId, userId, startDate, endDate],
     queryFn: async () => {
       const queryParams = parseQueryParams(params);
-      const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
+      const queryString = new URLSearchParams(
+        Object.entries(queryParams).map(([key, value]) => [key, String(value)])
+      ).toString();
       const response = await fetch(`${API_ENDPOINT_URL}/records/avgActionTime?${queryString}`);
       return (await response.json()) as { avgSeconds: number | null };
     },
