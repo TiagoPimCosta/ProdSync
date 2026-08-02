@@ -70,4 +70,24 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## License
 
-Nest is [MIT licensed](LICENSE).
+Copyright (C) 2026 Tiago Pimenta Costa
+
+ProdSync is free software: you can redistribute it and/or modify it under the
+terms of the GNU Affero General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along
+with this program. If not, see <https://www.gnu.org/licenses/>.
+
+See the full text in [`LICENSE`](../LICENSE) at the repository root.
+
+> **Note on §13:** if you run a modified version of this software as a network
+> service, you must offer its complete corresponding source code to the users of
+> that service.
+
+The NestJS framework this server is built on is separately [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).

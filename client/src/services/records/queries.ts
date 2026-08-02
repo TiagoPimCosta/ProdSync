@@ -27,6 +27,7 @@ export interface UserObj {
 export interface RecordObj {
   id: number;
   createdAt: string;
+  timeSincePrevious: number | null;
   user: UserObj;
   machine: {
     id: number;
@@ -119,6 +120,56 @@ export function useGetHourlyStatsRecords(params: GetHourlyStatsRecordsParamsSche
         hour: string;
         count: number;
       }[];
+    },
+    throwOnError: (error) => {
+      handleApiResponseError(error);
+      return false;
+    },
+  });
+}
+
+export interface DashboardKpisResponse {
+  todayRecords: number;
+  yesterdayRecords: number;
+  monthRecords: number;
+  lastMonthRecords: number;
+  activeUsers: number;
+  activeMachines: number;
+}
+
+export function useGetDashboardKpis() {
+  return useQuery({
+    queryKey: ["records", "kpis"],
+    queryFn: async () => {
+      const response = await fetch(API_ENDPOINT_URL + "/records/kpis");
+      return (await response.json()) as DashboardKpisResponse;
+    },
+    throwOnError: (error) => {
+      handleApiResponseError(error);
+      return false;
+    },
+  });
+}
+
+export type GetAvgActionTimeParams = {
+  machineId: number;
+  userId?: string;
+  startDate?: string;
+  endDate?: string;
+};
+
+export function useGetAvgActionTime(params: GetAvgActionTimeParams) {
+  const { machineId, userId, startDate, endDate } = params;
+
+  return useQuery({
+    queryKey: ["records", "avgActionTime", machineId, userId, startDate, endDate],
+    queryFn: async () => {
+      const queryParams = parseQueryParams(params);
+      const queryString = new URLSearchParams(
+        Object.entries(queryParams).map(([key, value]) => [key, String(value)])
+      ).toString();
+      const response = await fetch(`${API_ENDPOINT_URL}/records/avgActionTime?${queryString}`);
+      return (await response.json()) as { avgSeconds: number | null };
     },
     throwOnError: (error) => {
       handleApiResponseError(error);

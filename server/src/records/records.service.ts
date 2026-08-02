@@ -5,11 +5,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { MachinesService } from 'src/machines/machines.service';
 import { CreateRecordParams } from 'src/helpers/params/records.params';
 import { Record } from 'src/helpers/typeorm/entities/record.entity';
+import { User } from 'src/helpers/typeorm/entities/user.entity';
+import { Machine } from 'src/helpers/typeorm/entities/machine.entity';
 import { Pagination } from 'src/helpers/decorators/pagination.params.decorator';
 import * as dayjs from 'dayjs';
 import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
@@ -20,6 +22,8 @@ import { SuccessResponse } from 'src/types/SuccessResponse';
 export class RecordsService {
   constructor(
     @InjectRepository(Record) private recordRepository: Repository<Record>,
+    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Machine) private machineRepository: Repository<Machine>,
     private readonly usersService: UsersService,
     private readonly machinesService: MachinesService,
   ) {}
@@ -71,7 +75,7 @@ export class RecordsService {
     machine?: number,
     startPeriod?: Date,
     endPeriod?: Date,
-  ): Promise<PaginatedResource<Record> | ErrorResponse> {
+  ): Promise<PaginatedResource<Record & { timeSincePrevious: number | null }> | ErrorResponse> {
     try {
       const queryBuilder = this.recordRepository.createQueryBuilder('record');
       queryBuilder.leftJoinAndSelect('record.user', 'user');
@@ -94,12 +98,38 @@ export class RecordsService {
           endPeriod: dayjs(endPeriod).endOf('day').format(),
         });
 
-      queryBuilder.skip(offset).take(limit);
+      queryBuilder.orderBy('record.createdAt', 'DESC').skip(offset).take(limit);
 
       const [records, total] = await queryBuilder.getManyAndCount();
 
+      if (records.length === 0) {
+        return { items: [], totalItems: total, size, page };
+      }
+
+      const ids = records.map((r) => r.id);
+      const diffs = await this.recordRepository
+        .createQueryBuilder('r1')
+        .select('r1.id', 'id')
+        .addSelect(
+          `TIMESTAMPDIFF(SECOND, (
+            SELECT r2.createdAt FROM records r2
+            WHERE r2.userId = r1.userId
+              AND r2.createdAt < r1.createdAt
+              AND DATE(r2.createdAt) = DATE(r1.createdAt)
+            ORDER BY r2.createdAt DESC LIMIT 1
+          ), r1.createdAt)`,
+          'timeSincePrevious',
+        )
+        .where('r1.id IN (:...ids)', { ids })
+        .getRawMany<{ id: string; timeSincePrevious: number | null }>();
+
+      const diffMap = new Map(diffs.map((d) => [d.id, d.timeSincePrevious]));
+
       return {
-        items: records,
+        items: records.map((r) => ({
+          ...r,
+          timeSincePrevious: diffMap.get(r.id) ?? null,
+        })),
         totalItems: total,
         size,
         page,
@@ -269,5 +299,88 @@ export class RecordsService {
     }
 
     return filledDays;
+  }
+
+  async getAvgActionTime(
+    machineId: number,
+    userId?: number,
+    startDate?: string,
+    endDate?: string,
+  ): Promise<{ avgSeconds: number | null }> {
+    try {
+      const qb = this.recordRepository
+        .createQueryBuilder('r1')
+        .select(
+          `AVG(TIMESTAMPDIFF(SECOND, (
+            SELECT r2.createdAt FROM records r2
+            WHERE r2.userId = r1.userId
+              AND r2.machineId = r1.machineId
+              AND r2.createdAt < r1.createdAt
+              AND DATE(r2.createdAt) = DATE(r1.createdAt)
+            ORDER BY r2.createdAt DESC LIMIT 1
+          ), r1.createdAt))`,
+          'avgSeconds',
+        )
+        .where('r1.machine = :machineId', { machineId });
+
+      if (userId) qb.andWhere('r1.user = :userId', { userId });
+      if (startDate) qb.andWhere('r1.createdAt >= :startDate', { startDate });
+      if (endDate) qb.andWhere('r1.createdAt <= :endDate', { endDate });
+
+      const result = await qb.getRawOne<{ avgSeconds: string | null }>();
+      return {
+        avgSeconds:
+          result?.avgSeconds != null ? parseFloat(result.avgSeconds) : null,
+      };
+    } catch (error) {
+      console.error('Error in getAvgActionTime:', error);
+      throw new InternalServerErrorException(
+        'An error occurred while fetching average action time.',
+      );
+    }
+  }
+
+  async getKpis() {
+    const todayStart = dayjs().startOf('day').toDate();
+    const todayEnd = dayjs().endOf('day').toDate();
+    const yesterdayStart = dayjs().subtract(1, 'day').startOf('day').toDate();
+    const yesterdayEnd = dayjs().subtract(1, 'day').endOf('day').toDate();
+    const monthStart = dayjs().startOf('month').toDate();
+    const monthEnd = dayjs().endOf('day').toDate();
+    const lastMonthStart = dayjs().subtract(1, 'month').startOf('month').toDate();
+    const lastMonthEnd = dayjs().subtract(1, 'month').endOf('month').toDate();
+
+    const [
+      todayRecords,
+      yesterdayRecords,
+      monthRecords,
+      lastMonthRecords,
+      activeUsers,
+      activeMachines,
+    ] = await Promise.all([
+      this.recordRepository.count({
+        where: { createdAt: Between(todayStart, todayEnd) },
+      }),
+      this.recordRepository.count({
+        where: { createdAt: Between(yesterdayStart, yesterdayEnd) },
+      }),
+      this.recordRepository.count({
+        where: { createdAt: Between(monthStart, monthEnd) },
+      }),
+      this.recordRepository.count({
+        where: { createdAt: Between(lastMonthStart, lastMonthEnd) },
+      }),
+      this.userRepository.count({ where: { status: true } }),
+      this.machineRepository.count({ where: { status: true } }),
+    ]);
+
+    return {
+      todayRecords,
+      yesterdayRecords,
+      monthRecords,
+      lastMonthRecords,
+      activeUsers,
+      activeMachines,
+    };
   }
 }

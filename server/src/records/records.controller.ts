@@ -111,7 +111,7 @@ export class RecordsController {
     @Query('machine') machine?: number,
     @Query('startPeriod') startPeriod?: Date,
     @Query('endPeriod') endPeriod?: Date,
-  ): Promise<PaginatedResource<Partial<Record>> | ErrorResponse> {
+  ): Promise<PaginatedResource<Partial<Record> & { timeSincePrevious: number | null }> | ErrorResponse> {
     try {
       return this.recordsService.findAll(
         paginationParams,
@@ -168,6 +168,31 @@ export class RecordsController {
     } catch (error) {
       throw error;
     }
+  }
+
+  @Get('avgActionTime')
+  async getAvgActionTime(
+    @Query('machineId') machineId: string,
+    @Query('userId') userId?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+  ) {
+    return this.recordsService.getAvgActionTime(
+      parseInt(machineId),
+      userId ? parseInt(userId) : undefined,
+      startDate,
+      endDate,
+    );
+  }
+
+  @Get('kpis')
+  @ApiOperation({ summary: 'Get dashboard KPIs' })
+  @ApiResponse({
+    status: 200,
+    description: 'KPIs successfully retrieved',
+  })
+  async getKpis() {
+    return this.recordsService.getKpis();
   }
 
   @Get('recordHistory')

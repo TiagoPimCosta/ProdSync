@@ -1,16 +1,16 @@
-import React, { useMemo } from "react";
-import PageHeader from "@/ui/dashboard/PageHeader";
-import RecordsTable from "@/ui/dashboard/records/RecordsTable";
-import RecordsFilters from "@/ui/dashboard/records/RecordsFilters";
+import React, { useMemo } from 'react';
+import PageHeader from '@/ui/dashboard/PageHeader';
+import RecordsTable from '@/ui/dashboard/records/RecordsTable';
+import RecordsFilters from '@/ui/dashboard/records/RecordsFilters';
 
 const RecordsPage = () => {
   const pageBreadcrumbItems = useMemo(
     () => [
       {
-        label: "Registos",
+        label: 'Registos',
       },
     ],
-    []
+    [],
   );
 
   return (
