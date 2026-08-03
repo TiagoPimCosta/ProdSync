@@ -15,7 +15,7 @@ import {
 } from 'src/helpers/params/users.params';
 import { Pagination } from 'src/helpers/decorators/pagination.params.decorator';
 import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { hashPassword } from 'src/utils/password';
 import { SuccessResponse } from 'src/types/SuccessResponse';
 
