@@ -46,9 +46,6 @@ export class UpdateUserRequestDto {
   username?: string;
 
   @ApiProperty()
-  password?: string;
-
-  @ApiProperty()
   cc?: string;
 
   @ApiProperty()
