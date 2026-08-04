@@ -1,7 +1,6 @@
-import { toastError, toastSuccess } from "@/src/utils/toasts";
-import { useMutation } from "@tanstack/react-query";
-
-const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
+import { toastError, toastSuccess } from '@/src/utils/toasts';
+import { useMutation } from '@tanstack/react-query';
+import { fetchWithAuth } from '@/src/lib/fetch';
 
 export interface CreateUserBodyParams {
   idNumber: number;
@@ -16,10 +15,10 @@ export interface CreateUserBodyParams {
 }
 
 export async function createUser(body: CreateUserBodyParams) {
-  return fetch(API_ENDPOINT_URL + "/users/", {
-    method: "POST",
+  return fetchWithAuth('/users/', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
   });
@@ -59,10 +58,10 @@ export interface UpdateUserParams {
 
 export async function updateUser(params: UpdateUserParams) {
   const { id, user } = params;
-  return fetch(API_ENDPOINT_URL + `/users/${id}`, {
-    method: "PATCH",
+  return fetchWithAuth(`/users/${id}`, {
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(user),
   });
@@ -91,10 +90,10 @@ interface UserDeleteParams {
 function deleteUser(params: UserDeleteParams) {
   const { userId } = params;
 
-  return fetch(API_ENDPOINT_URL + "/users/" + userId, {
-    method: "DELETE",
+  return fetchWithAuth(`/users/${userId}`, {
+    method: 'DELETE',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: null,
   });

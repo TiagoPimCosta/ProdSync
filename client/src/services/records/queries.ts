@@ -1,13 +1,12 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { PaginationParams } from "../services.Schemas";
-import { handleApiResponseError } from "@/src/utils/errors";
-import { parseQueryParams } from "@/src/utils/services";
-import { GetRecordsParamsSchema } from "@/src/schemas/records/getRecordsSchema";
-import { GetHourlyStatsRecordsParamsSchema } from "@/src/schemas/records/getHourlyStatsRecordsParamsSchema";
-import { GetDailyStatsRecordsParamsSchema } from "@/src/schemas/records/getDailyStatsRecordsParamsSchema";
-import { GetRecordsHistoryParamsSchema } from "@/src/schemas/records/getRecordsHistoryParamsSchema";
-
-const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { PaginationParams } from '../services.Schemas';
+import { handleApiResponseError } from '@/src/utils/errors';
+import { parseQueryParams } from '@/src/utils/services';
+import { GetRecordsParamsSchema } from '@/src/schemas/records/getRecordsSchema';
+import { GetHourlyStatsRecordsParamsSchema } from '@/src/schemas/records/getHourlyStatsRecordsParamsSchema';
+import { GetDailyStatsRecordsParamsSchema } from '@/src/schemas/records/getDailyStatsRecordsParamsSchema';
+import { GetRecordsHistoryParamsSchema } from '@/src/schemas/records/getRecordsHistoryParamsSchema';
+import { fetchWithAuth } from '@/src/lib/fetch';
 
 export interface UserObj {
   id: number;
@@ -43,22 +42,24 @@ export interface RecordObj {
   };
 }
 
-export type GetRecordsParams = GetRecordsParamsSchema & Partial<PaginationParams>;
+export type GetRecordsParams = GetRecordsParamsSchema &
+  Partial<PaginationParams>;
 export type GetRecordsResponse = ApiGetListResponse<RecordObj[]> & Pagination;
 
 export function getRecords(params: GetRecordsParams) {
   const queryParams = parseQueryParams(params);
-  const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
-  const url = API_ENDPOINT_URL + "/records?" + queryString;
+  const queryString = new URLSearchParams(
+    queryParams as Record<string, string>,
+  ).toString();
 
-  return fetch(url);
+  return fetchWithAuth(`/records?${queryString}`);
 }
 
 export function useGetRecords(params: GetRecordsParams) {
   const { page, size, user, machine, startPeriod, endPeriod } = params;
 
   return useQuery({
-    queryKey: ["records", page, size, user, machine, startPeriod, endPeriod],
+    queryKey: ['records', page, size, user, machine, startPeriod, endPeriod],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getRecords(params);
@@ -76,17 +77,18 @@ export type GetRecordsHistoryResponse = RecordObj[];
 
 export function getRecordsHistory(params: GetRecordsHistoryParams) {
   const queryParams = parseQueryParams(params);
-  const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
-  const url = API_ENDPOINT_URL + "/records/recordHistory?" + queryString;
+  const queryString = new URLSearchParams(
+    queryParams as Record<string, string>,
+  ).toString();
 
-  return fetch(url);
+  return fetchWithAuth(`/records/recordHistory?${queryString}`);
 }
 
 export function useGetRecordsHistory(params: GetRecordsHistoryParams) {
   const { userId } = params;
 
   return useQuery({
-    queryKey: ["records", "recordsHistory", userId],
+    queryKey: ['records', 'recordsHistory', userId],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getRecordsHistory(params);
@@ -99,19 +101,32 @@ export function useGetRecordsHistory(params: GetRecordsHistoryParams) {
   });
 }
 
-export function getHourlyStatsRecords(params: GetHourlyStatsRecordsParamsSchema) {
+export function getHourlyStatsRecords(
+  params: GetHourlyStatsRecordsParamsSchema,
+) {
   const queryParams = parseQueryParams(params);
-  const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
-  const url = API_ENDPOINT_URL + "/records/hourlyStats?" + queryString;
+  const queryString = new URLSearchParams(
+    queryParams as Record<string, string>,
+  ).toString();
 
-  return fetch(url);
+  return fetchWithAuth(`/records/hourlyStats?${queryString}`);
 }
 
-export function useGetHourlyStatsRecords(params: GetHourlyStatsRecordsParamsSchema) {
+export function useGetHourlyStatsRecords(
+  params: GetHourlyStatsRecordsParamsSchema,
+) {
   const { userId, lineId, machineId, startDate, endDate } = params;
 
   return useQuery({
-    queryKey: ["records", "hourlyStats", userId, lineId, machineId, startDate, endDate],
+    queryKey: [
+      'records',
+      'hourlyStats',
+      userId,
+      lineId,
+      machineId,
+      startDate,
+      endDate,
+    ],
     placeholderData: keepPreviousData,
     /* refetchInterval: 5000, */
     queryFn: async () => {
@@ -139,9 +154,9 @@ export interface DashboardKpisResponse {
 
 export function useGetDashboardKpis() {
   return useQuery({
-    queryKey: ["records", "kpis"],
+    queryKey: ['records', 'kpis'],
     queryFn: async () => {
-      const response = await fetch(API_ENDPOINT_URL + "/records/kpis");
+      const response = await fetchWithAuth('/records/kpis');
       return (await response.json()) as DashboardKpisResponse;
     },
     throwOnError: (error) => {
@@ -162,13 +177,22 @@ export function useGetAvgActionTime(params: GetAvgActionTimeParams) {
   const { machineId, userId, startDate, endDate } = params;
 
   return useQuery({
-    queryKey: ["records", "avgActionTime", machineId, userId, startDate, endDate],
+    queryKey: [
+      'records',
+      'avgActionTime',
+      machineId,
+      userId,
+      startDate,
+      endDate,
+    ],
     queryFn: async () => {
       const queryParams = parseQueryParams(params);
       const queryString = new URLSearchParams(
-        Object.entries(queryParams).map(([key, value]) => [key, String(value)])
+        Object.entries(queryParams).map(([key, value]) => [key, String(value)]),
       ).toString();
-      const response = await fetch(`${API_ENDPOINT_URL}/records/avgActionTime?${queryString}`);
+      const response = await fetchWithAuth(
+        `/records/avgActionTime?${queryString}`,
+      );
       return (await response.json()) as { avgSeconds: number | null };
     },
     throwOnError: (error) => {
@@ -180,17 +204,27 @@ export function useGetAvgActionTime(params: GetAvgActionTimeParams) {
 
 export function getDailyStatsRecords(params: GetDailyStatsRecordsParamsSchema) {
   const queryParams = parseQueryParams(params);
-  const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
-  const url = API_ENDPOINT_URL + "/records/dailyStats?" + queryString;
-
-  return fetch(url);
+  const queryString = new URLSearchParams(
+    queryParams as Record<string, string>,
+  ).toString();
+  return fetchWithAuth(`/records/dailyStats?${queryString}`);
 }
 
-export function useGetDailyStatsRecords(params: GetDailyStatsRecordsParamsSchema) {
+export function useGetDailyStatsRecords(
+  params: GetDailyStatsRecordsParamsSchema,
+) {
   const { userId, lineId, machineId, startDate, endDate } = params;
 
   return useQuery({
-    queryKey: ["records", "dailyStats", userId, lineId, machineId, startDate, endDate],
+    queryKey: [
+      'records',
+      'dailyStats',
+      userId,
+      lineId,
+      machineId,
+      startDate,
+      endDate,
+    ],
     placeholderData: keepPreviousData,
     /* refetchInterval: 5000, */
     queryFn: async () => {

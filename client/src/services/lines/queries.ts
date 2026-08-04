@@ -1,11 +1,10 @@
-import { GetLinesParamsSchema } from "@/src/schemas/lines/getLinesSchema";
-import { PaginationParams } from "../services.Schemas";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { parseQueryParams } from "@/src/utils/services";
-import { handleApiResponseError } from "@/src/utils/errors";
-import { GetLineParamsSchema } from "@/src/schemas/lines/getLineSchema";
-
-const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
+import { GetLinesParamsSchema } from '@/src/schemas/lines/getLinesSchema';
+import { PaginationParams } from '../services.Schemas';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { parseQueryParams } from '@/src/utils/services';
+import { handleApiResponseError } from '@/src/utils/errors';
+import { GetLineParamsSchema } from '@/src/schemas/lines/getLineSchema';
+import { fetchWithAuth } from '@/src/lib/fetch';
 
 interface Machine {
   id: number;
@@ -26,17 +25,18 @@ export type GetLinesResponse = ApiGetListResponse<LineObj[]> & Pagination;
 
 export function getLines(params: GetLinesParams) {
   const queryParams = parseQueryParams(params);
-  const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
-  const url = API_ENDPOINT_URL + "/lines?" + queryString;
+  const queryString = new URLSearchParams(
+    queryParams as Record<string, string>,
+  ).toString();
 
-  return fetch(url);
+  return fetchWithAuth(`/lines?${queryString}`);
 }
 
 export function useGetLines(params: GetLinesParams) {
   const { page, size, name, status } = params;
 
   return useQuery({
-    queryKey: ["lines", page, size, name, status],
+    queryKey: ['lines', page, size, name, status],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getLines(params);
@@ -53,15 +53,14 @@ export type GetLineParams = GetLineParamsSchema;
 export type GetLineResponse = LineObj;
 
 export function getLine(params: GetLineParams) {
-  const url = API_ENDPOINT_URL + "/lines/" + params.lineId;
-  return fetch(url);
+  return fetchWithAuth(`/lines/${params.lineId}`);
 }
 
 export function useGetLine(params: GetLineParams) {
   const { lineId } = params;
 
   return useQuery({
-    queryKey: ["line", lineId],
+    queryKey: ['line', lineId],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getLine(params);

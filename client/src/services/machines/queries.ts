@@ -1,12 +1,11 @@
-import { PaginationParams } from "../services.Schemas";
-import { keepPreviousData, queryOptions, useQuery } from "@tanstack/react-query";
-import { parseQueryParams } from "@/src/utils/services";
-import { handleApiResponseError } from "@/src/utils/errors";
-import { GetMachinesParamsSchema } from "@/src/schemas/machines/getMachinesSchema";
-import { GetUserMachinesParamsSchema } from "@/src/schemas/machines/getUserMachinesSchema";
-import { GetMachineParamsSchema } from "@/src/schemas/machines/getMachineSchema";
-
-const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
+import { PaginationParams } from '../services.Schemas';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { parseQueryParams } from '@/src/utils/services';
+import { handleApiResponseError } from '@/src/utils/errors';
+import { GetMachinesParamsSchema } from '@/src/schemas/machines/getMachinesSchema';
+import { GetUserMachinesParamsSchema } from '@/src/schemas/machines/getUserMachinesSchema';
+import { GetMachineParamsSchema } from '@/src/schemas/machines/getMachineSchema';
+import { fetchWithAuth } from '@/src/lib/fetch';
 
 export interface MachineObj {
   id: number;
@@ -34,22 +33,24 @@ export interface MachineObj {
   };
 }
 
-export type GetMachinesParams = GetMachinesParamsSchema & Partial<PaginationParams>;
+export type GetMachinesParams = GetMachinesParamsSchema &
+  Partial<PaginationParams>;
 export type GetMachinesResponse = ApiGetListResponse<MachineObj[]> & Pagination;
 
 export function getMachines(params: GetMachinesParams) {
   const queryParams = parseQueryParams(params);
-  const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
-  const url = API_ENDPOINT_URL + "/machines?" + queryString;
+  const queryString = new URLSearchParams(
+    queryParams as Record<string, string>,
+  ).toString();
 
-  return fetch(url);
+  return fetchWithAuth(`/machines?${queryString}`);
 }
 
 export function useGetMachines(params: GetMachinesParams) {
   const { page, size, name, line, user, status } = params;
 
   return useQuery({
-    queryKey: ["machines", page, size, name, line, user, status],
+    queryKey: ['machines', page, size, name, line, user, status],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getMachines(params);
@@ -66,15 +67,14 @@ export type GetMachineParams = GetMachineParamsSchema;
 export type GetMachineResponse = MachineObj;
 
 export function getMachine(params: GetMachineParams) {
-  const url = API_ENDPOINT_URL + "/machines/" + params.machineId;
-  return fetch(url);
+  return fetchWithAuth(`/machines/${params.machineId}`);
 }
 
 export function useGetMachine(params: GetMachineParams) {
   const { machineId } = params;
 
   return useQuery({
-    queryKey: ["machine", machineId],
+    queryKey: ['machine', machineId],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getMachine(params);
@@ -92,15 +92,14 @@ export type GetUserMachinesResponse = MachineObj[];
 
 export function getUserMachines(params: GetUserMachinesParams) {
   const { id } = params;
-  const url = API_ENDPOINT_URL + `/machines/user/${id}`;
-  return fetch(url);
+  return fetchWithAuth(`/machines/user/${id}`);
 }
 
 export function useGetUserMachines(params: GetUserMachinesParams) {
   const { id } = params;
 
   return useQuery({
-    queryKey: ["machines", "user", id],
+    queryKey: ['machines', 'user', id],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getUserMachines(params);

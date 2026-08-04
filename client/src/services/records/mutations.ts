@@ -1,7 +1,6 @@
 import { toastError, toastSuccess } from '@/src/utils/toasts';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
+import { fetchWithAuth } from '@/src/lib/fetch';
 
 export interface CreateRecordBodyParams {
   userId: number;
@@ -9,7 +8,7 @@ export interface CreateRecordBodyParams {
 }
 
 export async function createRecord(body: CreateRecordBodyParams) {
-  return fetch(API_ENDPOINT_URL + '/records/', {
+  return fetchWithAuth('/records/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -45,7 +44,7 @@ export function useCreateRecord() {
 }
 
 export async function deleteRecord(recordId: string) {
-  return fetch(`${API_ENDPOINT_URL}/records/${recordId}`, {
+  return fetchWithAuth(`/records/${recordId}`, {
     method: 'DELETE',
   });
 }

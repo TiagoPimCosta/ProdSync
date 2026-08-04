@@ -1,11 +1,10 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { PaginationParams } from "../services.Schemas";
-import { handleApiResponseError } from "@/src/utils/errors";
-import { parseQueryParams } from "@/src/utils/services";
-import { GetUsersParamsSchema } from "@/src/schemas/users/getUsersSchema";
-import { GetUserParamsSchema } from "@/src/schemas/users/getUserSchema";
-
-const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { PaginationParams } from '../services.Schemas';
+import { handleApiResponseError } from '@/src/utils/errors';
+import { parseQueryParams } from '@/src/utils/services';
+import { GetUsersParamsSchema } from '@/src/schemas/users/getUsersSchema';
+import { GetUserParamsSchema } from '@/src/schemas/users/getUserSchema';
+import { fetchWithAuth } from '@/src/lib/fetch';
 
 export interface UserObj {
   id: number;
@@ -26,17 +25,28 @@ export type GetUsersResponse = ApiGetListResponse<UserObj[]> & Pagination;
 
 export function getUsers(params: GetUsersParams) {
   const queryParams = parseQueryParams(params);
-  const queryString = new URLSearchParams(queryParams as Record<string, string>).toString();
-  const url = API_ENDPOINT_URL + "/users?" + queryString;
+  const queryString = new URLSearchParams(
+    queryParams as Record<string, string>,
+  ).toString();
 
-  return fetch(url);
+  return fetchWithAuth(`/users?${queryString}`);
 }
 
 export function useGetUsers(params: GetUsersParams) {
-  const { page, size, name, role, status, startAdmission, endAdmission } = params;
+  const { page, size, name, role, status, startAdmission, endAdmission } =
+    params;
 
   return useQuery({
-    queryKey: ["users", page, size, name, role, status, startAdmission, endAdmission],
+    queryKey: [
+      'users',
+      page,
+      size,
+      name,
+      role,
+      status,
+      startAdmission,
+      endAdmission,
+    ],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getUsers(params);
@@ -53,15 +63,14 @@ export type GetUserParams = GetUserParamsSchema;
 export type GetUserResponse = UserObj;
 
 export function getUser(params: GetUserParams) {
-  const url = API_ENDPOINT_URL + "/users/" + params.id;
-  return fetch(url);
+  return fetchWithAuth(`/users/${params.id}`);
 }
 
 export function useGetUser(params: GetUserParams) {
   const { id } = params;
 
   return useQuery({
-    queryKey: ["user", id],
+    queryKey: ['user', id],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getUser(params);
