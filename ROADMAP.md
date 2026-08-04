@@ -11,7 +11,7 @@ Priority: **P0** Blocking/Security | **P1** Important | **P2** Quality | **P3** 
 | ID                                                                 | Priority | Title                                        | Area            | Done |
 | ------------------------------------------------------------------ | -------- | -------------------------------------------- | --------------- | :--: |
 | [PS-43](#ps-43--hash-passwords)                                    | P0       | Hash passwords                               | server/auth     |  ✅  |
-| [PS-44](#ps-44--move-the-jwt-secret-out-of-source)                 | P0       | Move the JWT secret out of source            | server/auth     |      |
+| [PS-44](#ps-44--move-the-jwt-secret-out-of-source)                 | P0       | Move the JWT secret out of source            | server/auth     |  ✅  |
 | [PS-45](#ps-45--protect-every-controller-with-jwtguard)            | P0       | Protect every controller with `JwtGuard`     | server          |      |
 | [PS-46](#ps-46--add-role-based-authorization)                      | P0       | Add role-based authorization                 | server/auth     |      |
 | [PS-47](#ps-47--strip-password-from-jwt-payload-and-api-responses) | P0       | Strip `password` from payloads and responses | server/users    |      |
