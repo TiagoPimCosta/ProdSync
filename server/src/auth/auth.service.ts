@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthPayloadDto } from '../helpers/dtos/auth.dto';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { comparePassword } from 'src/utils/password';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +15,10 @@ export class AuthService {
     const user = await this.usersService.findOneByUsername(
       authPayloadDto.username,
     );
-    if (!user || user.password !== authPayloadDto.password || !user.status)
+    const passwordMatches =
+      !!user && (await comparePassword(authPayloadDto.password, user.password));
+
+    if (!user || !passwordMatches || !user.status)
       throw new UnauthorizedException('Wrong Credentials');
     const { password, ...data } = user;
     return { token: this.jwtService.sign(data) };

@@ -15,7 +15,8 @@ import {
 } from 'src/helpers/params/users.params';
 import { Pagination } from 'src/helpers/decorators/pagination.params.decorator';
 import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
+import { hashPassword } from 'src/utils/password';
 import { SuccessResponse } from 'src/types/SuccessResponse';
 
 @Injectable()
@@ -55,6 +56,7 @@ export class UsersService {
 
       const newUser = this.userRepository.create({
         ...createUserDetails,
+        password: await hashPassword(createUserDetails.password),
         admission: createUserDetails.admission ?? new Date(),
       });
 
@@ -198,7 +200,13 @@ export class UsersService {
       const user = await this.userRepository.findOneBy({ id });
       if (!user) throw new NotFoundException(`User with ID ${id} not found.`);
 
-      await this.userRepository.update({ id }, { ...updateUserDetails });
+      // Exclude password from the update if it's present
+      const { password, ...userDetails } =
+        updateUserDetails as UpdateUserParams & {
+          password?: string;
+        };
+
+      await this.userRepository.update({ id }, userDetails);
       return {
         statusCode: 200,
         message: `User with number ${user.idNumber} has been updated.`,

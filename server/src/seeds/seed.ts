@@ -1,9 +1,10 @@
-import 'dotenv/config';
+require('dotenv').config();
 import { Line } from 'src/helpers/typeorm/entities/line.entity';
 import { Machine } from 'src/helpers/typeorm/entities/machine.entity';
 import { Record } from 'src/helpers/typeorm/entities/record.entity';
 import { User } from 'src/helpers/typeorm/entities/user.entity';
 import { DataSource } from 'typeorm';
+import { hashPassword } from 'src/utils/password';
 
 const AppDataSource = new DataSource({
   type: 'mysql',
@@ -31,6 +32,8 @@ async function seed() {
 
   console.log('🌱 Seeding data...');
 
+  const seedPassword = await hashPassword('1234567');
+
   // Lines
   const line1 = lineRepo.create({ name: 'Line A' });
   const line2 = lineRepo.create({ name: 'Line B' });
@@ -42,7 +45,7 @@ async function seed() {
     name: 'Tiago Pimenta Costa',
     role: 'admin',
     username: 'Tiago',
-    password: '1234567',
+    password: seedPassword,
     cc: '12345678',
     nif: '987654321',
     phone: '912345678',
@@ -58,7 +61,7 @@ async function seed() {
       name: 'Maria Fátima Costa',
       role: 'user',
       username: 'Maria Costa',
-      password: '1234567',
+      password: seedPassword,
       cc: '22345678',
       nif: '887654321',
       phone: '912345679',
@@ -70,7 +73,7 @@ async function seed() {
       name: 'Maria Fátima Braga',
       role: 'user',
       username: 'Maria Braga',
-      password: '1234567',
+      password: seedPassword,
       cc: '32345678',
       nif: '787654321',
       phone: '912345680',

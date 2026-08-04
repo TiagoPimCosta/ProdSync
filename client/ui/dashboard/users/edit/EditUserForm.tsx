@@ -36,7 +36,6 @@ const EditUserForm = (props: EditUserFormProps) => {
       name: user?.name || undefined,
       role: user?.role || undefined,
       username: user?.username || undefined,
-      password: user?.password || undefined,
       cc: user?.cc || undefined,
       nif: user?.nif || undefined,
       email: user?.email || undefined,
@@ -104,19 +103,6 @@ const EditUserForm = (props: EditUserFormProps) => {
                 <FormLabel>Username</FormLabel>
                 <FormControl>
                   <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem className="flex-1">
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

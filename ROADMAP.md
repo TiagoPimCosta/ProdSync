@@ -10,7 +10,7 @@ Priority: **P0** Blocking/Security | **P1** Important | **P2** Quality | **P3** 
 
 | ID                                                                 | Priority | Title                                        | Area            | Done |
 | ------------------------------------------------------------------ | -------- | -------------------------------------------- | --------------- | :--: |
-| [PS-43](#ps-43--hash-passwords)                                    | P0       | Hash passwords                               | server/auth     |      |
+| [PS-43](#ps-43--hash-passwords)                                    | P0       | Hash passwords                               | server/auth     |  ✅  |
 | [PS-44](#ps-44--move-the-jwt-secret-out-of-source)                 | P0       | Move the JWT secret out of source            | server/auth     |      |
 | [PS-45](#ps-45--protect-every-controller-with-jwtguard)            | P0       | Protect every controller with `JwtGuard`     | server          |      |
 | [PS-46](#ps-46--add-role-based-authorization)                      | P0       | Add role-based authorization                 | server/auth     |      |
@@ -47,6 +47,8 @@ Priority: **P0** Blocking/Security | **P1** Important | **P2** Quality | **P3** 
 | [PS-77](#ps-77--extract-the-ui-strings)                            | P3       | Extract the UI strings                       | client          |      |
 | [PS-78](#ps-78--add-a-global-exception-filter)                     | P2       | Add a global exception filter                | server          |      |
 | [PS-79](#ps-79--gitignore-build-artifacts)                         | P3       | Gitignore build artifacts                    | ops             |      |
+| [PS-80](#ps-80--forgot-password-flow)                              | P2       | Forgot password flow                         | feature         |      |
+| [PS-81](#ps-81--enforce-pipes-on-every-route-parameter)            | P1       | Enforce pipes on every route parameter       | server          |      |
 
 ---
 
@@ -102,7 +104,9 @@ Both `server/config/typeorm.config.ts` and `server/src/seeds/seed.ts` use `synch
 ### PS-52 — Add request validation
 
 No `class-validator` anywhere; DTOs are plain classes carrying only `@ApiProperty()`. Add a global `ValidationPipe({ whitelist: true, transform: true })` and decorate DTOs (`@IsUUID`, `@IsEmail`, `@IsInt`, `@IsDateString`, `@Length`). Today `POST /api/users` accepts any shape.
-**Related:** PS-53.
+
+Note `whitelist: true` strips every property without a validation decorator, so a DTO that is only decorated with `@ApiProperty()` will arrive empty — every field needs a real validator in the same pass. Once this lands, the manual `password` strip in `UsersService.update` becomes redundant and should be deleted.
+**Related:** PS-53, PS-81.
 
 ### PS-53 — Fix the UUID/int ID mismatch
 
@@ -136,6 +140,19 @@ All entities use `@PrimaryGeneratedColumn('uuid')` (string), but `records.contro
 
 `Machine.cadence` is an unconstrained `number` with no unit. Document it (actions/hour?), validate `> 0`, and add what the dashboard KPIs actually need: shift target, nominal cycle time, downtime reason codes.
 **Depends on:** PS-51. **Related:** PS-60.
+
+### PS-81 — Enforce pipes on every route parameter
+
+PS-52 validates request **bodies**; nothing validates params and query strings, and the declared TypeScript types are erased at runtime, so a handler annotated `id: string` or `startAdmission?: Date` actually receives whatever the URL contained. Concretely: `@Query('startAdmission') startAdmission?: Date` in `users.controller.ts:122` hands `UsersService.findAll` a raw string that `dayjs` then happily parses as `Invalid Date`, and every `@Param('id') id: string` reaches the repository unchecked — only `ParseIntPipe` is imported anywhere today, and it's applied to the wrong kind of ID (see PS-53).
+
+Go through `records`, `users`, `machines`, `lines` and `options` controllers and bind a pipe to every parameter:
+
+- `@Param('id', ParseUUIDPipe)` for entity IDs (coordinate with PS-53, which converts the `parseInt` call sites).
+- `ParseIntPipe` / `ParseBoolPipe` / `ParseDatePipe` for numeric, boolean and date query params, with `new DefaultValuePipe(...)` or `{ optional: true }` where the param is optional.
+- Group the repeated stats filters (`startDate`, `endDate`, `userId`, `lineId`, `machineId` — declared five times across `records.controller.ts`) into a decorated query DTO validated by the same global pipe as PS-52, instead of pipes on individual arguments.
+
+Add `forbidNonWhitelisted: true` alongside `whitelist: true` once the DTOs are decorated, so an unexpected field is a 400 rather than a silent drop. The payoff is that the handler signatures stop lying: the type in the code becomes the type the code receives.
+**Depends on:** PS-52. **Related:** PS-53, PS-78.
 
 ---
 
@@ -173,6 +190,18 @@ Admin actions (user created/deactivated, record deleted, machine reassigned) lea
 
 The JWT expires in 1h and `client/middleware.ts` just redirects to login on expiry — an operator gets kicked out mid-shift. Add refresh tokens with rotation, or extend the session with a sliding cookie.
 **Related:** PS-50.
+
+### PS-80 — Forgot password flow
+
+Since PS-43 the stored password is a bcrypt hash, so nobody — not even an admin — can read or restore a forgotten one, and the password field was removed from the user edit form (`client/ui/dashboard/users/edit/EditUserForm.tsx`) because editing it there would have silently reset it. That leaves a locked-out operator with no recovery path. Add:
+
+- `POST /api/auth/forgot-password` taking an email/username, issuing a single-use, short-lived (~15 min) reset token stored hashed on a `PasswordReset` entity, and always returning 200 so the endpoint can't be used to enumerate accounts.
+- `POST /api/auth/reset-password` validating the token, setting the new password through `UsersService.update`, and invalidating every outstanding token for that user.
+- A "Esqueceu-se da password?" link on `client/ui/login-form.tsx` plus the request and reset pages.
+- Delivery: users already carry an `email` column, so email is the natural channel — needs an SMTP provider in config. If the plant has no mail for operators, fall back to an admin-triggered reset that produces a one-time link.
+
+Both new routes must be `@Public()` (PS-45) and throttled (PS-76), or they become an unauthenticated way to reset anyone's password.
+**Depends on:** PS-43. **Related:** PS-64, PS-76, PS-45.
 
 ---
 
