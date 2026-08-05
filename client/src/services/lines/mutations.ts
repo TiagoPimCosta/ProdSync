@@ -1,17 +1,16 @@
-import { toastError, toastSuccess } from "@/src/utils/toasts";
-import { useMutation } from "@tanstack/react-query";
-
-const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
+import { toastError, toastSuccess } from '@/src/utils/toasts';
+import { useMutation } from '@tanstack/react-query';
+import { fetchWithAuth } from '@/src/lib/fetch';
 
 export interface CreateLineBodyParams {
   name: string;
 }
 
 export async function createLine(body: CreateLineBodyParams) {
-  return fetch(API_ENDPOINT_URL + "/lines/", {
-    method: "POST",
+  return fetchWithAuth('/lines/', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
   });

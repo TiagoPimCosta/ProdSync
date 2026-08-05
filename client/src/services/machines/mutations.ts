@@ -1,7 +1,6 @@
-import { toastError, toastSuccess } from "@/src/utils/toasts";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
+import { toastError, toastSuccess } from '@/src/utils/toasts';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { fetchWithAuth } from '@/src/lib/fetch';
 
 export interface CreateMachineBodyParams {
   name: string;
@@ -10,10 +9,10 @@ export interface CreateMachineBodyParams {
 }
 
 export async function createMachine(body: CreateMachineBodyParams) {
-  return fetch(API_ENDPOINT_URL + "/machines/", {
-    method: "POST",
+  return fetchWithAuth('/machines/', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
   });
@@ -45,11 +44,14 @@ export interface UpdateMachineUserBodyParams {
   userId: string;
 }
 
-export async function updateMachineUser({ machineId, userId }: UpdateMachineUserBodyParams) {
-  return fetch(API_ENDPOINT_URL + `/machines/${machineId}/user`, {
-    method: "PATCH",
+export async function updateMachineUser({
+  machineId,
+  userId,
+}: UpdateMachineUserBodyParams) {
+  return fetchWithAuth(`/machines/${machineId}/user`, {
+    method: 'PATCH',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ userId }),
   });
@@ -74,7 +76,7 @@ export function useUpdateMachineUser(machineId: number) {
     },
     onSuccess: (data) => {
       toastSuccess(data.message);
-      queryClient.invalidateQueries({ queryKey: ["machine", machineId] });
+      queryClient.invalidateQueries({ queryKey: ['machine', machineId] });
     },
   });
 }

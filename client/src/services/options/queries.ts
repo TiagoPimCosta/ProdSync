@@ -1,17 +1,14 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { handleApiResponseError } from "@/src/utils/errors";
-
-const API_ENDPOINT_URL = process.env.NEXT_PUBLIC_API_ENDPOINT_URL;
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { handleApiResponseError } from '@/src/utils/errors';
+import { fetchWithAuth } from '@/src/lib/fetch';
 
 export function getUsersOptions() {
-  const url = API_ENDPOINT_URL + "/options/users";
-
-  return fetch(url);
+  return fetchWithAuth('/options/users');
 }
 
 export function useGetUsersOptions() {
   return useQuery({
-    queryKey: ["options", "users"],
+    queryKey: ['options', 'users'],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getUsersOptions();
@@ -25,14 +22,12 @@ export function useGetUsersOptions() {
 }
 
 export function getMachinesOptions() {
-  const url = API_ENDPOINT_URL + "/options/machines";
-
-  return fetch(url);
+  return fetchWithAuth('/options/machines');
 }
 
 export function useGetMachinesOptions() {
   return useQuery({
-    queryKey: ["options", "machines"],
+    queryKey: ['options', 'machines'],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getMachinesOptions();
@@ -46,14 +41,12 @@ export function useGetMachinesOptions() {
 }
 
 export function getLinesOptions() {
-  const url = API_ENDPOINT_URL + "/options/lines";
-
-  return fetch(url);
+  return fetchWithAuth('/options/lines');
 }
 
 export function useGetLinesOptions() {
   return useQuery({
-    queryKey: ["options", "lines"],
+    queryKey: ['options', 'lines'],
     placeholderData: keepPreviousData,
     queryFn: async () => {
       const response = await getLinesOptions();

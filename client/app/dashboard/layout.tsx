@@ -8,7 +8,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const token = await getAuthToken();
 
   if (token) {
-    user = await getUserStatus();
+    const response = await getUserStatus();
+
+    if (response.ok) {
+      user = (await response.json()) as UserStatusResponse;
+    }
   }
 
   return (

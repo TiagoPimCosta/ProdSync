@@ -1,9 +1,9 @@
 import { getAuthToken } from './cookies';
 
-export async function fetchWithAuth<T = any>(
+export async function fetchWithAuth(
   path: string,
   options: RequestInit = {},
-): Promise<T> {
+): Promise<Response> {
   const token = await getAuthToken();
 
   const baseUrl =
@@ -19,20 +19,8 @@ export async function fetchWithAuth<T = any>(
     ...(options.headers || {}),
   };
 
-  try {
-    const response = await fetch(url, {
-      ...options,
-      headers,
-    });
-
-    if (!response.ok) {
-      const errorBody = await response.text();
-      throw new Error(`Request failed: ${response.status} ${errorBody}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('fetchWithAuth error:', error);
-    throw error;
-  }
+  return fetch(url, {
+    ...options,
+    headers,
+  });
 }

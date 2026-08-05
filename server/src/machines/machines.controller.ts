@@ -153,7 +153,7 @@ export class MachinesController {
     }
   }
 
-  @Get('/user/:user')
+  @Get('/user/:userId')
   @ApiOperation({ summary: 'Get all machines from a user' })
   @ApiResponse({
     status: 200,
@@ -166,10 +166,10 @@ export class MachinesController {
     type: ErrorResponse,
   })
   findAllFromAUser(
-    @Param('user') user: string,
+    @Param('userId') userId: string,
   ): Promise<Machine[] | ErrorResponse> {
     try {
-      return this.machinesService.findAllByUserId(user);
+      return this.machinesService.findAllByUserId(userId);
     } catch (error) {
       throw error;
     }
