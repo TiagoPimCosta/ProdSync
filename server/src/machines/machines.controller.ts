@@ -24,6 +24,8 @@ import {
   PaginationParams,
 } from 'src/helpers/decorators/pagination.params.decorator';
 import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/roles.enum';
 
 @ApiTags('Machines')
 @Controller('machines')
@@ -31,6 +33,7 @@ export class MachinesController {
   constructor(private readonly machinesService: MachinesService) {}
 
   @Post()
+  @Roles(Role.Admin)
   @ApiOperation({ summary: 'Create a new machine' })
   @ApiResponse({
     status: 201,
@@ -176,6 +179,7 @@ export class MachinesController {
   }
 
   @Patch(':id')
+  @Roles(Role.Admin)
   @ApiOperation({ summary: 'Update a machine by ID' })
   @ApiResponse({
     status: 200,
@@ -203,6 +207,7 @@ export class MachinesController {
   }
 
   @Delete(':id')
+  @Roles(Role.Admin)
   @ApiOperation({ summary: 'Delete a machine by ID' })
   @ApiResponse({
     status: 200,
@@ -230,6 +235,7 @@ export class MachinesController {
   }
 
   @Patch(':id/user')
+  @Roles(Role.Admin)
   @ApiOperation({ summary: 'Update machine user' })
   @ApiResponse({
     status: 200,

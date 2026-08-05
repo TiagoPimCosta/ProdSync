@@ -10,6 +10,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { getJwtSecret, JWT_EXPIRES_IN } from './jwt.config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtGuard } from './guards/jwt.guards';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   controllers: [AuthController],
@@ -20,6 +21,10 @@ import { JwtGuard } from './guards/jwt.guards';
     {
       provide: APP_GUARD,
       useClass: JwtGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
   imports: [

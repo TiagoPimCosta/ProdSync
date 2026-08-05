@@ -23,9 +23,12 @@ import {
 import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
 import { SuccessResponse } from 'src/types/SuccessResponse';
 import { User } from 'src/helpers/typeorm/entities/user.entity';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/roles.enum';
 
 @ApiTags('Users')
 @Controller('users')
+@Roles(Role.Admin)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
