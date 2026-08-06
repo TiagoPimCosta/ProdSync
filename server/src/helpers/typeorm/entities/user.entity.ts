@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Record } from './record.entity';
 import { Machine } from './machine.entity';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'users' })
 export class User {
@@ -25,8 +25,8 @@ export class User {
   @ApiProperty()
   username: string;
 
-  @Column()
-  @ApiProperty()
+  @Column({ select: false })
+  @ApiHideProperty()
   password: string;
 
   @Column({ unique: true })
