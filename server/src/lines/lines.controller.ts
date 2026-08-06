@@ -23,6 +23,8 @@ import {
   PaginationParams,
 } from 'src/helpers/decorators/pagination.params.decorator';
 import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/roles.enum';
 
 @ApiTags('Lines')
 @Controller('lines')
@@ -30,6 +32,7 @@ export class LinesController {
   constructor(private readonly linesService: LinesService) {}
 
   @Post()
+  @Roles(Role.Admin)
   @ApiOperation({ summary: 'Create a new line' })
   @ApiResponse({
     status: 201,
@@ -133,6 +136,7 @@ export class LinesController {
   }
 
   @Patch(':id')
+  @Roles(Role.Admin)
   @ApiOperation({ summary: 'Update a line by ID' })
   @ApiResponse({
     status: 200,
@@ -160,6 +164,7 @@ export class LinesController {
   }
 
   @Delete(':id')
+  @Roles(Role.Admin)
   @ApiOperation({ summary: 'Delete a line by ID' })
   @ApiResponse({
     status: 200,

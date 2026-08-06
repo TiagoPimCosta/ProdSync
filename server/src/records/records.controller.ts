@@ -19,6 +19,8 @@ import {
 } from 'src/helpers/decorators/pagination.params.decorator';
 import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
 import { SuccessResponse } from 'src/types/SuccessResponse';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/roles.enum';
 
 @ApiTags('Records')
 @Controller('records')
@@ -144,6 +146,7 @@ export class RecordsController {
   }
 
   @Delete(':id')
+  @Roles(Role.Admin)
   @ApiOperation({ summary: 'Delete a line by ID' })
   @ApiResponse({
     status: 200,
