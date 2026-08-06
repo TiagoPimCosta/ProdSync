@@ -25,7 +25,10 @@ async function hashExistingPasswords() {
   await AppDataSource.initialize();
   const userRepo = AppDataSource.getRepository(User);
 
-  const users = await userRepo.find();
+  const users = await userRepo
+    .createQueryBuilder('user')
+    .addSelect('user.password')
+    .getMany();
   let hashed = 0;
 
   for (const user of users) {

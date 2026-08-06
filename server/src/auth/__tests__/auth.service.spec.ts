@@ -46,6 +46,30 @@ describe('AuthService', () => {
     );
   });
 
+  it('signs only the allowlisted claims', async () => {
+    findOneByUsername.mockResolvedValue(
+      await buildUser({
+        idNumber: 1,
+        name: 'Tiago Pimenta Costa',
+        cc: '12345678',
+        nif: '987654321',
+        phone: '912345678',
+        email: 'admin@factory.com',
+      }),
+    );
+
+    await service.validateUser({ username: 'Tiago', password: '1234567' });
+
+    expect(sign).toHaveBeenCalledWith({
+      id: 'a3f1d0c2-0000-4000-8000-000000000001',
+      idNumber: 1,
+      name: 'Tiago Pimenta Costa',
+      username: 'Tiago',
+      role: 'admin',
+      status: true,
+    });
+  });
+
   it('rejects the plaintext-equals-hash shortcut', async () => {
     const user = await buildUser();
     findOneByUsername.mockResolvedValue(user);

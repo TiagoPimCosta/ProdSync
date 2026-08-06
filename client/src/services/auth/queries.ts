@@ -3,17 +3,12 @@ import { handleApiResponseError } from '@/src/utils/errors';
 import { fetchWithAuth } from '@/src/lib/fetch';
 
 export type UserStatusResponse = {
-  id: number;
+  id: string;
   idNumber: number;
   name: string;
   role: string;
   username: string;
-  cc: string;
-  nif: string;
-  phone: string;
-  email: string;
-  isActive: boolean;
-  admission: string;
+  status: boolean;
   iat: number;
   exp: number;
 };

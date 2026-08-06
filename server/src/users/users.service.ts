@@ -143,17 +143,12 @@ export class UsersService {
 
   async findOneByUsername(username: string) {
     try {
-      const user = this.userRepository.findOneBy({ username });
-      if (!user)
-        throw new NotFoundException(
-          `User with Username ${username} not found.`,
-        );
-
-      return user;
+      return await this.userRepository
+        .createQueryBuilder('user')
+        .addSelect('user.password')
+        .where('user.username = :username', { username })
+        .getOne();
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
       throw new InternalServerErrorException(
         'An error occurred while fetching the user.',
       );
