@@ -90,6 +90,9 @@ describe('global RolesGuard', () => {
       .set('Authorization', `Bearer ${tokenFor('user')}`)
       .expect(403));
 
+  it('401s an unauthenticated controller-level @Roles route', () =>
+    request(app.getHttpServer()).get('/c/anything').expect(401));
+
   it('leaves @Public routes open', () =>
     request(app.getHttpServer()).get('/t/public').expect(200));
 
