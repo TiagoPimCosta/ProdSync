@@ -15,8 +15,7 @@ const ActionButton = (props: ActionButtonProps) => {
   const { isPending } = createRecord;
 
   const handleClick = async () => {
-    const data = { userId: machine.user.id, machineId: machine.id };
-    await createRecord.mutateAsync(data);
+    await createRecord.mutateAsync({ machineId: machine.id });
   };
 
   return (
