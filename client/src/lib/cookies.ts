@@ -1,21 +1,25 @@
-"use server";
+'use server';
 
-import { cookies } from "next/headers";
+import { cookies } from 'next/headers';
+
+const AUTH_TOKEN_MAX_AGE = 60 * 60;
 
 export const setAuthToken = (token: string): void => {
   cookies().set({
-    name: "authToken",
+    name: 'authToken',
     value: token,
     httpOnly: true,
-    sameSite: "strict",
-    //secure: true, TODO: Make this available to production time
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+    maxAge: AUTH_TOKEN_MAX_AGE,
   });
 };
 
 export const getAuthToken = async (): Promise<string | undefined> => {
-  return cookies().get("authToken")?.value;
+  return cookies().get('authToken')?.value;
 };
 
 export const removeAuthToken = async (): Promise<void> => {
-  cookies().delete("authToken");
+  cookies().delete({ name: 'authToken', path: '/' });
 };
