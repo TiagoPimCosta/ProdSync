@@ -16,7 +16,7 @@ Priority: **P0** Blocking/Security | **P1** Important | **P2** Quality | **P3** 
 | [PS-46](#ps-46--add-role-based-authorization)                      | P0       | Add role-based authorization                 | server/auth     |  ✅  |
 | [PS-47](#ps-47--strip-password-from-jwt-payload-and-api-responses) | P0       | Strip `password` from payloads and responses | server/users    |  ✅  |
 | [PS-48](#ps-48--enforce-ownership-on-record-creation)              | P0       | Enforce ownership on record creation         | server/records  |  ✅  |
-| [PS-49](#ps-49--tighten-cors)                                      | P0       | Tighten CORS                                 | server          |      |
+| [PS-49](#ps-49--tighten-cors)                                      | P0       | Tighten CORS                                 | server          |  ✅  |
 | [PS-50](#ps-50--secure-the-auth-cookie)                            | P0       | Secure the auth cookie                       | client          |      |
 | [PS-51](#ps-51--replace-synchronize-true-with-migrations)          | P1       | Replace `synchronize: true` with migrations  | server/db       |      |
 | [PS-52](#ps-52--add-request-validation)                            | P1       | Add request validation                       | server          |      |
