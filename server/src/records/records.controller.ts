@@ -21,6 +21,7 @@ import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
 import { SuccessResponse } from 'src/types/SuccessResponse';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/roles.enum';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
 @ApiTags('Records')
 @Controller('records')
@@ -31,7 +32,8 @@ export class RecordsController {
   @ApiOperation({ summary: 'Create a new record' })
   @ApiResponse({
     status: 201,
-    description: 'Record submitted for machine {machineId} by user {userId}.',
+    description:
+      'Record submitted for machine {machineId} by the authenticated user.',
   })
   @ApiResponse({
     status: 400,
@@ -53,9 +55,15 @@ export class RecordsController {
     description: 'Internal Server Error',
     type: ErrorResponse,
   })
-  async create(@Body() createRecordDto: CreateRecordRequestDto) {
+  async create(
+    @Body() createRecordDto: CreateRecordRequestDto,
+    @CurrentUser('id') userId: string,
+  ) {
     try {
-      return await this.recordsService.create(createRecordDto);
+      return await this.recordsService.create({
+        machineId: createRecordDto.machineId,
+        userId,
+      });
     } catch (error) {
       throw error;
     }

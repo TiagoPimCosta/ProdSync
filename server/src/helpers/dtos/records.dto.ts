@@ -1,4 +1,9 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 export class CreateRecordRequestDto {
-  userId: string;
+  @ApiProperty({
+    description:
+      'Machine the action was performed on. The user is derived from the authenticated JWT.',
+  })
   machineId: string;
 }
