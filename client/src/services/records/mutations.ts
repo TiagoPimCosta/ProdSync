@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchWithAuth } from '@/src/lib/fetch';
 
 export interface CreateRecordBodyParams {
-  userId: number;
   machineId: number;
 }
 
@@ -34,10 +33,10 @@ export function useCreateRecord() {
     onError: (error) => {
       toastError(error.message);
     },
-    onSuccess: (data, body) => {
+    onSuccess: (data) => {
       toastSuccess(data.message);
       queryClient.invalidateQueries({
-        queryKey: ['records', 'recordsHistory', body.userId.toString()],
+        queryKey: ['records', 'recordsHistory'],
       });
     },
   });
