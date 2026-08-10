@@ -20,7 +20,16 @@ export class AuthService {
 
     if (!user || !passwordMatches || !user.status)
       throw new UnauthorizedException('Wrong Credentials');
-    const { password, ...data } = user;
-    return { token: this.jwtService.sign(data) };
+
+    const payload = {
+      id: user.id,
+      idNumber: user.idNumber,
+      name: user.name,
+      username: user.username,
+      role: user.role,
+      status: user.status,
+    };
+
+    return { token: this.jwtService.sign(payload) };
   }
 }

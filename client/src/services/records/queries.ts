@@ -14,7 +14,6 @@ export interface UserObj {
   name: string;
   role: string;
   username: string;
-  password: string;
   cc: string;
   nif: string;
   phone: string;
