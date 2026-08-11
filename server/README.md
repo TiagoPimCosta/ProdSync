@@ -45,6 +45,45 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Database migrations
+
+The schema is owned by the migrations in [`src/migrations`](src/migrations); `synchronize` is off
+by default so TypeORM can never silently drop or alter a column. Connection
+options for the app, the CLI and the seed scripts all come from
+[`src/config/data-source.options.ts`](src/config/data-source.options.ts).
+
+```bash
+# apply pending migrations
+$ pnpm migration:run
+
+# list applied / pending migrations
+$ pnpm migration:show
+
+# roll the last migration back
+$ pnpm migration:revert
+
+# after changing an entity — diff it against the database and write a migration
+$ pnpm migration:generate src/migrations/AddSomething
+
+# hand-written migration (data backfills, etc.)
+$ pnpm migration:create src/migrations/BackfillSomething
+```
+
+`migration:generate` diffs the entities against the database the env points at,
+so run it with an up-to-date database (`pnpm migration:run` first), otherwise
+the diff will include changes that are already migrated.
+
+Relevant env vars:
+
+| Variable            | Default | Purpose                                                                     |
+| ------------------- | ------- | --------------------------------------------------------------------------- |
+| `DB_RUN_MIGRATIONS` | `true`  | Apply pending migrations at boot. Set to `false` to migrate as a release step. |
+| `DB_SYNCHRONIZE`    | `false` | Local-only escape hatch. Ignored when `NODE_ENV=production`.                 |
+
+The `InitialSchema` migration is a baseline of what `synchronize: true` used to
+create, so a database that predates migrations can adopt them: the migration
+detects the existing tables, skips the DDL and just records itself as applied.
+
 ## Test
 
 ```bash

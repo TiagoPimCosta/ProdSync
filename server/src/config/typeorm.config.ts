@@ -3,19 +3,20 @@ import {
   TypeOrmModuleAsyncOptions,
   TypeOrmModuleOptions,
 } from '@nestjs/typeorm';
+import { buildDataSourceOptions } from './data-source.options';
 
 export default class TypeOrmConfig {
   static getOrmConfig(configService: ConfigService): TypeOrmModuleOptions {
-    return {
-      type: 'mysql',
-      host: configService.get('DB_HOST'),
-      port: configService.get('DB_PORT'),
-      username: configService.get('DB_USERNAME'),
-      password: configService.get('DB_PASSWORD'),
-      database: configService.get('DB_DATABASE'),
-      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      synchronize: true,
-    };
+    return buildDataSourceOptions({
+      DB_HOST: configService.get('DB_HOST'),
+      DB_PORT: configService.get('DB_PORT'),
+      DB_USERNAME: configService.get('DB_USERNAME'),
+      DB_PASSWORD: configService.get('DB_PASSWORD'),
+      DB_DATABASE: configService.get('DB_DATABASE'),
+      NODE_ENV: configService.get('NODE_ENV'),
+      DB_SYNCHRONIZE: configService.get('DB_SYNCHRONIZE'),
+      DB_RUN_MIGRATIONS: configService.get('DB_RUN_MIGRATIONS'),
+    });
   }
 }
 
