@@ -195,13 +195,7 @@ export class UsersService {
       const user = await this.userRepository.findOneBy({ id });
       if (!user) throw new NotFoundException(`User with ID ${id} not found.`);
 
-      // Exclude password from the update if it's present
-      const { password, ...userDetails } =
-        updateUserDetails as UpdateUserParams & {
-          password?: string;
-        };
-
-      await this.userRepository.update({ id }, userDetails);
+      await this.userRepository.update({ id }, updateUserDetails);
       return {
         statusCode: 200,
         message: `User with number ${user.idNumber} has been updated.`,
