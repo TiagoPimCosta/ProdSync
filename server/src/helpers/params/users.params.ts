@@ -8,7 +8,7 @@ export type CreateUserParams = {
   nif: string;
   phone: string;
   email: string;
-  admission: Date;
+  admission?: Date;
 };
 
 export type UpdateUserParams = {
@@ -20,6 +20,6 @@ export type UpdateUserParams = {
   nif?: string;
   phone?: string;
   email?: string;
-  isActive?: boolean;
+  status?: boolean;
   admission?: Date;
 };
