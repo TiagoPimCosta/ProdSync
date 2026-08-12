@@ -1,34 +1,23 @@
-require('dotenv').config();
 import { Line } from 'src/helpers/typeorm/entities/line.entity';
 import { Machine } from 'src/helpers/typeorm/entities/machine.entity';
 import { Record } from 'src/helpers/typeorm/entities/record.entity';
 import { User } from 'src/helpers/typeorm/entities/user.entity';
-import { DataSource } from 'typeorm';
+import AppDataSource from 'src/config/data-source';
 import { hashPassword } from 'src/utils/password';
-
-const AppDataSource = new DataSource({
-  type: 'mysql',
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT || '3306'),
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-  entities: [User, Line, Machine, Record],
-  synchronize: true,
-});
 
 async function seed() {
   await AppDataSource.initialize();
+  await AppDataSource.runMigrations();
   const userRepo = AppDataSource.getRepository(User);
   const lineRepo = AppDataSource.getRepository(Line);
   const machineRepo = AppDataSource.getRepository(Machine);
   const recordRepo = AppDataSource.getRepository(Record);
 
   console.log('🔁 Clearing data...');
-  await recordRepo.delete({});
-  await machineRepo.delete({});
-  await userRepo.delete({});
-  await lineRepo.delete({});
+  await recordRepo.deleteAll();
+  await machineRepo.deleteAll();
+  await userRepo.deleteAll();
+  await lineRepo.deleteAll();
 
   console.log('🌱 Seeding data...');
 
