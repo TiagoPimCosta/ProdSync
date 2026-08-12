@@ -14,10 +14,10 @@ async function seed() {
   const recordRepo = AppDataSource.getRepository(Record);
 
   console.log('🔁 Clearing data...');
-  await recordRepo.delete({});
-  await machineRepo.delete({});
-  await userRepo.delete({});
-  await lineRepo.delete({});
+  await recordRepo.deleteAll();
+  await machineRepo.deleteAll();
+  await userRepo.deleteAll();
+  await lineRepo.deleteAll();
 
   console.log('🌱 Seeding data...');
 
