@@ -20,7 +20,7 @@ Priority: **P0** Blocking/Security | **P1** Important | **P2** Quality | **P3** 
 | [PS-50](#ps-50--secure-the-auth-cookie)                            | P0       | Secure the auth cookie                       | client          |  ✅  |
 | [PS-51](#ps-51--replace-synchronize-true-with-migrations)          | P1       | Replace `synchronize: true` with migrations  | server/db       |  ✅  |
 | [PS-52](#ps-52--add-request-validation)                            | P1       | Add request validation                       | server          |  ✅  |
-| [PS-53](#ps-53--fix-the-uuidint-id-mismatch)                       | P1       | Fix the UUID/int ID mismatch                 | server/records  |      |
+| [PS-53](#ps-53--fix-the-uuidint-id-mismatch)                       | P1       | Fix the UUID/int ID mismatch                 | server/records  |  ✅  |
 | [PS-54](#ps-54--fix-route-ordering-in-recordscontroller)           | P1       | Fix route ordering in `RecordsController`    | server/records  |      |
 | [PS-55](#ps-55--remove-hardcoded-line-ids-from-the-client)         | P1       | Remove hardcoded line IDs from the client    | client          |      |
 | [PS-56](#ps-56--add-db-indexes-for-reporting-queries)              | P1       | Add DB indexes for reporting queries         | server/db       |      |
