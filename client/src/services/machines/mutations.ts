@@ -40,7 +40,7 @@ export function useCreateMachine() {
 }
 
 export interface UpdateMachineUserBodyParams {
-  machineId: number;
+  machineId: string;
   userId: string;
 }
 
@@ -57,7 +57,7 @@ export async function updateMachineUser({
   });
 }
 
-export function useUpdateMachineUser(machineId: number) {
+export function useUpdateMachineUser(machineId: string) {
   const queryClient = useQueryClient();
 
   return useMutation<ApiResponseMessage, Error, string>({

@@ -7,14 +7,14 @@ import { GetLineParamsSchema } from '@/src/schemas/lines/getLineSchema';
 import { fetchWithAuth } from '@/src/lib/fetch';
 
 interface Machine {
-  id: number;
+  id: string;
   cadence: number;
   name: string;
   status: boolean;
 }
 
 export interface LineObj {
-  id: number;
+  id: string;
   name: string;
   status: boolean;
   createdAt: string;

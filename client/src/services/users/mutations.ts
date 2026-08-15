@@ -52,7 +52,7 @@ export interface UpdateUserBody {
 }
 
 export interface UpdateUserParams {
-  id: number;
+  id: string;
   user: UpdateUserBody;
 }
 
@@ -84,7 +84,7 @@ export function useUpdateUser() {
 }
 
 interface UserDeleteParams {
-  userId: number;
+  userId: string;
 }
 
 function deleteUser(params: UserDeleteParams) {

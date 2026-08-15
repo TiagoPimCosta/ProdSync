@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchWithAuth } from '@/src/lib/fetch';
 
 export interface CreateRecordBodyParams {
-  machineId: number;
+  machineId: string;
 }
 
 export async function createRecord(body: CreateRecordBodyParams) {

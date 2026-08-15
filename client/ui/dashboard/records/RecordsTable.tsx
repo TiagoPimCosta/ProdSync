@@ -81,8 +81,8 @@ export default function RecordsTable() {
 
   const recordDelete = useDeleteRecord();
 
-  const handleDeleteRecord = async (id: number) => {
-    await recordDelete.mutateAsync(String(id));
+  const handleDeleteRecord = async (id: string) => {
+    await recordDelete.mutateAsync(id);
   };
 
   const handleChangePage = (page: number) => {
