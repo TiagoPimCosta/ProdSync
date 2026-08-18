@@ -138,52 +138,6 @@ export class RecordsController {
     }
   }
 
-  @Get('/user/:userId')
-  findAllFromUser(@Param('userId', ParseUUIDPipe) userId: string) {
-    try {
-      return this.recordsService.findAllFromUser(userId);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  @Get('/machine/:machineId')
-  findAllFromMachine(@Param('machineId', ParseUUIDPipe) machineId: string) {
-    try {
-      return this.recordsService.findAllFromMachine(machineId);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  @Delete(':id')
-  @Roles(Role.Admin)
-  @ApiOperation({ summary: 'Delete a line by ID' })
-  @ApiResponse({
-    status: 200,
-    description: 'Line successfully deleted',
-    type: SuccessResponse,
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Line not found',
-    type: ErrorResponse,
-  })
-  @ApiResponse({
-    status: 500,
-    description: 'Internal Server Error',
-    type: ErrorResponse,
-  })
-  async delete(
-    @Param('id', ParseUUIDPipe) id: string,
-  ): Promise<SuccessResponse | ErrorResponse> {
-    try {
-      return this.recordsService.delete(id);
-    } catch (error) {
-      throw error;
-    }
-  }
-
   @Get('avgActionTime')
   async getAvgActionTime(
     @Query('machineId', ParseUUIDPipe) machineId: string,
@@ -248,5 +202,51 @@ export class RecordsController {
       lineId,
       machineId,
     );
+  }
+
+  @Get('/user/:userId')
+  findAllFromUser(@Param('userId', ParseUUIDPipe) userId: string) {
+    try {
+      return this.recordsService.findAllFromUser(userId);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Get('/machine/:machineId')
+  findAllFromMachine(@Param('machineId', ParseUUIDPipe) machineId: string) {
+    try {
+      return this.recordsService.findAllFromMachine(machineId);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Delete(':id')
+  @Roles(Role.Admin)
+  @ApiOperation({ summary: 'Delete a line by ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'Line successfully deleted',
+    type: SuccessResponse,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Line not found',
+    type: ErrorResponse,
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+    type: ErrorResponse,
+  })
+  async delete(
+    @Param('id', ParseUUIDPipe) id: string,
+  ): Promise<SuccessResponse | ErrorResponse> {
+    try {
+      return this.recordsService.delete(id);
+    } catch (error) {
+      throw error;
+    }
   }
 }
