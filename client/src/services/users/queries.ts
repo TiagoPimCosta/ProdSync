@@ -7,7 +7,7 @@ import { GetUserParamsSchema } from '@/src/schemas/users/getUserSchema';
 import { fetchWithAuth } from '@/src/lib/fetch';
 
 export interface UserObj {
-  id: number;
+  id: string;
   idNumber: number;
   name: string;
   role: string;

@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import { useSearchParams } from "next/navigation";
 
 interface MachineAvgActionTimeKpiProps {
-  machineId: number;
+  machineId: string;
 }
 
 function formatDuration(seconds: number | null): string {

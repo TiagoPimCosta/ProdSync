@@ -36,7 +36,7 @@ const MachineOverview = ({ machine }: MachineOverviewProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data: usersOptions } = useGetUsersOptions();
-  const { mutate: updateMachineUser, isPending } = useUpdateMachineUser(machine?.id ?? 0);
+  const { mutate: updateMachineUser, isPending } = useUpdateMachineUser(machine?.id ?? '');
 
   if (!machine) return <div>line Not Found</div>;
 

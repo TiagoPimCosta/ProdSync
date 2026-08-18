@@ -21,7 +21,7 @@ export default function LineCard(props: LineCardProps) {
   const { line } = props;
   const { push } = useRouter();
 
-  const handleOpenLineDetails = (id: number) => {
+  const handleOpenLineDetails = (id: string) => {
     push(`/dashboard/lines/${id}`);
   };
 

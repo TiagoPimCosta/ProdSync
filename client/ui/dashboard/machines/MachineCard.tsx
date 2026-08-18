@@ -13,7 +13,7 @@ export default function MachineCard(props: MachineCardProps) {
   const { machine } = props;
   const { push } = useRouter();
 
-  const handleOpenMachineDetails = (id: number) => {
+  const handleOpenMachineDetails = (id: string) => {
     push(`/dashboard/machines/${id}`);
   };
 

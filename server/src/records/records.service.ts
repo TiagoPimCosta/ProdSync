@@ -13,7 +13,7 @@ import { Record } from 'src/helpers/typeorm/entities/record.entity';
 import { User } from 'src/helpers/typeorm/entities/user.entity';
 import { Machine } from 'src/helpers/typeorm/entities/machine.entity';
 import { Pagination } from 'src/helpers/decorators/pagination.params.decorator';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import { PaginatedResource } from 'src/helpers/dtos/paginatedResource.dto';
 import { ErrorResponse } from 'src/types/ErrorResponse';
 import { SuccessResponse } from 'src/types/SuccessResponse';
@@ -71,11 +71,14 @@ export class RecordsService {
 
   async findAll(
     { page, limit, size, offset }: Pagination,
-    user?: number,
-    machine?: number,
+    user?: string,
+    machine?: string,
     startPeriod?: Date,
     endPeriod?: Date,
-  ): Promise<PaginatedResource<Record & { timeSincePrevious: number | null }> | ErrorResponse> {
+  ): Promise<
+    | PaginatedResource<Record & { timeSincePrevious: number | null }>
+    | ErrorResponse
+  > {
     try {
       const queryBuilder = this.recordRepository.createQueryBuilder('record');
       queryBuilder.leftJoinAndSelect('record.user', 'user');
@@ -176,7 +179,7 @@ export class RecordsService {
     }
   }
 
-  async getRecordsHistory(userId: number) {
+  async getRecordsHistory(userId: string) {
     const records = await this.recordRepository
       .createQueryBuilder('record')
       .leftJoinAndSelect('record.machine', 'machine')
@@ -192,9 +195,9 @@ export class RecordsService {
   async getHourlyRecordCounts(
     startDate: string,
     endDate: string,
-    userId?: number,
-    lineId?: number,
-    machineId?: number,
+    userId?: string,
+    lineId?: string,
+    machineId?: string,
   ) {
     const query = this.recordRepository
       .createQueryBuilder('record')
@@ -248,9 +251,9 @@ export class RecordsService {
   async getDailyRecordCounts(
     startDate: string,
     endDate: string,
-    userId?: number,
-    lineId?: number,
-    machineId?: number,
+    userId?: string,
+    lineId?: string,
+    machineId?: string,
   ) {
     const query = this.recordRepository
       .createQueryBuilder('record')
@@ -302,8 +305,8 @@ export class RecordsService {
   }
 
   async getAvgActionTime(
-    machineId: number,
-    userId?: number,
+    machineId: string,
+    userId?: string,
     startDate?: string,
     endDate?: string,
   ): Promise<{ avgSeconds: number | null }> {
@@ -347,7 +350,10 @@ export class RecordsService {
     const yesterdayEnd = dayjs().subtract(1, 'day').endOf('day').toDate();
     const monthStart = dayjs().startOf('month').toDate();
     const monthEnd = dayjs().endOf('day').toDate();
-    const lastMonthStart = dayjs().subtract(1, 'month').startOf('month').toDate();
+    const lastMonthStart = dayjs()
+      .subtract(1, 'month')
+      .startOf('month')
+      .toDate();
     const lastMonthEnd = dayjs().subtract(1, 'month').endOf('month').toDate();
 
     const [

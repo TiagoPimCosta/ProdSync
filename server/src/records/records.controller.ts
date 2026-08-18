@@ -4,7 +4,7 @@ import {
   Post,
   Body,
   Param,
-  ParseIntPipe,
+  ParseUUIDPipe,
   Query,
   Delete,
 } from '@nestjs/common';
@@ -84,14 +84,14 @@ export class RecordsController {
   @ApiQuery({
     name: 'user',
     required: false,
-    description: 'Filter by user',
-    type: Number,
+    description: 'Filter by user (UUID)',
+    type: String,
   })
   @ApiQuery({
     name: 'machine',
     required: false,
-    description: 'Filter by machine',
-    type: Number,
+    description: 'Filter by machine (UUID)',
+    type: String,
   })
   @ApiQuery({
     name: 'startPeriod',
@@ -117,11 +117,14 @@ export class RecordsController {
   })
   findAll(
     @PaginationParams() paginationParams: Pagination,
-    @Query('user') user?: number,
-    @Query('machine') machine?: number,
+    @Query('user', new ParseUUIDPipe({ optional: true })) user?: string,
+    @Query('machine', new ParseUUIDPipe({ optional: true })) machine?: string,
     @Query('startPeriod') startPeriod?: Date,
     @Query('endPeriod') endPeriod?: Date,
-  ): Promise<PaginatedResource<Partial<Record> & { timeSincePrevious: number | null }> | ErrorResponse> {
+  ): Promise<
+    | PaginatedResource<Partial<Record> & { timeSincePrevious: number | null }>
+    | ErrorResponse
+  > {
     try {
       return this.recordsService.findAll(
         paginationParams,
@@ -136,7 +139,7 @@ export class RecordsController {
   }
 
   @Get('/user/:userId')
-  findAllFromUser(@Param('userId') userId: string) {
+  findAllFromUser(@Param('userId', ParseUUIDPipe) userId: string) {
     try {
       return this.recordsService.findAllFromUser(userId);
     } catch (error) {
@@ -145,7 +148,7 @@ export class RecordsController {
   }
 
   @Get('/machine/:machineId')
-  findAllFromMachine(@Param('machineId') machineId: string) {
+  findAllFromMachine(@Param('machineId', ParseUUIDPipe) machineId: string) {
     try {
       return this.recordsService.findAllFromMachine(machineId);
     } catch (error) {
@@ -172,7 +175,7 @@ export class RecordsController {
     type: ErrorResponse,
   })
   async delete(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
   ): Promise<SuccessResponse | ErrorResponse> {
     try {
       return this.recordsService.delete(id);
@@ -183,14 +186,14 @@ export class RecordsController {
 
   @Get('avgActionTime')
   async getAvgActionTime(
-    @Query('machineId') machineId: string,
-    @Query('userId') userId?: string,
+    @Query('machineId', ParseUUIDPipe) machineId: string,
+    @Query('userId', new ParseUUIDPipe({ optional: true })) userId?: string,
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
   ) {
     return this.recordsService.getAvgActionTime(
-      parseInt(machineId),
-      userId ? parseInt(userId) : undefined,
+      machineId,
+      userId,
       startDate,
       endDate,
     );
@@ -207,24 +210,25 @@ export class RecordsController {
   }
 
   @Get('recordHistory')
-  async getRecordsHistory(@Query('userId') userId: string) {
-    return this.recordsService.getRecordsHistory(parseInt(userId));
+  async getRecordsHistory(@Query('userId', ParseUUIDPipe) userId: string) {
+    return this.recordsService.getRecordsHistory(userId);
   }
 
   @Get('hourlyStats')
   async getHourlyStats(
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
-    @Query('userId') userId?: string,
-    @Query('lineId') lineId?: string,
-    @Query('machineId') machineId?: string,
+    @Query('userId', new ParseUUIDPipe({ optional: true })) userId?: string,
+    @Query('lineId', new ParseUUIDPipe({ optional: true })) lineId?: string,
+    @Query('machineId', new ParseUUIDPipe({ optional: true }))
+    machineId?: string,
   ) {
     return this.recordsService.getHourlyRecordCounts(
       startDate,
       endDate,
-      userId ? parseInt(userId) : undefined,
-      lineId ? parseInt(lineId) : undefined,
-      machineId ? parseInt(machineId) : undefined,
+      userId,
+      lineId,
+      machineId,
     );
   }
 
@@ -232,16 +236,17 @@ export class RecordsController {
   async getDaylyStats(
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
-    @Query('userId') userId?: string,
-    @Query('lineId') lineId?: string,
-    @Query('machineId') machineId?: string,
+    @Query('userId', new ParseUUIDPipe({ optional: true })) userId?: string,
+    @Query('lineId', new ParseUUIDPipe({ optional: true })) lineId?: string,
+    @Query('machineId', new ParseUUIDPipe({ optional: true }))
+    machineId?: string,
   ) {
     return this.recordsService.getDailyRecordCounts(
       startDate,
       endDate,
-      userId ? parseInt(userId) : undefined,
-      lineId ? parseInt(lineId) : undefined,
-      machineId ? parseInt(machineId) : undefined,
+      userId,
+      lineId,
+      machineId,
     );
   }
 }

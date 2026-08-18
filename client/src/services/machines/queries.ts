@@ -8,17 +8,17 @@ import { GetMachineParamsSchema } from '@/src/schemas/machines/getMachineSchema'
 import { fetchWithAuth } from '@/src/lib/fetch';
 
 export interface MachineObj {
-  id: number;
+  id: string;
   name: string;
   status: boolean;
   line: {
-    id: number;
+    id: string;
     name: string;
     status: boolean;
     createdAt: string;
   };
   user: {
-    id: number;
+    id: string;
     idNumber: number;
     name: string;
     role: string;

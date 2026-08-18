@@ -117,15 +117,15 @@ export default function UsersTable() {
   });
   const userDelete = useDeleteUser();
 
-  const handleOpenProfile = (id: number) => {
+  const handleOpenProfile = (id: string) => {
     push(`/dashboard/users/${id}`);
   };
 
-  const handleOpenEdit = (id: number) => {
+  const handleOpenEdit = (id: string) => {
     push(`/dashboard/users/${id}/edit`);
   };
 
-  const handleDeactivateUser = async (id: number) => {
+  const handleDeactivateUser = async (id: string) => {
     await userDelete.mutateAsync({ userId: id });
     refetchUsers();
   };

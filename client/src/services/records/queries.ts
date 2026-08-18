@@ -9,7 +9,7 @@ import { GetRecordsHistoryParamsSchema } from '@/src/schemas/records/getRecordsH
 import { fetchWithAuth } from '@/src/lib/fetch';
 
 export interface UserObj {
-  id: number;
+  id: string;
   idNumber: number;
   name: string;
   role: string;
@@ -23,17 +23,17 @@ export interface UserObj {
 }
 
 export interface RecordObj {
-  id: number;
+  id: string;
   createdAt: string;
   timeSincePrevious: number | null;
   user: UserObj;
   machine: {
-    id: number;
+    id: string;
     name: string;
     cadence: number;
     status: boolean;
     line: {
-      id: number;
+      id: string;
       name: string;
       status: boolean;
       createdAt: string;
@@ -166,7 +166,7 @@ export function useGetDashboardKpis() {
 }
 
 export type GetAvgActionTimeParams = {
-  machineId: number;
+  machineId: string;
   userId?: string;
   startDate?: string;
   endDate?: string;
