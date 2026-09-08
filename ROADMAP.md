@@ -23,7 +23,7 @@ Priority: **P0** Blocking/Security | **P1** Important | **P2** Quality | **P3** 
 | [PS-53](#ps-53--fix-the-uuidint-id-mismatch)                       | P1       | Fix the UUID/int ID mismatch                 | server/records  |  ✅  |
 | [PS-54](#ps-54--fix-route-ordering-in-recordscontroller)           | P1       | Fix route ordering in `RecordsController`    | server/records  |  ✅  |
 | [PS-55](#ps-55--remove-hardcoded-line-ids-from-the-client)         | P1       | Remove hardcoded line IDs from the client    | client          |  ✅  |
-| [PS-56](#ps-56--add-db-indexes-for-reporting-queries)              | P1       | Add DB indexes for reporting queries         | server/db       |      |
+| [PS-56](#ps-56--add-db-indexes-for-reporting-queries)              | P1       | Add DB indexes for reporting queries         | server/db       |  ✅  |
 | [PS-57](#ps-57--make-timezone-handling-explicit)                   | P1       | Make timezone handling explicit              | server + client |      |
 | [PS-58](#ps-58--make-deletedeactivate-semantics-consistent)        | P1       | Make delete/deactivate semantics consistent  | server          |      |
 | [PS-59](#ps-59--validate-machine-cadence-and-add-target-fields)    | P1       | Validate cadence, add target/OEE fields      | server/machines |      |
