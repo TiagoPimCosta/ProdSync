@@ -19,11 +19,3 @@ export const UserStatus: SelectOption[] = [
   { value: "1", label: "Activo" },
   { value: "0", label: "Inativo" },
 ];
-
-export const Lines: SelectOption[] = [
-  { value: "6", label: "Linha 1" },
-  { value: "8", label: "Linha 2" },
-  { value: "9", label: "Linha 4" },
-  { value: "10", label: "Linha 5" },
-  { value: "12", label: "Linha 6" },
-];
